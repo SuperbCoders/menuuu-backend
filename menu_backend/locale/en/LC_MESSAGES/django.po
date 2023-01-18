@@ -1,0 +1,82 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-01-16 14:47+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+#: menu_backend/settings.py:123
+msgid "English"
+msgstr ""
+
+#: menu_backend/settings.py:124
+msgid "Russian"
+msgstr ""
+
+#: restaurants/models.py:28
+msgid "restaurant"
+msgstr ""
+
+#: restaurants/models.py:29
+msgid "restaurants"
+msgstr ""
+
+#: restaurants/models.py:34
+msgid "Restaurant name"
+msgstr ""
+
+#: restaurants/models.py:39
+msgid "Restaurant description"
+msgstr ""
+
+#: restaurants/models.py:54
+msgid "Restaurant owner"
+msgstr ""
+
+#: restaurants/models.py:55
+msgid "Restaurant worker"
+msgstr ""
+
+#: restaurants/models.py:61
+msgid "restaurant ownership or employment"
+msgstr ""
+
+#: restaurants/models.py:62
+msgid "restaurant ownerships or employments"
+msgstr ""
+
+#: restaurants/models.py:66
+msgid "User"
+msgstr ""
+
+#: restaurants/models.py:73
+msgid "Restaurant"
+msgstr ""
+
+#: restaurants/models.py:80
+msgid "Position"
+msgstr ""
+
+#: users/models.py:27
+msgid "user"
+msgstr ""
+
+#: users/models.py:28
+msgid "users"
+msgstr ""
+
+#: users/models.py:31
+msgid "phone number"
+msgstr ""

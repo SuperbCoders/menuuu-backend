@@ -1,0 +1,84 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-01-16 14:47+0300\n"
+"PO-Revision-Date: 2023-01-16 11:53+0000\n"
+"Last-Translator:   <admin@localhost>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
+"X-Translated-Using: django-rosetta 0.9.8\n"
+
+#: menu_backend/settings.py:123
+msgid "English"
+msgstr "английский"
+
+#: menu_backend/settings.py:124
+msgid "Russian"
+msgstr "русский"
+
+#: restaurants/models.py:28
+msgid "restaurant"
+msgstr "ресторан"
+
+#: restaurants/models.py:29
+msgid "restaurants"
+msgstr "рестораны"
+
+#: restaurants/models.py:34
+msgid "Restaurant name"
+msgstr "Название ресторана"
+
+#: restaurants/models.py:39
+msgid "Restaurant description"
+msgstr "Описание ресторана"
+
+#: restaurants/models.py:54
+msgid "Restaurant owner"
+msgstr "Владелец ресторана"
+
+#: restaurants/models.py:55
+msgid "Restaurant worker"
+msgstr "Работник ресторана"
+
+#: restaurants/models.py:61
+msgid "restaurant ownership or employment"
+msgstr "должность пользователя в ресторане"
+
+#: restaurants/models.py:62
+msgid "restaurant ownerships or employments"
+msgstr "должности пользователей в ресторанах"
+
+#: restaurants/models.py:66
+msgid "User"
+msgstr "Пользователь"
+
+#: restaurants/models.py:73
+msgid "Restaurant"
+msgstr "Ресторан"
+
+#: restaurants/models.py:80
+msgid "Position"
+msgstr "Положение"
+
+#: users/models.py:27
+msgid "user"
+msgstr "пользователь"
+
+#: users/models.py:28
+msgid "users"
+msgstr "пользователи"
+
+#: users/models.py:31
+msgid "phone number"
+msgstr "номер телефона"
