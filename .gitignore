@@ -2,5 +2,6 @@
 *.sqlite
 *.sqlite3
 *.mo
+.*.env
 __pycache__/
 media/

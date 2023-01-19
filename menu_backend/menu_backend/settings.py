@@ -16,22 +16,20 @@ from pathlib import Path
 
 from django.utils.translation import gettext_lazy as _
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+# Корневой каталог проекта
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Секретный ключ для генерации временных токенов доступа
+SECRET_KEY = os.getenv('SECRET_KEY', 'nskncgurmxkgru')
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
+# Включить или выключить режим отладки
+DEBUG = bool(int(os.getenv('DEBUG', '1')))
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-(cd2@_0=r)a4i_dc&mui(jjc^=bd9yw78tvlg_w_)vpiko4_2@')
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
+# Допустимые значения адреса продакшн-сервера
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '*').split(',')
 
-AUTH_USER_MODEL = 'users.user'
+# Использовать собственную модель для пользователей
+AUTH_USER_MODEL = 'users.User'
 
 
 INSTALLED_APPS = [
@@ -86,20 +84,28 @@ TEMPLATES = [
 WSGI_APPLICATION = 'menu_backend.wsgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/4.1/ref/settings/#databases
-
+# Настройки подключения к базе данных
 DATABASES = {
-    'default': {
+    'testing': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
+    },
+    'working': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': os.getenv('DB_NAME', 'postgres'),
+        'USER': os.getenv('DB_USER', 'postgres'),
+        'PASSWORD': os.getenv('DB_PASSWORD', 'postgres'),
+        'HOST': os.getenv('DB_HOST', '127.0.0.1'),
+        'PORT': os.getenv('DB_PORT', '5432'),
     }
 }
 
 
-# Password validation
-# https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
+# Используем базу по умолчанию
+DATABASES['default'] = DATABASES['working']
 
+
+# Проверки надежности паролей пользователей
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -116,11 +122,10 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-# Internationalization
-# https://docs.djangoproject.com/en/4.1/topics/i18n/
-
+# Язык по умолчанию
 LANGUAGE_CODE = 'en'
 
+# Поддерживаемые языки
 LANGUAGES = (
     ('en', _("English")),
     ('ru', _('Russian')),
@@ -136,13 +141,8 @@ USE_I18N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/4.1/howto/static-files/
-
 STATIC_URL = 'static/'
 
-# Default primary key field type
-# https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
@@ -154,6 +154,7 @@ REST_FRAMEWORK = {
 }
 
 
+# Поддерживаемые языки
 PARLER_LANGUAGES = {
     None: (
         {'code': 'en'},

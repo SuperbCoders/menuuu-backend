@@ -14,6 +14,8 @@ from django.utils.translation import gettext_lazy as _
 
 from parler.models import TranslatableModel, TranslatedFields
 
+from phonenumber_field.modelfields import PhoneNumberField
+
 from users.models import User
 
 
@@ -24,7 +26,7 @@ class RestaurantCategory(TranslatableModel):
     """
     class Meta:
         db_table = 'restaurants_restaurantcategory'
-        ordering = ['-stars', 'pk']
+        ordering = ['pk']
         verbose_name = _('restaurant category')
         verbose_name_plural = _('restaurant categories')
 
@@ -34,9 +36,6 @@ class RestaurantCategory(TranslatableModel):
             verbose_name=_("Category name"),
             blank=False, null=False
         )
-    )
-    stars = models.PositiveSmallIntegerField(
-        default=0, blank=False, null=False
     )
 
 
@@ -64,7 +63,62 @@ class Restaurant(TranslatableModel):
             blank=True, null=False
         )
     )
-
+    logo = models.ImageField(
+        verbose_name=_("Logo"),
+        blank=True, null=True
+    )
+    picture = models.ImageField(
+        verbose_name=_("Picture"),
+        blank=True, null=True
+    )
+    category = models.ForeignKey(
+        to=RestaurantCategory,
+        verbose_name=_("Restaurant category"),
+        on_delete=models.SET_NULL,
+        related_name='restaurants',
+        blank=True, null=True
+    )
+    stars = models.PositiveSmallIntegerField(
+        verbose_name=_("Number of stars"),
+        default=0,
+        blank=False, null=False
+    )
+    country = models.CharField(
+        max_length=100,
+        verbose_name=_("Country"),
+        blank=False,
+        null=False
+    )
+    city = models.CharField(
+        max_length=100,
+        verbose_name=_("City"),
+        blank=False,
+        null=False
+    )
+    street = models.CharField(
+        max_length=100,
+        verbose_name=_("Street"),
+        blank=True,
+        null=False
+    )
+    building = models.CharField(
+        max_length=20,
+        verbose_name=_("Building"),
+        blank=False,
+        null=False
+    )
+    address_details = models.CharField(
+        max_length=100,
+        verbose_name=_("Address details"),
+        blank=True,
+        null=False
+    )
+    zip_code = models.CharField(
+        max_length=20,
+        verbose_name=_("Zip code"),
+        blank=False,
+        null=False
+    )
     longitude = models.DecimalField(
         max_digits=20, decimal_places=15,
         blank=True, null=True,
@@ -74,6 +128,15 @@ class Restaurant(TranslatableModel):
         max_digits=20, decimal_places=15,
         blank=True, null=True,
         verbose_name=_('Latitude')
+    )
+    phone = PhoneNumberField(
+        verbose_name=_("Phone number"),
+        blank=True, null=False
+    )
+    site = models.URLField(
+        max_length=100,
+        verbose_name=_("Site URL"),
+        blank=True, null=False
     )
 
     def __str__(self):

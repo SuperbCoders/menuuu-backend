@@ -9,13 +9,13 @@ from restaurants.models import Restaurant, RestaurantStaff, RestaurantCategory
 
 
 @admin.register(RestaurantCategory)
-class RestaurantAdmin(TranslatableAdmin):
-    list_display = ['name', 'stars']
+class RestaurantCategoryAdmin(TranslatableAdmin):
+    list_display = ['name']
 
 
 @admin.register(Restaurant)
 class RestaurantAdmin(TranslatableAdmin):
-    list_display = ['name']
+    list_display = ['name', 'stars']
 
 
 @admin.register(RestaurantStaff)

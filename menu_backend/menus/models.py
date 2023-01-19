@@ -132,3 +132,7 @@ class MenuCourse(TranslatableModel):
         verbose_name=_('Cooking time'),
         blank=True, null=True
     )
+    options = models.JSONField(
+        verbose_name=_('Options'),
+        blank=True, null=True
+    )

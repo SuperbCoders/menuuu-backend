@@ -18,6 +18,7 @@ from django.urls import path, include
 
 from rest_framework import routers
 
+from restaurants.views import UnauthorizedRestaturantView
 from menus.viewsets import MenuCourseViewSet, MenuSectionViewSet, MenuViewSet
 
 
@@ -32,6 +33,12 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     # Управление переводами строк через встроенную админку
     path('rosetta/', include('rosetta.urls')),
+    # Получение меню ресторана неавторизованным пользователем
+    path(
+        'api/v1/public/restaurants/<pk>/',
+        UnauthorizedRestaturantView.as_view(),
+        name='public_restaurant'
+    ),
     # API-обработчики для работы с данными по протоколу REST
     path('api/v1/', include(router_v1.urls))
 ]

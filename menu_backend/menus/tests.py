@@ -45,14 +45,9 @@ class MenuCourseListTest(MenuTestCase):
     URL = '/api/v1/menu_courses/'
 
     def test_unauthorized(self):
-        """Неавторизованный пользователь получает список всех блюд"""
+        """Неавторизованный пользователь не имеет доступа к странице списка всех блюд"""
         ans = self.client.get(self.URL)
-        self.assertEqual(ans.status_code, 200)
-        info = ans.json()
-        # Проверить, что все доступные блюда были возвращены
-        self.assertEqual(info['count'], 1)
-        results = info['results']
-        self.assertEqual(len(results), 1)
+        self.assertEqual(ans.status_code, 403)
 
 
 class MenuSectionListTest(MenuTestCase):
@@ -63,14 +58,9 @@ class MenuSectionListTest(MenuTestCase):
     URL = '/api/v1/menu_sections/'
 
     def test_unauthorized(self):
-        """Неавторизованный пользователь получает список всех разделов меню"""
+        """Неавторизованный пользователь не имеет доступа к странице списка всех разделов меню"""
         ans = self.client.get(self.URL)
-        self.assertEqual(ans.status_code, 200)
-        info = ans.json()
-        # Проверить, что все доступные разделы меню были возвращены
-        self.assertEqual(info['count'], 4)
-        results = info['results']
-        self.assertEqual(len(results), 4)
+        self.assertEqual(ans.status_code, 403)
 
 
 class MenuListTest(MenuTestCase):
@@ -81,11 +71,6 @@ class MenuListTest(MenuTestCase):
     URL = '/api/v1/menu/'
 
     def test_unauthorized(self):
-        """Неавторизованный пользователь получает список всех опубликованных меню"""
+        """Неавторизованный пользователь не имеет доступа к странице списка всех меню"""
         ans = self.client.get(self.URL)
-        self.assertEqual(ans.status_code, 200)
-        info = ans.json()
-        # Проверить, что все доступные меню
-        self.assertEqual(info['count'], 2)
-        results = info['results']
-        self.assertEqual(len(results), 2)
+        self.assertEqual(ans.status_code, 403)
