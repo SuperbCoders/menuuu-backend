@@ -75,11 +75,13 @@ parso==0.8.3
 pexpect==4.8.0
 phonenumbers==8.13.4
 pickleshare==0.7.5
+Pillow==9.4.0
 platformdirs==2.6.2
 polib==1.1.1
 prometheus-client==0.15.0
 prompt-toolkit==3.0.36
 psutil==5.9.4
+psycopg2-binary==2.9.5
 ptyprocess==0.7.0
 pure-eval==0.2.2
 pycodestyle==2.10.0

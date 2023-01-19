@@ -38,6 +38,9 @@ class RestaurantCategory(TranslatableModel):
         )
     )
 
+    def __str__(self):
+        return self.name
+
 
 class Restaurant(TranslatableModel):
     """

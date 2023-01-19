@@ -28,6 +28,9 @@ DEBUG = bool(int(os.getenv('DEBUG', '1')))
 # Допустимые значения адреса продакшн-сервера
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '*').split(',')
 
+# Допустимые значения адресов для CSRF
+CSRF_TRUSTED_ORIGINS = os.getenv('CSRF_TRUSTED_ORIGINS', '*').split(',')
+
 # Использовать собственную модель для пользователей
 AUTH_USER_MODEL = 'users.User'
 
@@ -140,8 +143,11 @@ USE_I18N = True
 
 USE_TZ = True
 
-
+# Префикс URL для статических файлов
 STATIC_URL = 'static/'
+
+# Каталог для размещения статических файлов
+STATIC_ROOT = BASE_DIR / 'static'
 
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
