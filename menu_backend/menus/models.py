@@ -90,8 +90,8 @@ class MenuCourse(TranslatableModel):
         db_table = 'menus_menucourses'
         # Сортировка по заголовку невозможна, если заголовок зависит от языка
         ordering = ['pk']
-        verbose_name = _('menu')
-        verbose_name_plural = _('menus')
+        verbose_name = _('course')
+        verbose_name_plural = _('courses')
 
     translations = TranslatedFields(
         title=models.CharField(

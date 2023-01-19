@@ -15,9 +15,13 @@ class UserAdmin(admin.ModelAdmin):
     readonly_fields = ('date_joined', 'last_login')
     search_fields = ('username', 'first_name', 'last_name')
     fields = (
+        # Имя пользователя и контакты
         ('username', 'email', 'phone'),
+        # Полное имя
         ('last_name', 'first_name'),
+        # Полномочия в системе
         ('is_active', 'is_staff', 'is_superuser'),
+        # Прочие сведения
         ('date_joined', 'last_login')
     )
 
