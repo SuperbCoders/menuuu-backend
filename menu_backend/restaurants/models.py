@@ -9,8 +9,13 @@
 *   Сотрудник или владелец ресторана
 """
 
+import qrcode
+import logging
+
+from django.conf import settings
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from django.urls import reverse
 
 from parler.models import TranslatableModel, TranslatedFields
 
@@ -144,6 +149,14 @@ class Restaurant(TranslatableModel):
 
     def __str__(self):
         return self.name
+
+    def generate_qrcode(self):
+        """Генерирует QR код для доступа к меню ресторана через API"""
+        logger = logging.getLogger('default')
+        data = settings.SITE_URL + reverse("public_restaurant", kwargs={'pk': self.pk})
+        logger.info(_("Generating a QR code for URL: {}").format(data))
+        img = qrcode.make(data)
+        return img
 
 
 class RestaurantStaff(models.Model):

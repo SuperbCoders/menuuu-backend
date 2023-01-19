@@ -25,6 +25,9 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'nskncgurmxkgru')
 # Включить или выключить режим отладки
 DEBUG = bool(int(os.getenv('DEBUG', '1')))
 
+# URL сайта для генерации QR-кодов
+SITE_URL = os.getenv("SITE_URL", "http://127.0.0.1:8000")
+
 # Допустимые значения адреса продакшн-сервера
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '*').split(',')
 
