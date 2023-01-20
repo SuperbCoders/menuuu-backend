@@ -4,7 +4,10 @@ from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
+from drf_yasg.utils import swagger_auto_schema
+
 from restaurants.models import Restaurant
+from restaurants.swagger import swagger_public_menu
 
 
 def course_to_json(course, language: str = settings.LANGUAGE_CODE):
@@ -114,6 +117,7 @@ class UnauthorizedRestaturantView(APIView):
             language = language[0]
         return language
 
+    @swagger_public_menu
     def get(self, request, pk: int):
         """Возврат информации о меню ресторана"""
         language = self.__get_language(request)

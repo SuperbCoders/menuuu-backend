@@ -13,10 +13,15 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+
 from django.contrib import admin
 from django.urls import path, include
+from django.utils.translation import gettext_lazy as _
 
-from rest_framework import routers
+from rest_framework import permissions, routers
+
+from drf_yasg.views import get_schema_view
+from drf_yasg import openapi
 
 from restaurants.views import UnauthorizedRestaturantView
 from menus.viewsets import MenuCourseViewSet, MenuSectionViewSet, MenuViewSet
@@ -28,11 +33,29 @@ router_v1.register('menu_sections', MenuSectionViewSet, basename='menusection')
 router_v1.register('menu', MenuViewSet, basename='menu')
 
 
+# Генерируем страницу с документацией по API
+schema_view = get_schema_view(
+   openapi.Info(
+      title="Menu backend",
+      default_version='v1',
+      description=_("Menu service for restaurants"),
+   ),
+   public=True,
+   permission_classes=[permissions.AllowAny],
+)
+
+
 urlpatterns = [
     # Встроенная админка
     path('admin/', admin.site.urls),
     # Управление переводами строк через встроенную админку
     path('rosetta/', include('rosetta.urls')),
+    # Описание API
+    path(
+        'api/v1/swagger/',
+        schema_view.with_ui('swagger', cache_timeout=0),
+        name='schema-swagger'
+    ),
     # Получение меню ресторана неавторизованным пользователем
     path(
         'api/v1/public/restaurants/<pk>/',

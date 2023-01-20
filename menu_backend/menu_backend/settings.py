@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # Модули сторонних разработчиков
+    'drf_yasg',
     'parler',
     'phonenumber_field',
     'rest_framework',
@@ -108,7 +109,7 @@ DATABASES = {
 
 
 # Используем базу по умолчанию
-DATABASES['default'] = DATABASES['working']
+DATABASES['default'] = DATABASES['testing']
 
 
 # Проверки надежности паролей пользователей
@@ -158,10 +159,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Настройки REST API
 REST_FRAMEWORK = {
+    # Для постраничной выдачи данных
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 20,
 }
-
 
 # Поддерживаемые языки
 PARLER_LANGUAGES = {
