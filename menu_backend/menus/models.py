@@ -28,8 +28,8 @@ class Menu(TranslatableModel):
         db_table = 'menus_menu'
         # Сортировка по заголовку невозможна, если заголовок зависит от языка
         ordering = ['pk']
-        verbose_name = _('course')
-        verbose_name_plural = _('courses')
+        verbose_name = _('menu')
+        verbose_name_plural = _('menus')
 
     translations = TranslatedFields(
         title=models.CharField(
@@ -49,6 +49,11 @@ class Menu(TranslatableModel):
         verbose_name=_('Published'),
         default=False, blank=False, null=False
     )
+
+    def __str__(self):
+        if self.restaurant:
+            return f"{self.title} at {self.restaurant.name}"
+        return self.title
 
 
 class MenuSection(TranslatableModel):
@@ -79,6 +84,9 @@ class MenuSection(TranslatableModel):
         related_name='sections',
         blank=False, null=False
     )
+
+    def __str__(self):
+        return self.title
 
 
 class MenuCourse(TranslatableModel):
@@ -136,3 +144,6 @@ class MenuCourse(TranslatableModel):
         verbose_name=_('Options'),
         blank=True, null=True
     )
+
+    def __str__(self):
+        return self.title
