@@ -45,5 +45,5 @@ class MenuListTest(BaseTestCase):
         ans = self.client.get(self.URL)
         self.assertEqual(ans.status_code, 200)
         info = ans.json()
-        self.assertEqual(info['count'], 3)
-        self.assertEqual(len(info['results']), 3)
+        self.assertEqual(info['count'], 2)
+        self.assertEqual(len(info['results']), 2)

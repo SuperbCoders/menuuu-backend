@@ -40,10 +40,10 @@ class Menu(TranslatableModel):
     )
     restaurant = models.ForeignKey(
         to=Restaurant,
-        on_delete=models.SET_NULL,
+        on_delete=models.CASCADE,
         verbose_name=_('Restaurant'),
         related_name='menus',
-        blank=True, null=True
+        blank=False, null=False
     )
     published = models.BooleanField(
         verbose_name=_('Published'),

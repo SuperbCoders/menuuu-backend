@@ -2,6 +2,8 @@
 Наборы API-обработчиков для работы с меню, разделами меню и блюдами
 """
 
+from django.db.models import Q
+
 from rest_framework import viewsets
 from rest_framework.permissions import AllowAny
 
@@ -43,7 +45,21 @@ class MenuViewSet(viewsets.ModelViewSet):
     """
 
     model = Menu
-    queryset = Menu.objects.all()
     permission_classes = (AllowAny,)
     serializer_class = MenuSerializer
     http_method_names = ['get', 'head', 'options']
+
+    def get_queryset(self):
+        """
+        Возвращает список меню, которые может видеть текущий пользователь.
+
+        Неавторизованный пользователь может видеть только опубликованные меню.
+        Авторизованный пользователь может видеть опубликованные меню и меню своих
+        ресторанов
+        """
+        if self.request.user.is_authenticated:
+            return Menu.objects.filter(
+                Q(published=True) |
+                Q(restaurant__id__in=self.request.user.restaurant_staff.values_list('restaurant_id', flat=True))
+            ).all()
+        return Menu.objects.filter(published=True).all()
