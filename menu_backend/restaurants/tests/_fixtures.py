@@ -296,3 +296,36 @@ class BaseTestCase(APITestCase):
         self.assertEqual(info['site'], "https://somerestaurant.com")
         self.assertEqual(info['logo'], None)
         self.assertEqual(info['picture'], None)
+
+    def verify_premium_restaurant(self, info):
+        """
+        Проверить, что словарь info содержит необходимые данные о тестовом
+        дешевом ресторане
+        """
+        self.assertEqual(info['translations']['en']['name'], "Premium restaurant")
+        self.assertEqual(info['translations']['ru']['name'], "Премиум ресторан")
+        self.assertEqual(info['translations']['en']['description'], "A premium-class restaurant")
+        self.assertEqual(info['translations']['ru']['description'], "Ресторан премиум-класса")
+        self.assertEqual(info['slug'], "")
+        self.assertEqual(info['category'], None)
+        self.assertEqual(info['category_data'], None)
+        self.assertEqual(info['stars'], 5)
+        self.assertEqual(info['phone'], "+79107654321")
+        self.assertEqual(info['site'], "https://premiumrestaurant.com")
+        self.assertEqual(info['logo'], None)
+        self.assertEqual(info['picture'], None)
+
+    def verify_restaurant_list(self, info):
+        """
+        Проверить, что список info содержит список словарей с описанием тестовых
+        ресторанов и не содержит ничего другого
+        """
+        self.assertIsInstance(info, list)
+        self.assertEqual(len(info), 2)
+        for item in info:
+            if item['id'] == self._data['cheap_restaurant'].pk:
+                self.verify_cheap_restaurant(item)
+            elif item['id'] == self._data['premium_restaurant'].pk:
+                self.verify_premium_restaurant(item)
+            else:
+                self.fail("В возвращенном списке ресторанов оказался неизвестный ресторан")

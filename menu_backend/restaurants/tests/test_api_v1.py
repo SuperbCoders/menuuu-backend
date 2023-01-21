@@ -83,12 +83,22 @@ class RestaurantListTest(BaseTestCase):
         self.assertEqual(ans.status_code, 200)
         info = ans.json()
         self.assertEqual(info['count'], 2)
-        results = info['results']
-        self.assertEqual(len(results), 2)
-        for res in results:
-            if res['id'] == self._data['cheap_restaurant'].pk:
-                self.verify_cheap_restaurant(res)
-            elif res['id'] == self._data['premium_restaurant'].pk:
-                pass
-            else:
-                self.fail("В возвращенном списке ресторанов оказался неизвестный ресторан")
+        self.verify_restaurant_list(info['results'])
+
+    def test_admin(self):
+        """Администратор видит список ресторанов"""
+        with self.logged_in('admin'):
+            ans = self.client.get(self.__get_url())
+        self.assertEqual(ans.status_code, 200)
+        info = ans.json()
+        self.assertEqual(info['count'], 2)
+        self.verify_restaurant_list(info['results'])
+
+    def test_some_user(self):
+        """Зарегистрированный пользователь видит список ресторанов"""
+        with self.logged_in('admin'):
+            ans = self.client.get(self.__get_url())
+        self.assertEqual(ans.status_code, 200)
+        info = ans.json()
+        self.assertEqual(info['count'], 2)
+        self.verify_restaurant_list(info['results'])
