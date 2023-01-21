@@ -67,3 +67,28 @@ class RestaurantRetrieveTest(BaseTestCase):
         self.assertEqual(ans.status_code, 200)
         info = ans.json()
         self.verify_cheap_restaurant(info)
+
+
+class RestaurantListTest(BaseTestCase):
+    """
+    Тесты для API получения списка всех ресторанов
+    """
+
+    def __get_url(self):
+        return f"/api/v1/restaurants/"
+
+    def test_unauthorized(self):
+        """Неавторизованный пользователь видит список ресторанов"""
+        ans = self.client.get(self.__get_url())
+        self.assertEqual(ans.status_code, 200)
+        info = ans.json()
+        self.assertEqual(info['count'], 2)
+        results = info['results']
+        self.assertEqual(len(results), 2)
+        for res in results:
+            if res['id'] == self._data['cheap_restaurant'].pk:
+                self.verify_cheap_restaurant(res)
+            elif res['id'] == self._data['premium_restaurant'].pk:
+                pass
+            else:
+                self.fail("В возвращенном списке ресторанов оказался неизвестный ресторан")

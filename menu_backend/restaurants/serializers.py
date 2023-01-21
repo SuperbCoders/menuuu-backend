@@ -26,6 +26,7 @@ class RestaurantSerializer(TranslatableModelSerializer):
     class Meta:
         model = Restaurant
         fields = [
+            'id',
             'translations',
             'slug',
             'logo',
