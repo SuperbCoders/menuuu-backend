@@ -162,6 +162,12 @@ REST_FRAMEWORK = {
     # Для постраничной выдачи данных
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 20,
+    # Права доступа по умолчанию - доступ только администратора.
+    # Фактически для большинства классов будут определены более мягкие
+    # права доступа.
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAdminUser',
+    ]
 }
 
 # Поддерживаемые языки

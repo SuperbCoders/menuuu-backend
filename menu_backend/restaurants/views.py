@@ -3,6 +3,7 @@ from django.shortcuts import get_object_or_404
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.permissions import AllowAny
 
 from restaurants.models import Restaurant
 from restaurants.swagger import swagger_public_menu
@@ -105,6 +106,8 @@ class UnauthorizedRestaturantView(APIView):
     Просмотр неавторизованным пользователем информации о ресторане. Поддерживает
     только метод GET, который возвращает информацию о ресторане и меню этого ресторана.
     """
+
+    permission_classes = [AllowAny]
 
     def __get_language(self, request):
         """
