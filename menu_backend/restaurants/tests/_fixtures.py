@@ -276,11 +276,22 @@ class BaseTestCase(APITestCase):
         yield user
         self.client.logout()
 
+    def verify_cheap_active_menu(self, info):
+        """
+        Проверить, что словарь info соответствует данным об активном меню дешевого
+        ресторана.
+        """
+        self.assertEqual(info['translations']['en']['title'], "Menu")
+        self.assertEqual(info['translations']['ru']['title'], "Меню")
+        self.assertEqual(info['published'], True)
+        self.assertEqual(info['restaurant'], self._data['cheap_restaurant'].pk)
+
     def verify_cheap_restaurant(self, info):
         """
         Проверить, что словарь info содержит необходимые данные о тестовом
         дешевом ресторане
         """
+        self.assertEqual(info['id'], self._data['cheap_restaurant'].pk)
         self.assertEqual(info['translations']['en']['name'], "A good place to eat")
         self.assertEqual(info['translations']['ru']['name'], "Придорожное кафе")
         self.assertEqual(info['translations']['en']['description'], "Just some good place to eat")
@@ -296,12 +307,15 @@ class BaseTestCase(APITestCase):
         self.assertEqual(info['site'], "https://somerestaurant.com")
         self.assertEqual(info['logo'], None)
         self.assertEqual(info['picture'], None)
+        # Проверить меню
+        self.verify_cheap_active_menu(info['current_menu'])
 
     def verify_premium_restaurant(self, info):
         """
         Проверить, что словарь info содержит необходимые данные о тестовом
         дешевом ресторане
         """
+        self.assertEqual(info['id'], self._data['premium_restaurant'].pk)
         self.assertEqual(info['translations']['en']['name'], "Premium restaurant")
         self.assertEqual(info['translations']['ru']['name'], "Премиум ресторан")
         self.assertEqual(info['translations']['en']['description'], "A premium-class restaurant")

@@ -35,12 +35,12 @@ class MenuSectionSerializer(TranslatableModelSerializer):
         fields = [
             'translations',
             'menu',
-            'courses'
+            'published_courses'
         ]
 
-    # Вместе с разделом меню возвращаем информацию обо всех блюда этого
-    # раздела
-    courses = MenuCourseSerializer(many=True, read_only=True)
+    # Вместе с разделом меню возвращаем информацию обо всех опубликованных
+    # блюдах этого раздела
+    published_courses = MenuCourseSerializer(many=True, read_only=True)
 
 
 class MenuSerializer(TranslatableModelSerializer):
@@ -54,9 +54,10 @@ class MenuSerializer(TranslatableModelSerializer):
             'restaurant',
             'published',
             'sections',
-            'extra_courses',
+            'extra_published_courses',
         ]
 
-    # При возврате меню расписать все его разделы и блюда
+    # При возврате меню расписать все его разделы а также все опубликованные
+    # блюда, не входящие в раздел
     sections = MenuSectionSerializer(many=True, read_only=True)
-    extra_courses = MenuCourseSerializer(many=True, read_only=True)
+    extra_published_courses = MenuCourseSerializer(many=True, read_only=True)

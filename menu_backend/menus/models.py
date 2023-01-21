@@ -54,10 +54,11 @@ class Menu(TranslatableModel):
         if self.restaurant:
             return f"{self.title} at {self.restaurant.name}"
         return self.title
+
     @property
-    def extra_courses(self):
-        """Список блюд меню, не входящих ни в один подраздел"""
-        return self.courses.filter(section__isnull=True)
+    def extra_published_courses(self):
+        """Список опубликованных блюд меню, не входящих ни в один подраздел"""
+        return self.courses.filter(section__isnull=True, published=True)
 
     def save(self, *args, **kwargs):
         """
@@ -102,6 +103,11 @@ class MenuSection(TranslatableModel):
 
     def __str__(self):
         return self.title
+
+    @property
+    def published_courses(self):
+        """Список опубликованных блюд, входящих в подраздел"""
+        return self.courses.filter(published=True)
 
 
 class MenuCourse(TranslatableModel):
