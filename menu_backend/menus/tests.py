@@ -10,12 +10,30 @@ class MenuCourseListTest(BaseTestCase):
     Тесты для API получения списка блюд
     """
 
-    URL = '/api/v1/menu_courses/'
+    def __get_url(self):
+        return '/api/v1/menu_courses/'
 
     def test_unauthorized(self):
         """Неавторизованный пользователь просматривает список всех блюд"""
-        ans = self.client.get(self.URL)
+        ans = self.client.get(self.__get_url())
         self.assertEqual(ans.status_code, 200)
+
+
+class MenuCourseRetrieveTest(BaseTestCase):
+    """
+    Тесты для API получения информации об определенном блюде
+    """
+
+    def __get_url(self):
+        return f"/api/v1/menu_courses/{self._data['chocolate_sandwich'].pk}/"
+
+    def test_unauthorized(self):
+        """Неавторизованный пользователь может видеть опубликованное блюдо"""
+        ans = self.client.get(self.__get_url())
+        self.assertEqual(ans.status_code, 200)
+        info = ans.json()
+        from pprint import PrettyPrinter
+        PrettyPrinter().pprint(info)
 
 
 class MenuSectionListTest(BaseTestCase):
@@ -54,3 +72,20 @@ class MenuListTest(BaseTestCase):
         info = ans.json()
         self.assertEqual(info['count'], 3)
         self.assertEqual(len(info['results']), 3)
+
+
+class MenuRetrieveTest(BaseTestCase):
+    """
+    Тесты для API получения информации об определенном меню
+    """
+
+    def __get_url(self):
+        return f"/api/v1/menu/{self._data['cheap_menu'].pk}/"
+
+    def test_unauthorized(self):
+        """Неавторизованный пользователь может видеть опубликованное меню"""
+        ans = self.client.get(self.__get_url())
+        self.assertEqual(ans.status_code, 200)
+        info = ans.json()
+        from pprint import PrettyPrinter
+        PrettyPrinter().pprint(info)
