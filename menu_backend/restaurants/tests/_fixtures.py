@@ -158,6 +158,17 @@ def populate_test_data():
         password='administrator',
         email='administrator@localhost'
     )
+    # Создать владельца и работника дешевого ресторана
+    test_data['cheap_owner'] = User.objects.create_user(
+        username='cheap_owner',
+        password='cheap_owner',
+        email='cheap_owner@localhost'
+    )
+    test_data['cheap_worker'] = User.objects.create_user(
+        username='cheap_worker',
+        password='cheap_worker',
+        email='cheap_worker@localhost'
+    )
     return test_data
 
 
@@ -171,6 +182,8 @@ def cleanup_test_data(test_data):
     test_data['premium_menu'].delete()
     test_data['premium_restaurant'].delete()
     test_data['admin'].delete()
+    test_data['cheap_owner'].delete()
+    test_data['cheap_worker'].delete()
 
 
 class BaseTestCase(APITestCase):

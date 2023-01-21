@@ -15,7 +15,6 @@ import logging
 from django.conf import settings
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from django.urls import reverse
 
 from parler.models import TranslatableModel, TranslatedFields
 

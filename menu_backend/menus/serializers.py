@@ -2,7 +2,6 @@
 Сериализация данных о меню, разделах меню и блюдах
 """
 
-from rest_framework.serializers import ReadOnlyField
 from parler_rest.serializers import TranslatableModelSerializer
 from parler_rest.fields import TranslatedFieldsField
 
@@ -29,10 +28,10 @@ class MenuCourseSerializer(TranslatableModelSerializer):
 
 class MenuSectionSerializer(TranslatableModelSerializer):
     """Сериализатор для разделов меню"""
-    translations = TranslatedFieldsField(shared_model=MenuCourse)
+    translations = TranslatedFieldsField(shared_model=MenuSection)
 
     class Meta:
-        model = MenuCourse
+        model = MenuSection
         fields = [
             'translations',
             'menu',

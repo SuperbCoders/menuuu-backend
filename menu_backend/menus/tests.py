@@ -2,8 +2,6 @@
 Тесты для API для работы с меню, разделами меню и блюдами
 """
 
-from menus.models import Menu, MenuSection, MenuCourse
-
 from restaurants.tests._fixtures import BaseTestCase
 
 

@@ -29,8 +29,6 @@ class PublicRestaurantTestCase(BaseTestCase):
         self.assertEqual(info['name'], "A good place to eat")
         self.assertEqual(info['description'], "Just some good place to eat")
         self.assertEqual(info['stars'], 3)
-        from pprint import PrettyPrinter
-        PrettyPrinter().pprint(info)
 
     def test_restaurant_name_ru(self):
         """Возвращается название и описание ресторана по-русски"""
@@ -40,8 +38,6 @@ class PublicRestaurantTestCase(BaseTestCase):
         self.assertEqual(info['name'], "Придорожное кафе")
         self.assertEqual(info['description'], "Первое попавшееся кафе")
         self.assertEqual(info['stars'], 3)
-        from pprint import PrettyPrinter
-        PrettyPrinter().pprint(info)
 
     def test_restaurant_category(self):
         """Возвращается название категории ресторана"""

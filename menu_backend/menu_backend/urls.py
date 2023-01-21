@@ -23,14 +23,17 @@ from rest_framework import permissions, routers
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 
-from restaurants.views import UnauthorizedRestaturantView
 from menus.viewsets import MenuCourseViewSet, MenuSectionViewSet, MenuViewSet
+from restaurants.viewsets import RestaurantViewSet
+
+from restaurants.views import UnauthorizedRestaturantView
 
 
 router_v1 = routers.SimpleRouter()
 router_v1.register('menu_courses', MenuCourseViewSet, basename='menucourse')
 router_v1.register('menu_sections', MenuSectionViewSet, basename='menusection')
 router_v1.register('menu', MenuViewSet, basename='menu')
+router_v1.register('restaurants', RestaurantViewSet, basename='restaurant')
 
 
 # Генерируем страницу с документацией по API
