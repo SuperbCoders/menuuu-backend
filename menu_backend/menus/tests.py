@@ -41,9 +41,18 @@ class MenuListTest(BaseTestCase):
     URL = '/api/v1/menu/'
 
     def test_unauthorized(self):
-        """Неавторизованный пользователь просматривает список всех меню"""
+        """Неавторизованный пользователь видит все опубликованные меню"""
         ans = self.client.get(self.URL)
         self.assertEqual(ans.status_code, 200)
         info = ans.json()
         self.assertEqual(info['count'], 2)
         self.assertEqual(len(info['results']), 2)
+
+    def test_admin(self):
+        """Администратор видит все опубликованные меню включая неопубликованные"""
+        with self.logged_in('admin'):
+            ans = self.client.get(self.URL)
+        self.assertEqual(ans.status_code, 200)
+        info = ans.json()
+        self.assertEqual(info['count'], 3)
+        self.assertEqual(len(info['results']), 3)

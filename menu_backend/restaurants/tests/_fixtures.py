@@ -3,11 +3,14 @@
 данных для тестирования
 """
 
+from contextlib import contextmanager
+
 import datetime
 
 from rest_framework.test import APITestCase
 
 from restaurants.models import Restaurant, RestaurantCategory
+from users.models import User
 
 
 def populate_test_data():
@@ -149,6 +152,12 @@ def populate_test_data():
     test_data['premium_menu'].set_current_language('ru')
     test_data['premium_menu'].title = "Меню"
     test_data['premium_menu'].save()
+    # Создать пользователя-администратора
+    test_data['admin'] = User.objects.create_superuser(
+        username='administrator',
+        password='administrator',
+        email='administrator@localhost'
+    )
     return test_data
 
 
@@ -161,6 +170,7 @@ def cleanup_test_data(test_data):
     test_data['cheap_restaurant'].delete()
     test_data['premium_menu'].delete()
     test_data['premium_restaurant'].delete()
+    test_data['admin'].delete()
 
 
 class BaseTestCase(APITestCase):
@@ -197,3 +207,16 @@ class BaseTestCase(APITestCase):
     def tearDown(self):
         """Удаляет тестовые данные"""
         cleanup_test_data(self._data)
+
+    @contextmanager
+    def logged_in(self, username):
+        """
+        Контекст для выполнения кода от имени определенного зарегистрированного
+        пользователя. Возможные значения параметра username следующие
+
+        *   'admin'
+        """
+        user = self._data[username]
+        self.client.force_authenticate(user)
+        yield user
+        self.client.logout()

@@ -58,6 +58,8 @@ class MenuViewSet(viewsets.ModelViewSet):
         ресторанов
         """
         if self.request.user.is_authenticated:
+            if self.request.user.is_staff:
+                return Menu.objects.all()
             return Menu.objects.filter(
                 Q(published=True) |
                 Q(restaurant__id__in=self.request.user.restaurant_staff.values_list('restaurant_id', flat=True))
