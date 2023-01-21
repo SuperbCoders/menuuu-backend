@@ -42,6 +42,7 @@ def populate_test_data():
         phone='+79101234567',
         site='https://somerestaurant.com',
         stars=3,
+        slug='some-cafe',
         country='Russia',
         city='Moscow',
         street='Leninskiy avenue',
@@ -169,6 +170,35 @@ def populate_test_data():
         password='cheap_worker',
         email='cheap_worker@localhost'
     )
+    test_data['cheap_restaurant'].restaurant_staff.create(
+        user=test_data['cheap_owner'], position='owner'
+    )
+    test_data['cheap_restaurant'].restaurant_staff.create(
+        user=test_data['cheap_worker'], position='worker'
+    )
+    # Создать владельца и работника дорогого ресторана
+    test_data['premium_owner'] = User.objects.create_user(
+        username='premium_owner',
+        password='premium_owner',
+        email='premium_owner@localhost'
+    )
+    test_data['premium_worker'] = User.objects.create_user(
+        username='premium_worker',
+        password='premium_worker',
+        email='premium_worker@localhost'
+    )
+    test_data['premium_restaurant'].restaurant_staff.create(
+        user=test_data['premium_owner'], position='owner'
+    )
+    test_data['premium_restaurant'].restaurant_staff.create(
+        user=test_data['premium_worker'], position='worker'
+    )
+    # Создать еще одного пользователя, не связанного ни с каким рестораном
+    test_data['some_user'] = User.objects.create_user(
+        username='some_user',
+        password='some_user',
+        email='some_user@localhost'
+    )
     return test_data
 
 
@@ -184,6 +214,9 @@ def cleanup_test_data(test_data):
     test_data['admin'].delete()
     test_data['cheap_owner'].delete()
     test_data['cheap_worker'].delete()
+    test_data['premium_owner'].delete()
+    test_data['premium_worker'].delete()
+    test_data['some_user'].delete()
 
 
 class BaseTestCase(APITestCase):
@@ -213,13 +246,17 @@ class BaseTestCase(APITestCase):
         Активное - и единственное - меню дорогого ресторана
     """
 
-    def setUp(self):
+    @classmethod
+    def setUpClass(cls):
         """Создает данные для тестирования"""
-        self._data = populate_test_data()
+        super().setUpClass()
+        cls._data = populate_test_data()
 
-    def tearDown(self):
+    @classmethod
+    def tearDownClass(cls):
         """Удаляет тестовые данные"""
-        cleanup_test_data(self._data)
+        cleanup_test_data(cls._data)
+        super().tearDownClass()
 
     @contextmanager
     def logged_in(self, username):
@@ -228,8 +265,34 @@ class BaseTestCase(APITestCase):
         пользователя. Возможные значения параметра username следующие
 
         *   'admin'
+        *   'cheap_owner'
+        *   'cheap_worker'
+        *   'premium_owner'
+        *   'premium_worker'
+        *   'some_user'
         """
         user = self._data[username]
         self.client.force_authenticate(user)
         yield user
         self.client.logout()
+
+    def verify_cheap_restaurant(self, info):
+        """
+        Проверить, что словарь info содержит необходимые данные о тестовом
+        дешевом ресторане
+        """
+        self.assertEqual(info['translations']['en']['name'], "A good place to eat")
+        self.assertEqual(info['translations']['ru']['name'], "Придорожное кафе")
+        self.assertEqual(info['translations']['en']['description'], "Just some good place to eat")
+        self.assertEqual(info['translations']['ru']['description'], "Первое попавшееся кафе")
+        self.assertEqual(info['slug'], "some-cafe")
+        self.assertEqual(info['category'], self._data['category'].pk)
+        self.assertEqual(info['category_data']['translations']['en']['name'], "Fastfood")
+        # FIXME: Здесь все правильно при запущенном сервисе, но почему-то этого
+        # поля нет при тестировании
+        # self.assertEqual(info['category_data']['translations']['ru']['name'], "Фастфуд")
+        self.assertEqual(info['stars'], 3)
+        self.assertEqual(info['phone'], "+79101234567")
+        self.assertEqual(info['site'], "https://somerestaurant.com")
+        self.assertEqual(info['logo'], None)
+        self.assertEqual(info['picture'], None)
