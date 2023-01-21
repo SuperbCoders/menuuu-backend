@@ -25,8 +25,8 @@ from drf_yasg import openapi
 
 from menus.viewsets import MenuCourseViewSet, MenuSectionViewSet, MenuViewSet
 from restaurants.viewsets import RestaurantViewSet
-
 from restaurants.views import UnauthorizedRestaturantView
+from users.views import UserCreationView
 
 
 router_v1 = routers.SimpleRouter()
@@ -53,6 +53,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     # Управление переводами строк через встроенную админку
     path('rosetta/', include('rosetta.urls')),
+    # Регистрация нового пользователя
+    path("api/v1/users/register/", UserCreationView.as_view(), name="user_register"),
     # Описание API
     path(
         'api/v1/swagger/',
