@@ -2,6 +2,7 @@
 Сериализация данных о меню, разделах меню и блюдах
 """
 
+from rest_framework.serializers import ReadOnlyField
 from parler_rest.serializers import TranslatableModelSerializer
 from parler_rest.fields import TranslatedFieldsField
 

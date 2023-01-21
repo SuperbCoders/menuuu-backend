@@ -175,3 +175,27 @@ PARLER_LANGUAGES = {
         'hide_untranslated': False
     }
 }
+
+# Настройки записи информации в журнал
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'level': 'INFO',
+            'class': 'logging.StreamHandler',
+            'formatter': 'default'
+        }
+    },
+    'root': {
+        'level': 'INFO',
+        'handlers': ['console'],
+        'propagate': True
+    },
+    'formatters': {
+        'default': {
+            'format': "{asctime} [{levelname}] {message}",
+            'style': "{"
+        }
+    }
+}

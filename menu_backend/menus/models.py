@@ -55,6 +55,17 @@ class Menu(TranslatableModel):
             return f"{self.title} at {self.restaurant.name}"
         return self.title
 
+    def save(self, *args, **kwargs):
+        """
+        Если меню сделано опубликованным, то автоматически все другие меню того же
+        ресторана должны стать неопубликованными
+        """
+        super().save(*args, **kwargs)
+        if self.restaurant and self.published:
+            for other_menu in self.restaurant.menus.exclude(pk=self.pk).all():
+                other_menu.published = False
+                other_menu.save()
+
 
 class MenuSection(TranslatableModel):
     """

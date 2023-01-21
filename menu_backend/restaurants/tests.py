@@ -54,7 +54,7 @@ class PublicRestaurantTestCase(APITestCase):
         self.menu.save()
         self.inactive_menu = self.restaurant.menus.create(
             # Это меню возвращаться не должно
-            published=True, title='Inactive menu'
+            published=False, title='Inactive menu'
         )
         self.inactive_menu.set_current_language('ru')
         self.inactive_menu.title = "Неактивное меню"

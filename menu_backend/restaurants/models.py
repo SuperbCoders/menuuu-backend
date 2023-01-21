@@ -71,6 +71,11 @@ class Restaurant(TranslatableModel):
             blank=True, null=False
         )
     )
+    slug = models.SlugField(
+        verbose_name=_("Nickname"),
+        max_length=100,
+        blank=True, null=False
+    )
     logo = models.ImageField(
         verbose_name=_("Logo"),
         blank=True, null=True
@@ -152,8 +157,11 @@ class Restaurant(TranslatableModel):
 
     def generate_qrcode(self):
         """Генерирует QR код для доступа к меню ресторана через API"""
-        logger = logging.getLogger('default')
-        data = settings.SITE_URL + reverse("public_restaurant", kwargs={'pk': self.pk})
+        logger = logging.getLogger('root')
+        if self.nickname:
+            data = settings.SITE_URL + "/" + self.nickname
+        else:
+            data = settings.SITE_URL + "/id" + self.pk
         logger.info(_("Generating a QR code for URL: {}").format(data))
         img = qrcode.make(data)
         return img
