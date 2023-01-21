@@ -2,129 +2,17 @@
 Тесты для API работы с ресторанами
 """
 
-import datetime
-
-from rest_framework.test import APITestCase
-
-from restaurants.models import Restaurant, RestaurantCategory
+from restaurants.tests._fixtures import BaseTestCase
 
 
-class PublicRestaurantTestCase(APITestCase):
+class PublicRestaurantTestCase(BaseTestCase):
     """
     Тесты для API общедоступного меню ресторана
     """
 
-    def setUp(self):
-        """Создать данные для тестирования"""
-        # Создаем категорию ресторанов
-        self.category = RestaurantCategory.objects.create(
-            name='Fastfood'
-        )
-        # Задаем русское название для категории
-        self.category.set_current_language('ru')
-        self.category.name = "Фастфуд"
-        self.category.save()
-        # Создаем ресторан
-        self.restaurant = Restaurant.objects.create(
-            category=self.category,
-            name="A good place to eat",
-            description="Just some good place to eat",
-            phone='+79101234567',
-            site='https://somerestaurant.com',
-            stars=3,
-            country='Russia',
-            city='Moscow',
-            street='Leninskiy avenue',
-            building='6/3',
-            zip_code='123456',
-            longitude=37.5,
-            latitude=56.5,
-        )
-        # Задаем русское название и описание
-        self.restaurant.set_current_language('ru')
-        self.restaurant.name = "Придорожное кафе"
-        self.restaurant.description = "Первое попавшееся кафе"
-        self.restaurant.save()
-        self.menu = self.restaurant.menus.create(
-            # Активное меню ресторана
-            published=True, title='Menu'
-        )
-        self.menu.set_current_language('ru')
-        self.menu.title = "Меню"
-        self.menu.save()
-        self.inactive_menu = self.restaurant.menus.create(
-            # Это меню возвращаться не должно
-            published=False, title='Inactive menu'
-        )
-        self.inactive_menu.set_current_language('ru')
-        self.inactive_menu.title = "Неактивное меню"
-        self.inactive_menu.save()
-        self.drinks_section = self.menu.sections.create(
-            # Раздел напитков для меню
-            title='Drinks'
-        )
-        self.drinks_section.set_current_language('ru')
-        self.drinks_section.title = "Напитки"
-        self.drinks_section.save()
-        self.desserts_section = self.menu.sections.create(
-            # Раздел напитков для меню
-            title='Desserts'
-        )
-        self.desserts_section.set_current_language('ru')
-        self.desserts_section.title = "Десерты"
-        self.desserts_section.save()
-        self.sparkling_water = self.drinks_section.courses.create(
-            menu=self.menu,
-            published=True,
-            title="Sparkling mineral water",
-            price=25,
-            cooking_time=datetime.timedelta(days=0)
-        )
-        self.sparkling_water.set_current_language('ru')
-        self.sparkling_water.title = "Газированная минеральная вода"
-        self.sparkling_water.save()
-        self.still_water = self.drinks_section.courses.create(
-            menu=self.menu,
-            published=True,
-            title="Still mineral water",
-            price=20,
-            cooking_time=datetime.timedelta(days=0)
-        )
-        self.still_water.set_current_language('ru')
-        self.still_water.title = "Негазированная минеральная вода"
-        self.still_water.save()
-        self.disabled_water = self.drinks_section.courses.create(
-            # Этой воды в меню быть не должно
-            menu=self.menu,
-            published=False,
-            title="Unavailable mineral water",
-            price=30,
-            cooking_time=datetime.timedelta(days=0)
-        )
-        self.disabled_water.set_current_language('ru')
-        self.disabled_water.title = "Недоступная минеральная вода"
-        self.disabled_water.save()
-        self.chocolate_sandwich = self.desserts_section.courses.create(
-            # Этой воды в меню быть не должно
-            menu=self.menu,
-            published=True,
-            title="Sandwich with chocolate butter",
-            price=30,
-            cooking_time=datetime.timedelta(seconds=90)
-        )
-        self.chocolate_sandwich.set_current_language('ru')
-        self.chocolate_sandwich.title = "Бутерброд с шоколадным маслом"
-        self.chocolate_sandwich.save()
-
-    def tearDown(self):
-        """Удалить тестовые данные"""
-        self.inactive_menu.save()
-        self.menu.delete()
-        self.restaurant.delete()
-
     def __get_url(self):
         """URL для запроса информации о ресторане"""
-        return f"/api/v1/public/restaurants/{self.restaurant.pk}/"
+        return f"/api/v1/public/restaurants/{self._data['cheap_restaurant'].pk}/"
 
     def __get_section_from_answer(self, info, section_name):
         """Ищет в информации о ресторане данные о разделе меню"""

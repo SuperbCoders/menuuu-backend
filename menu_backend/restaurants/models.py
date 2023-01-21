@@ -155,6 +155,11 @@ class Restaurant(TranslatableModel):
     def __str__(self):
         return self.name
 
+    @property
+    def current_menu(self):
+        """Возвращает текущее активное меню ресторана"""
+        return self.menus.filter(published=True).first()
+
     def generate_qrcode(self):
         """Генерирует QR код для доступа к меню ресторана через API"""
         logger = logging.getLogger('root')

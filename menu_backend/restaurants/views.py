@@ -96,7 +96,7 @@ def restaurant_to_json(restaurant, language: str = settings.LANGUAGE_CODE):
         'latitude': restaurant.latitude,
         'longitude': restaurant.longitude
     }
-    menu = restaurant.menus.filter(published=True).first()
+    menu = restaurant.current_menu
     if menu:
         obj['menu'] = menu_to_json(menu, language)
     return obj

@@ -15,7 +15,16 @@ class MenuCourseSerializer(TranslatableModelSerializer):
 
     class Meta:
         model = MenuCourse
-        fields = ['id', 'translations', 'price', 'cooking_time']
+        fields = [
+            'id',
+            'menu',
+            'section',
+            'published',
+            'translations',
+            'price',
+            'cooking_time',
+            'options',
+        ]
 
 
 class MenuSectionSerializer(TranslatableModelSerializer):
@@ -24,7 +33,11 @@ class MenuSectionSerializer(TranslatableModelSerializer):
 
     class Meta:
         model = MenuCourse
-        fields = ['translations', 'courses']
+        fields = [
+            'translations',
+            'menu',
+            'courses'
+        ]
 
     # Вместе с разделом меню возвращаем информацию обо всех блюда этого
     # раздела
@@ -37,7 +50,14 @@ class MenuSerializer(TranslatableModelSerializer):
 
     class Meta:
         model = Menu
-        fields = ['translations', 'sections', 'restaurant']
+        fields = [
+            'translations',
+            'restaurant',
+            'published',
+            'sections',
+            'extra_courses',
+        ]
 
     # При возврате меню расписать все его разделы и блюда
     sections = MenuSectionSerializer(many=True, read_only=True)
+    extra_courses = MenuCourseSerializer(many=True, read_only=True)

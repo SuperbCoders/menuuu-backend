@@ -3,7 +3,7 @@
 """
 
 from rest_framework import viewsets
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import AllowAny
 
 from menus.models import MenuCourse, MenuSection, Menu
 from menus.serializers import (
@@ -19,7 +19,8 @@ class MenuCourseViewSet(viewsets.ModelViewSet):
     """
 
     model = MenuCourse
-    permission_classes = (IsAuthenticated,)
+    queryset = MenuCourse.objects.all()
+    permission_classes = (AllowAny,)
     serializer_class = MenuCourseSerializer
     http_method_names = ['get', 'head', 'options']
 
@@ -30,7 +31,8 @@ class MenuSectionViewSet(viewsets.ModelViewSet):
     """
 
     model = MenuSection
-    permission_classes = (IsAuthenticated,)
+    queryset = MenuSection.objects.all()
+    permission_classes = (AllowAny,)
     serializer_class = MenuSectionSerializer
     http_method_names = ['get', 'head', 'options']
 
@@ -41,6 +43,7 @@ class MenuViewSet(viewsets.ModelViewSet):
     """
 
     model = Menu
-    permission_classes = (IsAuthenticated,)
+    queryset = Menu.objects.all()
+    permission_classes = (AllowAny,)
     serializer_class = MenuSerializer
     http_method_names = ['get', 'head', 'options']
