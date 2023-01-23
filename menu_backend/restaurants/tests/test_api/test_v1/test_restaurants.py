@@ -197,6 +197,7 @@ class RestaurantCreateTest(BaseTestCase):
                             'description': "Только что добавленный ресторан",
                         },
                     },
+                    'country': 'Россия',
                     'city': 'Москва',
                     'street': 'Тверская',
                     'building': '25',
@@ -212,3 +213,67 @@ class RestaurantCreateTest(BaseTestCase):
         # Проверяем, что ресторан был добавлен
         self.assertEqual(Restaurant.objects.count(), 3)
         new_restaurant = Restaurant.objects.get(pk=new_pk)
+        self.assertEqual(new_restaurant.name, "New restaurant")
+        self.assertEqual(new_restaurant.description, "A new restaurant just added")
+        self.assertEqual(new_restaurant.city, "Москва")
+        # Проверяем, что пользователь, добавивший ресторан, стал его владельцем
+        self.assertTrue(
+            new_restaurant.restaurant_staff.filter(
+                position='owner', user=self._data['some_user']
+            ).exists()
+        )
+        # Проверяем, что пользователь, добавивший ресторан, получил права владельца
+        # этого ресторана
+        self.assertTrue(new_restaurant.check_owner(self._data['some_user']))
+        # Проверяем, что и русское название добавилось
+        new_restaurant.set_current_language('ru')
+        self.assertEqual(new_restaurant.name, "Новый ресторан")
+
+    def test_admin(self):
+        """Администратор добавляет новый ресторан"""
+        self.assertEqual(Restaurant.objects.count(), 2)
+        with self.logged_in('admin'):
+            ans = self.client.post(
+                self.__get_url(),
+                {
+                    'translations': {
+                        'en': {
+                            'name': "New restaurant",
+                            'description': "A new restaurant just added",
+                        },
+                        'ru': {
+                            'name': "Новый ресторан",
+                            'description': "Только что добавленный ресторан",
+                        },
+                    },
+                    'country': 'Россия',
+                    'city': 'Москва',
+                    'street': 'Тверская',
+                    'building': '25',
+                    'address_details': 'Вход со двора',
+                    'zip_code': '110120',
+                    'longitude': '37.5',
+                    'latitude': '56.5'
+                },
+                format='json'
+            )
+        self.assertEqual(ans.status_code, 201)
+        new_pk = ans.json()['id']
+        # Проверяем, что ресторан был добавлен
+        self.assertEqual(Restaurant.objects.count(), 3)
+        new_restaurant = Restaurant.objects.get(pk=new_pk)
+        self.assertEqual(new_restaurant.name, "New restaurant")
+        self.assertEqual(new_restaurant.description, "A new restaurant just added")
+        self.assertEqual(new_restaurant.city, "Москва")
+        # Проверяем, что пользователь, добавивший ресторан, стал его владельцем
+        self.assertTrue(
+            new_restaurant.restaurant_staff.filter(
+                position='owner', user=self._data['admin']
+            ).exists()
+        )
+        # Проверяем, что пользователь, добавивший ресторан, получил права владельца
+        # этого ресторана
+        self.assertTrue(new_restaurant.check_owner(self._data['admin']))
+        # Проверяем, что и русское название добавилось
+        new_restaurant.set_current_language('ru')
+        self.assertEqual(new_restaurant.name, "Новый ресторан")

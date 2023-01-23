@@ -47,10 +47,27 @@ class RestaurantViewSet(viewsets.ModelViewSet):
     model = Restaurant
     permission_classes = [RestaurantPermission]
     serializer_class = RestaurantSerializer
-    http_method_names = ['get', 'head', 'options']
+    http_method_names = [
+        'get', 'head', 'options', 'post', 'put', 'patch', 'delete'
+    ]
 
     def get_queryset(self):
         return Restaurant.objects.all()
+
+    def create(self, request):
+        """
+        При создании нового ресторана сделать пользователя, добавившего
+        ресторан, в список владельцев этого ресторана
+        """
+        response = super().create(request)
+        if response.status_code == 201:
+            # Находим созданный ресторан по возвращаемому значению ключа
+            restaurant = Restaurant.objects.get(pk=response.data['id'])
+            # И добавляем пользователя-создателя в список владельцев
+            user = request.user
+            if user.is_authenticated and user.is_active:
+                restaurant.restaurant_staff.create(position='owner', user=user)
+        return response
 
 
 class RestaurantStaffViewSet(viewsets.ModelViewSet):
@@ -61,7 +78,9 @@ class RestaurantStaffViewSet(viewsets.ModelViewSet):
     model = RestaurantStaff
     permission_classes = [RestaurantStaffPermission]
     serializer_class = RestaurantStaffSerializer
-    http_method_names = ['get', 'head', 'options', 'post', 'put', 'patch', 'delete']
+    http_method_names = [
+        'get', 'head', 'options', 'post', 'put', 'patch', 'delete'
+    ]
 
     def get_queryset(self):
         return RestaurantStaff.objects.all()

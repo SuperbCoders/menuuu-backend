@@ -32,8 +32,6 @@ class MenuCourseRetrieveTest(BaseTestCase):
         ans = self.client.get(self.__get_url())
         self.assertEqual(ans.status_code, 200)
         info = ans.json()
-        from pprint import PrettyPrinter
-        PrettyPrinter().pprint(info)
 
 
 class MenuSectionListTest(BaseTestCase):
@@ -86,6 +84,3 @@ class MenuRetrieveTest(BaseTestCase):
         """Неавторизованный пользователь может видеть опубликованное меню"""
         ans = self.client.get(self.__get_url())
         self.assertEqual(ans.status_code, 200)
-        info = ans.json()
-        from pprint import PrettyPrinter
-        PrettyPrinter().pprint(info)

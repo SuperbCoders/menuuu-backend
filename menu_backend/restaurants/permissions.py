@@ -19,7 +19,7 @@ class RestaurantCategoryPermission(permissions.BasePermission):
         """
         if request.method in permissions.SAFE_METHODS:
             return True
-        if not request.user.is_authenticated:
+        if not request.user.is_authenticated or not request.user.is_active:
             return False
         return request.user.is_staff
 
@@ -29,7 +29,7 @@ class RestaurantCategoryPermission(permissions.BasePermission):
         """
         if request.method in permissions.SAFE_METHODS:
             return True
-        if not request.user.is_authenticated:
+        if not request.user.is_authenticated or not request.user.is_active:
             return False
         return request.user.is_staff
 
@@ -54,7 +54,7 @@ class RestaurantPermission(permissions.BasePermission):
         """
         if request.method in permissions.SAFE_METHODS:
             return True
-        if not request.user.is_authenticated:
+        if not request.user.is_authenticated or not request.user.is_active:
             return False
         if request.method == 'POST':
             return True
@@ -90,7 +90,7 @@ class RestaurantStaffPermission(permissions.BasePermission):
             # а переопределенная функция get_queryset наборе обработчиков ограничит
             # список доступных должностей пользователей в ресторанами теми ресторанами,
             # к которым пользователь имеет доступ.
-            return request.user.is_authenticated
+            return request.user.is_authenticated and request.user.is_active
         if request.method == 'POST':
             # А вот во втором случае придется извлекать идентификатор ресторана из
             # данных запроса и проверять права для него...
