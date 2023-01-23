@@ -5,7 +5,9 @@
 from parler_rest.serializers import TranslatableModelSerializer
 from parler_rest.fields import TranslatedFieldsField
 
-from restaurants.models import Restaurant, RestaurantCategory
+from rest_framework.serializers import ModelSerializer
+
+from restaurants.models import Restaurant, RestaurantCategory, RestaurantStaff
 
 from menus.serializers import MenuSerializer
 
@@ -51,3 +53,14 @@ class RestaurantSerializer(TranslatableModelSerializer):
 
     category_data = RestaurantCategorySerializer(source='category', read_only=True)
     current_menu = MenuSerializer(read_only=True)
+
+
+class RestaurantStaffSerializer(ModelSerializer):
+    """Сериализатор для должностей пользователей в ресторанах"""
+    class Meta:
+        model = RestaurantStaff
+        fields = [
+            'restaurant',
+            'user',
+            'position'
+        ]

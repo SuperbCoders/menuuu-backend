@@ -1,9 +1,9 @@
 from rest_framework import viewsets
 from rest_framework.permissions import AllowAny
 
-from restaurants.models import Restaurant
-from restaurants.permissions import RestaurantPermission
-from restaurants.serializers import RestaurantSerializer
+from restaurants.models import Restaurant, RestaurantStaff, RestaurantCategory
+from restaurants.permissions import RestaurantPermission, RestaurantStaffPermission, RestaurantCategoryPermission
+from restaurants.serializers import RestaurantSerializer, RestaurantStaffSerializer, RestaurantCategorySerializer
 
 
 class RestaurantViewSet(viewsets.ModelViewSet):
@@ -17,3 +17,17 @@ class RestaurantViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         return Restaurant.objects.all()
+
+
+class RestaurantStaffViewset(viewsets.ModelViewSet):
+    """
+    Набор API-обработчиков для управления должностями пользователей
+    в ресторанах
+    """
+    model = RestaurantStaff
+    permission_classes = [RestaurantStaffPermission]
+    serializer_class = RestaurantStaffSerializer
+    http_method_names = ['get', 'head', 'options']
+
+    def get_queryset(self):
+        return RestaurantStaff.objects.all()

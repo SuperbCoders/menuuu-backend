@@ -170,6 +170,24 @@ class Restaurant(TranslatableModel):
         img = qrcode.make(data)
         return img
 
+    def check_owner(self, user):
+        """
+        Возвращает True, если пользователь user является владельцем ресторана
+        self и False в противном случае
+        """
+        if not user.is_authenticated or not user.is_active:
+            return False
+        return self.restaurant_staff.filter(position='owner', user=user).exists()
+
+    def check_owner_or_worker(self, user):
+        """
+        Возвращает True, если пользователь user является владельцем ресторана
+        self или работает в нем и False в противном случае
+        """
+        if not user.is_authenticated or not user.is_active:
+            return False
+        return self.restaurant_staff.filter(user=user).exists()
+
 
 class RestaurantStaff(models.Model):
     """
