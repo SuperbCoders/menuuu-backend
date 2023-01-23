@@ -276,7 +276,7 @@ class RestaurantCategoryUpdateTest(BaseTestCase):
     def test_unauthorized(self):
         """Неавторизованный пользователь не может изменить существующую категорию ресторанов"""
         self.assertEqual(RestaurantCategory.objects.count(), 1)
-        ans = self.client.post(
+        ans = self.client.put(
             self.__get_url(),
             {
                 'translations': {'en': {'name': "Fast food"}, 'ru': {'name': "Быстрая еда"}}
@@ -293,13 +293,139 @@ class RestaurantCategoryUpdateTest(BaseTestCase):
         """Непривилегированный пользователь не может изменить существующую категорию ресторанов"""
         self.assertEqual(RestaurantCategory.objects.count(), 1)
         with self.logged_in('some_user'):
-            ans = self.client.post(
+            ans = self.client.put(
                 self.__get_url(),
                 {
                     'translations': {'en': {'name': "Fast food"}, 'ru': {'name': "Быстрая еда"}}
                 },
                 format='json'
             )
+        self.assertEqual(ans.status_code, 403)
+        # Проверить, что категория не была изменена
+        self.assertEqual(RestaurantCategory.objects.count(), 1)
+        self.assertEqual(RestaurantCategory.objects.language('en').first().name, "Fastfood")
+        self.assertEqual(RestaurantCategory.objects.language('ru').first().name, "Фастфуд")
+
+    def test_cheap_worker(self):
+        """Сотрудник дешевого ресторана не может изменить существующую категорию ресторанов"""
+        self.assertEqual(RestaurantCategory.objects.count(), 1)
+        with self.logged_in('cheap_worker'):
+            ans = self.client.put(
+                self.__get_url(),
+                {
+                    'translations': {'en': {'name': "Fast food"}, 'ru': {'name': "Быстрая еда"}}
+                },
+                format='json'
+            )
+        self.assertEqual(ans.status_code, 403)
+        # Проверить, что категория не была изменена
+        self.assertEqual(RestaurantCategory.objects.count(), 1)
+        self.assertEqual(RestaurantCategory.objects.language('en').first().name, "Fastfood")
+        self.assertEqual(RestaurantCategory.objects.language('ru').first().name, "Фастфуд")
+
+    def test_cheap_owner(self):
+        """Владелец дешевого ресторана не может изменить существующую категорию ресторанов"""
+        self.assertEqual(RestaurantCategory.objects.count(), 1)
+        with self.logged_in('cheap_owner'):
+            ans = self.client.put(
+                self.__get_url(),
+                {
+                    'translations': {'en': {'name': "Fast food"}, 'ru': {'name': "Быстрая еда"}}
+                },
+                format='json'
+            )
+        self.assertEqual(ans.status_code, 403)
+        # Проверить, что категория не была изменена
+        self.assertEqual(RestaurantCategory.objects.count(), 1)
+        self.assertEqual(RestaurantCategory.objects.language('en').first().name, "Fastfood")
+        self.assertEqual(RestaurantCategory.objects.language('ru').first().name, "Фастфуд")
+
+    def test_premium_worker(self):
+        """Сотрудник премиум ресторана не может изменить существующую категорию ресторанов"""
+        self.assertEqual(RestaurantCategory.objects.count(), 1)
+        with self.logged_in('premium_worker'):
+            ans = self.client.put(
+                self.__get_url(),
+                {
+                    'translations': {'en': {'name': "Fast food"}, 'ru': {'name': "Быстрая еда"}}
+                },
+                format='json'
+            )
+        self.assertEqual(ans.status_code, 403)
+        # Проверить, что категория не была изменена
+        self.assertEqual(RestaurantCategory.objects.count(), 1)
+        self.assertEqual(RestaurantCategory.objects.language('en').first().name, "Fastfood")
+        self.assertEqual(RestaurantCategory.objects.language('ru').first().name, "Фастфуд")
+
+    def test_premium_owner(self):
+        """Владелец премиум ресторана не может изменить существующую категорию ресторанов"""
+        self.assertEqual(RestaurantCategory.objects.count(), 1)
+        with self.logged_in('premium_owner'):
+            ans = self.client.put(
+                self.__get_url(),
+                {
+                    'translations': {'en': {'name': "Fast food"}, 'ru': {'name': "Быстрая еда"}}
+                },
+                format='json'
+            )
+        self.assertEqual(ans.status_code, 403)
+        # Проверить, что категория не была изменена
+        self.assertEqual(RestaurantCategory.objects.count(), 1)
+        self.assertEqual(RestaurantCategory.objects.language('en').first().name, "Fastfood")
+        self.assertEqual(RestaurantCategory.objects.language('ru').first().name, "Фастфуд")
+
+    def test_admin(self):
+        """Администратор изменяет существующую категорию ресторанов"""
+        self.assertEqual(RestaurantCategory.objects.count(), 1)
+        with self.logged_in('admin'):
+            ans = self.client.put(
+                self.__get_url(),
+                {
+                    'translations': {'en': {'name': "Fast food"}, 'ru': {'name': "Быстрая еда"}}
+                },
+                format='json'
+            )
+        self.assertEqual(ans.status_code, 200)
+        # Проверить, что категория была изменена
+        self.assertEqual(RestaurantCategory.objects.count(), 1)
+        self.assertEqual(RestaurantCategory.objects.language('en').first().name, "Fast food")
+        self.assertEqual(RestaurantCategory.objects.language('ru').first().name, "Быстрая еда")
+
+
+class RestaurantCategoryDeleteTest(BaseTestCase):
+    """
+    Тесты для API для удаления существующей категории ресторанов.
+    """
+
+    def __get_url(self):
+        return f"/api/v1/restaurant_categories/{self._data['category'].pk}/"
+
+    def test_unauthorized(self):
+        """Неавторизованный пользователь не может удалить существующую категорию ресторанов"""
+        self.assertEqual(RestaurantCategory.objects.count(), 1)
+        ans = self.client.delete(self.__get_url())
+        self.assertEqual(ans.status_code, 403)
+        # Проверить, что категория не была изменена
+        self.assertEqual(RestaurantCategory.objects.count(), 1)
+        self.assertEqual(RestaurantCategory.objects.language('en').first().name, "Fastfood")
+        self.assertEqual(RestaurantCategory.objects.language('ru').first().name, "Фастфуд")
+
+    def test_some_user(self):
+        """Непривилегированный пользователь не может удалить существующую категорию ресторанов"""
+        self.assertEqual(RestaurantCategory.objects.count(), 1)
+        with self.logged_in('some_user'):
+            ans = self.client.delete(self.__get_url())
+        self.assertEqual(ans.status_code, 403)
+        # Проверить, что категория не была изменена
+        self.assertEqual(RestaurantCategory.objects.count(), 1)
+        self.assertEqual(RestaurantCategory.objects.language('en').first().name, "Fastfood")
+        self.assertEqual(RestaurantCategory.objects.language('ru').first().name, "Фастфуд")
+
+    def test_cheap_worker(self):
+        """Работник дешевого ресторана не может удалить существующую категорию ресторанов"""
+        self.assertEqual(RestaurantCategory.objects.count(), 1)
+        with self.logged_in('cheap_worker'):
+            ans = self.client.delete(self.__get_url())
         self.assertEqual(ans.status_code, 403)
         # Проверить, что категория не была изменена
         self.assertEqual(RestaurantCategory.objects.count(), 1)

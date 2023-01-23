@@ -61,7 +61,7 @@ class RestaurantStaffViewSet(viewsets.ModelViewSet):
     model = RestaurantStaff
     permission_classes = [RestaurantStaffPermission]
     serializer_class = RestaurantStaffSerializer
-    http_method_names = ['get', 'head', 'options']
+    http_method_names = ['get', 'head', 'options', 'post', 'put', 'patch', 'delete']
 
     def get_queryset(self):
         return RestaurantStaff.objects.all()

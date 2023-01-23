@@ -246,17 +246,15 @@ class BaseTestCase(APITestCase):
         Активное - и единственное - меню дорогого ресторана
     """
 
-    @classmethod
-    def setUpClass(cls):
+    def setUp(self):
         """Создает данные для тестирования"""
-        super().setUpClass()
-        cls._data = populate_test_data()
+        super().setUp()
+        self._data = populate_test_data()
 
-    @classmethod
-    def tearDownClass(cls):
+    def tearDown(self):
         """Удаляет тестовые данные"""
-        cleanup_test_data(cls._data)
-        super().tearDownClass()
+        cleanup_test_data(self._data)
+        super().tearDown()
 
     @contextmanager
     def logged_in(self, username):
