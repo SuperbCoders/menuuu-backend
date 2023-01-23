@@ -263,3 +263,45 @@ class RestaurantCategoryCreateTest(BaseTestCase):
         # Проверить, что категория была добавлена
         self.assertEqual(RestaurantCategory.objects.count(), 2)
         self.assertEqual(RestaurantCategory.objects.get(pk=new_pk).name, "Vegetarian")
+
+
+class RestaurantCategoryUpdateTest(BaseTestCase):
+    """
+    Тесты для API для изменения существующей категории ресторанов.
+    """
+
+    def __get_url(self):
+        return f"/api/v1/restaurant_categories/{self._data['category'].pk}/"
+
+    def test_unauthorized(self):
+        """Неавторизованный пользователь не может изменить существующую категорию ресторанов"""
+        self.assertEqual(RestaurantCategory.objects.count(), 1)
+        ans = self.client.post(
+            self.__get_url(),
+            {
+                'translations': {'en': {'name': "Fast food"}, 'ru': {'name': "Быстрая еда"}}
+            },
+            format='json'
+        )
+        self.assertEqual(ans.status_code, 403)
+        # Проверить, что категория не была изменена
+        self.assertEqual(RestaurantCategory.objects.count(), 1)
+        self.assertEqual(RestaurantCategory.objects.language('en').first().name, "Fastfood")
+        self.assertEqual(RestaurantCategory.objects.language('ru').first().name, "Фастфуд")
+
+    def test_some_user(self):
+        """Непривилегированный пользователь не может изменить существующую категорию ресторанов"""
+        self.assertEqual(RestaurantCategory.objects.count(), 1)
+        with self.logged_in('some_user'):
+            ans = self.client.post(
+                self.__get_url(),
+                {
+                    'translations': {'en': {'name': "Fast food"}, 'ru': {'name': "Быстрая еда"}}
+                },
+                format='json'
+            )
+        self.assertEqual(ans.status_code, 403)
+        # Проверить, что категория не была изменена
+        self.assertEqual(RestaurantCategory.objects.count(), 1)
+        self.assertEqual(RestaurantCategory.objects.language('en').first().name, "Fastfood")
+        self.assertEqual(RestaurantCategory.objects.language('ru').first().name, "Фастфуд")
