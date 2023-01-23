@@ -18,7 +18,7 @@ class RestaurantCategorySerializer(TranslatableModelSerializer):
 
     class Meta:
         model = RestaurantCategory
-        fields = ['translations']
+        fields = ['id', 'translations']
 
 
 class RestaurantSerializer(TranslatableModelSerializer):

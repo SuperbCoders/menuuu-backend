@@ -276,6 +276,15 @@ class BaseTestCase(APITestCase):
         yield user
         self.client.logout()
 
+    def verify_fastfood_category(self, info):
+        """
+        Проверить, что словарь info содержит корректные данные о категории
+        фастфуд-ресторанов.
+        """
+        self.assertCountEqual(info.keys(), ['id', 'translations'])
+        self.assertEqual(info['id'], self._data['category'].pk)
+        self.assertEqual(info['translations']['en']['name'], "Fastfood")
+
     def verify_cheap_active_menu(self, info):
         """
         Проверить, что словарь info соответствует данным об активном меню дешевого

@@ -24,7 +24,11 @@ from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 
 from menus.viewsets import MenuCourseViewSet, MenuSectionViewSet, MenuViewSet
-from restaurants.viewsets import RestaurantViewSet
+from restaurants.viewsets import (
+    RestaurantCategoryViewSet,
+    RestaurantViewSet,
+    RestaurantStaffViewSet
+)
 from restaurants.views import UnauthorizedRestaturantView
 from users.views import UserCreationView
 
@@ -33,6 +37,7 @@ router_v1 = routers.SimpleRouter()
 router_v1.register('menu_courses', MenuCourseViewSet, basename='menucourse')
 router_v1.register('menu_sections', MenuSectionViewSet, basename='menusection')
 router_v1.register('menu', MenuViewSet, basename='menu')
+router_v1.register('restaurant_categories', RestaurantCategoryViewSet, basename='restaurant_category')
 router_v1.register('restaurants', RestaurantViewSet, basename='restaurant')
 
 

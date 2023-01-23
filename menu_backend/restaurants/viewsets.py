@@ -1,9 +1,39 @@
 from rest_framework import viewsets
 from rest_framework.permissions import AllowAny
 
-from restaurants.models import Restaurant, RestaurantStaff, RestaurantCategory
-from restaurants.permissions import RestaurantPermission, RestaurantStaffPermission, RestaurantCategoryPermission
-from restaurants.serializers import RestaurantSerializer, RestaurantStaffSerializer, RestaurantCategorySerializer
+from restaurants.models import (
+    Restaurant,
+    RestaurantStaff,
+    RestaurantCategory
+)
+from restaurants.permissions import (
+    RestaurantPermission,
+    RestaurantStaffPermission,
+    RestaurantCategoryPermission
+)
+from restaurants.serializers import (
+    RestaurantSerializer,
+    RestaurantStaffSerializer,
+    RestaurantCategorySerializer
+)
+
+
+class RestaurantCategoryViewSet(viewsets.ModelViewSet):
+    """
+    Набор API-обработчиков для управления категориями ресторанов.
+
+    Смотреть категории ресторанов имеют право все пользователи, а изменять
+    их - только администраторы.
+    """
+    model = RestaurantCategory
+    permission_classes = [RestaurantCategoryPermission]
+    serializer_class = RestaurantCategorySerializer
+    http_method_names = [
+        'get', 'head', 'options', 'post', 'put', 'patch', 'delete'
+    ]
+
+    def get_queryset(self):
+        return RestaurantCategory.objects.all()
 
 
 class RestaurantViewSet(viewsets.ModelViewSet):
@@ -19,7 +49,7 @@ class RestaurantViewSet(viewsets.ModelViewSet):
         return Restaurant.objects.all()
 
 
-class RestaurantStaffViewset(viewsets.ModelViewSet):
+class RestaurantStaffViewSet(viewsets.ModelViewSet):
     """
     Набор API-обработчиков для управления должностями пользователей
     в ресторанах

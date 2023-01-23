@@ -90,7 +90,7 @@ class RestaurantStaffPermission(permissions.BasePermission):
             # а переопределенная функция get_queryset наборе обработчиков ограничит
             # список доступных должностей пользователей в ресторанами теми ресторанами,
             # к которым пользователь имеет доступ.
-            return request.user.is_authenticated:
+            return request.user.is_authenticated
         if request.method == 'POST':
             # А вот во втором случае придется извлекать идентификатор ресторана из
             # данных запроса и проверять права для него...
