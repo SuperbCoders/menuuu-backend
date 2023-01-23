@@ -39,6 +39,7 @@ router_v1.register('menu_sections', MenuSectionViewSet, basename='menusection')
 router_v1.register('menu', MenuViewSet, basename='menu')
 router_v1.register('restaurant_categories', RestaurantCategoryViewSet, basename='restaurant_category')
 router_v1.register('restaurants', RestaurantViewSet, basename='restaurant')
+router_v1.register('restaurant_staff', RestaurantStaffViewSet, basename='restaurant_staff')
 
 
 # Генерируем страницу с документацией по API

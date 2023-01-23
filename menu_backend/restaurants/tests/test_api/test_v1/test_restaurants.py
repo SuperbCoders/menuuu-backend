@@ -5,70 +5,6 @@
 from restaurants.tests._fixtures import BaseTestCase
 
 
-class RestaurantCategoryRetrieveTest(BaseTestCase):
-    """
-    Тесты для API для получения информации о категории ресторанов.
-    """
-
-    def __get_url(self):
-        return f"/api/v1/restaurant_categories/{self._data['category'].pk}/"
-
-    def test_unauthorized(self):
-        """Неавторизованный пользователь видит информацию о категории ресторанов"""
-        ans = self.client.get(self.__get_url())
-        self.assertEqual(ans.status_code, 200)
-        info = ans.json()
-        self.verify_fastfood_category(info)
-
-    def test_some_user(self):
-        """Непривилегированный пользователь видит информацию о категории ресторанов"""
-        with self.logged_in('some_user'):
-            ans = self.client.get(self.__get_url())
-        self.assertEqual(ans.status_code, 200)
-        info = ans.json()
-        self.verify_fastfood_category(info)
-
-    def test_cheap_worker(self):
-        """Работник дешевого ресторана пользователь видит информацию о категории ресторанов"""
-        with self.logged_in('cheap_worker'):
-            ans = self.client.get(self.__get_url())
-        self.assertEqual(ans.status_code, 200)
-        info = ans.json()
-        self.verify_fastfood_category(info)
-
-    def test_cheap_owner(self):
-        """Владелец дешевого ресторана пользователь видит информацию о категории ресторанов"""
-        with self.logged_in('cheap_owner'):
-            ans = self.client.get(self.__get_url())
-        self.assertEqual(ans.status_code, 200)
-        info = ans.json()
-        self.verify_fastfood_category(info)
-
-    def test_premium_worker(self):
-        """Работник дорогого ресторана пользователь видит информацию о категории ресторанов"""
-        with self.logged_in('premium_worker'):
-            ans = self.client.get(self.__get_url())
-        self.assertEqual(ans.status_code, 200)
-        info = ans.json()
-        self.verify_fastfood_category(info)
-
-    def test_premium_owner(self):
-        """Владелец дорогого ресторана пользователь видит информацию о категории ресторанов"""
-        with self.logged_in('premium_owner'):
-            ans = self.client.get(self.__get_url())
-        self.assertEqual(ans.status_code, 200)
-        info = ans.json()
-        self.verify_fastfood_category(info)
-
-    def test_admin(self):
-        """Администратор видит информацию о категории ресторанов"""
-        with self.logged_in('admin'):
-            ans = self.client.get(self.__get_url())
-        self.assertEqual(ans.status_code, 200)
-        info = ans.json()
-        self.verify_fastfood_category(info)
-
-
 class RestaurantRetrieveTest(BaseTestCase):
     """
     Тесты для API получения информации об одиночном ресторане
@@ -139,7 +75,7 @@ class RestaurantListTest(BaseTestCase):
     """
 
     def __get_url(self):
-        return f"/api/v1/restaurants/"
+        return "/api/v1/restaurants/"
 
     def test_unauthorized(self):
         """Неавторизованный пользователь видит список ресторанов"""

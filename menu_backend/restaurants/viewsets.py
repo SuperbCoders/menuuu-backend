@@ -1,5 +1,9 @@
+"""
+Наборы обработчиков API для работы с ресторанами, категориями ресторанов и
+должностями пользователей ресторанов.
+"""
+
 from rest_framework import viewsets
-from rest_framework.permissions import AllowAny
 
 from restaurants.models import (
     Restaurant,
