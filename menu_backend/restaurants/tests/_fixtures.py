@@ -353,8 +353,10 @@ class BaseTestCase(APITestCase):
 
     def verify_cheap_restaurant_unchanged(self):
         """
-        Проверить, что данные о фастфуд-ресторане не были изменены
+        Проверить, что данные о фастфуд-ресторане не были изменены и не один
+        ресторан не был удален (то есть всего их два)
         """
+        self.assertEqual(Restaurant.objects.count(), 2)
         restaurant = Restaurant.objects.get(pk=self._data['cheap_restaurant'].pk)
         self.assertEqual(restaurant.name, "A good place to eat")
         self.assertEqual(restaurant.description, "Just some good place to eat")

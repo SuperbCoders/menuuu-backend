@@ -356,7 +356,6 @@ class RestaurantUpdateTest(BaseTestCase):
 
     def test_unauthorized(self):
         """Неавторизованный пользователь не может редактировать информацию о ресторане"""
-        self.assertEqual(Restaurant.objects.count(), 2)
         ans = self.__put_new_restaurant_data()
         self.assertEqual(ans.status_code, 403)
         # Проверяем, что ресторан не был изменен
@@ -364,7 +363,6 @@ class RestaurantUpdateTest(BaseTestCase):
 
     def test_some_user(self):
         """Пользователь не имеющий отношения к ресторану не может редактировать ресторан"""
-        self.assertEqual(Restaurant.objects.count(), 2)
         with self.logged_in('some_user'):
             ans = self.__put_new_restaurant_data()
         self.assertEqual(ans.status_code, 403)
@@ -373,7 +371,6 @@ class RestaurantUpdateTest(BaseTestCase):
 
     def test_cheap_worker(self):
         """Работник ресторана не может редактировать ресторан"""
-        self.assertEqual(Restaurant.objects.count(), 2)
         with self.logged_in('cheap_worker'):
             ans = self.__put_new_restaurant_data()
         self.assertEqual(ans.status_code, 403)
@@ -382,7 +379,6 @@ class RestaurantUpdateTest(BaseTestCase):
 
     def test_cheap_owner(self):
         """Владелец ресторана редактирует его описание и адрес"""
-        self.assertEqual(Restaurant.objects.count(), 2)
         with self.logged_in('cheap_owner'):
             ans = self.__put_new_restaurant_data()
         self.assertEqual(ans.status_code, 200)
@@ -391,7 +387,6 @@ class RestaurantUpdateTest(BaseTestCase):
 
     def test_premium_worker(self):
         """Работник другого ресторана не может редактировать ресторан"""
-        self.assertEqual(Restaurant.objects.count(), 2)
         with self.logged_in('premium_worker'):
             ans = self.__put_new_restaurant_data()
         self.assertEqual(ans.status_code, 403)
@@ -400,7 +395,6 @@ class RestaurantUpdateTest(BaseTestCase):
 
     def test_premium_owner(self):
         """Владелец другого ресторана не может редактировать ресторан"""
-        self.assertEqual(Restaurant.objects.count(), 2)
         with self.logged_in('premium_owner'):
             ans = self.__put_new_restaurant_data()
         self.assertEqual(ans.status_code, 403)
@@ -409,9 +403,152 @@ class RestaurantUpdateTest(BaseTestCase):
 
     def test_admin(self):
         """Администратор редактирует описание и адрес ресторана"""
-        self.assertEqual(Restaurant.objects.count(), 2)
         with self.logged_in('admin'):
             ans = self.__put_new_restaurant_data()
         self.assertEqual(ans.status_code, 200)
         # Проверяем, что данные ресторана изменились
         self.__verify_cheap_restaurant_changed()
+
+
+class RestaurantPatchTest(BaseTestCase):
+    """
+    Тесты для API частичного изменения существующего ресторана
+    """
+
+    def __get_url(self, restaurant_name: str='cheap_restaurant'):
+        return f"/api/v1/restaurants/{self._data[restaurant_name].pk}/"
+
+    def __patch_new_restaurant_data(self):
+        """
+        Выполнить PATCH-запрос на изменение данных ресторана и вернуть ответ на
+        него. Изменяет подробности адреса ресторана
+        """
+        return self.client.patch(
+            self.__get_url(),
+            {
+                'address_details': 'Вход со двора',
+            },
+            format='json'
+        )
+
+    def __verify_cheap_restaurant_changed(self):
+        """
+        Проверить, что данные о фастфуд-ресторане были успешно изменены
+        """
+        restaurant = Restaurant.objects.get(pk=self._data['cheap_restaurant'].pk)
+        self.assertEqual(restaurant.name, "A good place to eat")
+        self.assertEqual(restaurant.description, "Just some good place to eat")
+        self.assertEqual(restaurant.country, "Russia")
+        self.assertEqual(restaurant.city, "Moscow")
+        self.assertEqual(restaurant.street, "Leninskiy avenue")
+        self.assertEqual(restaurant.building, "6/3")
+        self.assertEqual(restaurant.address_details, "Вход со двора")
+        self.assertEqual(restaurant.zip_code, "123456")
+        restaurant.set_current_language('ru')
+        self.assertEqual(restaurant.name, "Придорожное кафе")
+        self.assertEqual(restaurant.description, "Первое попавшееся кафе")
+
+    def test_unauthorized(self):
+        """Неавторизованный пользователь не может редактировать информацию о ресторане"""
+        ans = self.__patch_new_restaurant_data()
+        self.assertEqual(ans.status_code, 403)
+        # Проверяем, что ресторан не был изменен
+        self.verify_cheap_restaurant_unchanged()
+
+    def test_some_user(self):
+        """Пользователь не имеющий отношения к ресторану не может редактировать ресторан"""
+        with self.logged_in('some_user'):
+            ans = self.__patch_new_restaurant_data()
+        self.assertEqual(ans.status_code, 403)
+        # Проверяем, что ресторан не был изменен
+        self.verify_cheap_restaurant_unchanged()
+
+    def test_cheap_worker(self):
+        """Работник ресторана не может редактировать ресторан"""
+        with self.logged_in('cheap_worker'):
+            ans = self.__patch_new_restaurant_data()
+        self.assertEqual(ans.status_code, 403)
+        # Проверяем, что ресторан не был изменен
+        self.verify_cheap_restaurant_unchanged()
+
+    def test_cheap_owner(self):
+        """Владелец ресторана редактирует подробности его адреса"""
+        with self.logged_in('cheap_owner'):
+            ans = self.__patch_new_restaurant_data()
+        self.assertEqual(ans.status_code, 200)
+        # Проверяем, что данные ресторана изменились
+        self.__verify_cheap_restaurant_changed()
+
+    def test_premium_worker(self):
+        """Работник другого ресторана не может редактировать ресторан"""
+        with self.logged_in('premium_worker'):
+            ans = self.__patch_new_restaurant_data()
+        self.assertEqual(ans.status_code, 403)
+        # Проверяем, что ресторан не был изменен
+        self.verify_cheap_restaurant_unchanged()
+
+    def test_premium_owner(self):
+        """Владелец другого ресторана не может редактировать ресторан"""
+        with self.logged_in('premium_owner'):
+            ans = self.__patch_new_restaurant_data()
+        self.assertEqual(ans.status_code, 403)
+        # Проверяем, что ресторан не был изменен
+        self.verify_cheap_restaurant_unchanged()
+
+    def test_admin(self):
+        """Администратор редактирует адрес ресторана"""
+        with self.logged_in('admin'):
+            ans = self.__patch_new_restaurant_data()
+        self.assertEqual(ans.status_code, 200)
+        # Проверяем, что данные ресторана изменились
+        self.__verify_cheap_restaurant_changed()
+
+
+class RestaurantDeleteTest(BaseTestCase):
+    """
+    Тесты для удаления существующего ресторана
+    """
+
+    def __get_url(self, restaurant_name: str='cheap_restaurant'):
+        return f"/api/v1/restaurants/{self._data[restaurant_name].pk}/"
+
+    def __delete_new_restaurant_data(self):
+        """
+        Выполнить DELETE-запрос на удаление ресторана и вернуть ответ на него
+        """
+        return self.client.delete(self.__get_url())
+
+    def __verify_cheap_restaurant_deleted(self):
+        """
+        Проверить, что фастфуд-ресторан был удален
+        """
+        self.assertEqual(Restaurant.objects.count(), 1)
+        self.assertFalse(
+            Restaurant.objects.filter(pk=self._data['cheap_restaurant'].pk).exists()
+        )
+
+    def test_unauthorized(self):
+        """Неавторизованный пользователь не может удалить ресторан"""
+        self.assertEqual(Restaurant.objects.count(), 2)
+        ans = self.__delete_new_restaurant_data()
+        self.assertEqual(ans.status_code, 403)
+        # Проверяем, что ресторан не был изменен
+        self.verify_cheap_restaurant_unchanged()
+
+    def test_some_user(self):
+        """Зарегистрированный пользователь не может удалить ресторан"""
+        self.assertEqual(Restaurant.objects.count(), 2)
+        with self.logged_in('some_user'):
+            ans = self.__delete_new_restaurant_data()
+        self.assertEqual(ans.status_code, 403)
+        # Проверяем, что ресторан не был изменен
+        self.verify_cheap_restaurant_unchanged()
+
+    def test_cheap_worker(self):
+        """Работник ресторана не может удалить ресторан"""
+        self.assertEqual(Restaurant.objects.count(), 2)
+        with self.logged_in('cheap_worker'):
+            ans = self.__delete_new_restaurant_data()
+        self.assertEqual(ans.status_code, 403)
+        # Проверяем, что ресторан не был изменен
+        self.verify_cheap_restaurant_unchanged()

@@ -64,7 +64,7 @@ class Menu(TranslatableModel):
         """
         Проверить, что меню опубликовано
         """
-        return self.is_published
+        return self.published
 
     def check_restaurant_staff(self, user):
         """
@@ -120,6 +120,18 @@ class MenuSection(TranslatableModel):
     def published_courses(self):
         """Список опубликованных блюд, входящих в подраздел"""
         return self.courses.filter(published=True)
+
+    def check_published(self):
+        """
+        Проверить, что меню, к которому относится этот раздел, опубликовано
+        """
+        return self.menu.check_published()
+
+    def check_restaurant_staff(self, user):
+        """
+        Проверить, что пользователь работает в ресторане, к которому относится меню
+        """
+        return self.menu.check_restaurant_staff(user)
 
 
 class MenuCourse(TranslatableModel):
@@ -180,3 +192,15 @@ class MenuCourse(TranslatableModel):
 
     def __str__(self):
         return self.title
+
+    def check_published(self):
+        """
+        Проверить, что меню, к которому относится это блюдо, опубликовано
+        """
+        return self.menu.check_published() and self.published
+
+    def check_restaurant_staff(self, user):
+        """
+        Проверить, что пользователь работает в ресторане, к которому относится меню
+        """
+        return self.menu.check_restaurant_staff(user)
