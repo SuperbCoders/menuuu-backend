@@ -532,7 +532,7 @@ class RestaurantDeleteTest(BaseTestCase):
         self.assertEqual(Restaurant.objects.count(), 2)
         ans = self.__delete_new_restaurant_data()
         self.assertEqual(ans.status_code, 403)
-        # Проверяем, что ресторан не был изменен
+        # Проверяем, что ресторан не был удален или изменен
         self.verify_cheap_restaurant_unchanged()
 
     def test_some_user(self):
@@ -541,7 +541,7 @@ class RestaurantDeleteTest(BaseTestCase):
         with self.logged_in('some_user'):
             ans = self.__delete_new_restaurant_data()
         self.assertEqual(ans.status_code, 403)
-        # Проверяем, что ресторан не был изменен
+        # Проверяем, что ресторан не был удален или изменен
         self.verify_cheap_restaurant_unchanged()
 
     def test_cheap_worker(self):
@@ -550,5 +550,41 @@ class RestaurantDeleteTest(BaseTestCase):
         with self.logged_in('cheap_worker'):
             ans = self.__delete_new_restaurant_data()
         self.assertEqual(ans.status_code, 403)
-        # Проверяем, что ресторан не был изменен
+        # Проверяем, что ресторан не был удален или изменен
         self.verify_cheap_restaurant_unchanged()
+
+    def test_cheap_owner(self):
+        """Владелец ресторана удаляет свой ресторан"""
+        self.assertEqual(Restaurant.objects.count(), 2)
+        with self.logged_in('cheap_owner'):
+            ans = self.__delete_new_restaurant_data()
+        self.assertEqual(ans.status_code, 204)
+        # Проверяем, что ресторан был удален
+        self.__verify_cheap_restaurant_deleted()
+
+    def test_premium_worker(self):
+        """Работник ресторана не может удалить другой ресторан"""
+        self.assertEqual(Restaurant.objects.count(), 2)
+        with self.logged_in('premium_worker'):
+            ans = self.__delete_new_restaurant_data()
+        self.assertEqual(ans.status_code, 403)
+        # Проверяем, что ресторан не был удален или изменен
+        self.verify_cheap_restaurant_unchanged()
+
+    def test_premium_owner(self):
+        """Хозяин ресторана не может удалить другой ресторан"""
+        self.assertEqual(Restaurant.objects.count(), 2)
+        with self.logged_in('premium_owner'):
+            ans = self.__delete_new_restaurant_data()
+        self.assertEqual(ans.status_code, 403)
+        # Проверяем, что ресторан не был удален или изменен
+        self.verify_cheap_restaurant_unchanged()
+
+    def test_admin(self):
+        """Администратор удаляет ресторан"""
+        self.assertEqual(Restaurant.objects.count(), 2)
+        with self.logged_in('admin'):
+            ans = self.__delete_new_restaurant_data()
+        self.assertEqual(ans.status_code, 204)
+        # Проверяем, что ресторан был удален
+        self.__verify_cheap_restaurant_deleted()

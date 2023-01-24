@@ -5,7 +5,7 @@
 from rest_framework import permissions
 
 from menus.models import Menu
-from restaurant.models import Restaurant
+from restaurants.models import Restaurant
 
 
 class MenuPermission(permissions.BasePermission):

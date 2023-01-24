@@ -40,12 +40,12 @@ class MenuCourseViewSet(viewsets.ModelViewSet):
         """
         if self.request.user.is_authenticated:
             if self.request.user.is_staff:
-                return MenuSection.objects.all()
-            return MenuSection.objects.filter(
+                return MenuCourse.objects.all()
+            return MenuCourse.objects.filter(
                 Q(menu__published=True) |
                 Q(menu__restaurant__id__in=self.request.user.restaurant_staff.values_list('restaurant_id', flat=True))
             ).all()
-        return MenuSection.objects.filter(menu__published=True).all()
+        return MenuCourse.objects.filter(menu__published=True).all()
 
 
 class MenuSectionViewSet(viewsets.ModelViewSet):
