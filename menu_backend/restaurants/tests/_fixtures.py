@@ -350,3 +350,20 @@ class BaseTestCase(APITestCase):
                 self.verify_premium_restaurant(item)
             else:
                 self.fail("В возвращенном списке ресторанов оказался неизвестный ресторан")
+
+    def verify_cheap_restaurant_unchanged(self):
+        """
+        Проверить, что данные о фастфуд-ресторане не были изменены
+        """
+        restaurant = Restaurant.objects.get(pk=self._data['cheap_restaurant'].pk)
+        self.assertEqual(restaurant.name, "A good place to eat")
+        self.assertEqual(restaurant.description, "Just some good place to eat")
+        self.assertEqual(restaurant.country, "Russia")
+        self.assertEqual(restaurant.city, "Moscow")
+        self.assertEqual(restaurant.street, "Leninskiy avenue")
+        self.assertEqual(restaurant.building, "6/3")
+        self.assertEqual(restaurant.address_details, "")
+        self.assertEqual(restaurant.zip_code, "123456")
+        restaurant.set_current_language('ru')
+        self.assertEqual(restaurant.name, "Придорожное кафе")
+        self.assertEqual(restaurant.description, "Первое попавшееся кафе")

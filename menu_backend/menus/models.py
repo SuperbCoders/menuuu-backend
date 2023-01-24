@@ -60,6 +60,18 @@ class Menu(TranslatableModel):
         """Список опубликованных блюд меню, не входящих ни в один подраздел"""
         return self.courses.filter(section__isnull=True, published=True)
 
+    def check_published(self):
+        """
+        Проверить, что меню опубликовано
+        """
+        return self.is_published
+
+    def check_restaurant_staff(self, user):
+        """
+        Проверить, что пользователь работает в ресторане, к которому относится меню
+        """
+        return self.restaurant.check_owner_or_worker(user)
+
     def save(self, *args, **kwargs):
         """
         Если меню сделано опубликованным, то автоматически все другие меню того же

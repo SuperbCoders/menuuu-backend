@@ -1,0 +1,37 @@
+"""
+Проверка прав доступа пользователей к меню ресторанов
+"""
+
+from rest_framework import permissions
+
+from menus.models import Menu
+
+
+class MenuPermission(permissions.BasePermission):
+    """
+    Права доступа к меню. Опубликованное меню могут видеть все. Неопубликованное
+    меню могут видеть администратор и работники ресторана, к которому относится
+    меню. Они же могут редактировать меню.
+    """
+
+    def has_permission(self, request, view):
+        if request.method in permissions.SAFE_METHODS:
+            return True
+        if not request.user.is_authenticated or not request.user.is_active:
+            return False
+        if request.method == 'POST':
+            # При добавлении нового меню придется извлекать идентификатор
+            # ресторана из данных запроса и проверять права для него...
+            restaurant_id = request.DATA['restaurant']
+            if not Restaurant.objects.filter(pk=restaurant_id).exists():
+                return False
+            restaurant = Restaurant.objects.get(pk=restaurant_id)
+            return restaurant.check_owner_or_worker(request.user)
+        return request.user.is_staff or request.user.restaurant_staff.exists()
+
+    def has_object_permission(self, request, view, obj):
+        if obj.check_published() and request.method in permissions.SAFE_METHODS:
+            return True
+        if not request.user.is_authenticated:
+            return False
+        return request.user.is_staff or obj.check_restaurant_staff(request.user)
