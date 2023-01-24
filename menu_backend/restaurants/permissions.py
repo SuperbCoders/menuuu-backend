@@ -86,17 +86,19 @@ class RestaurantStaffPermission(permissions.BasePermission):
         """
         Проверка права на выполнения запроса request
         """
-        if request.method in permissions.SAFE_METHODS:
-            return request.user.is_authenticated and request.user.is_active
+        if not request.user.is_authenticated or not request.user.is_active:
+            return False
+        if request.user.is_staff:
+            return True
         if request.method == 'POST':
             # При добавлении нового сотрудника придется извлекать идентификатор
             # ресторана из данных запроса и проверять права для него...
-            restaurant_id = request.DATA['restaurant']
+            restaurant_id = request.data['restaurant']
             if not Restaurant.objects.filter(pk=restaurant_id).exists():
                 return False
             restaurant = Restaurant.objects.get(pk=restaurant_id)
             return restaurant.check_owner(request.user)
-        return request.user.is_staff or request.user.restaurant_staff.exists()
+        return request.user.restaurant_staff.exists()
 
     def has_object_permission(self, request, view, obj):
         """

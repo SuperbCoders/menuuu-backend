@@ -83,4 +83,12 @@ class RestaurantStaffViewSet(viewsets.ModelViewSet):
     ]
 
     def get_queryset(self):
-        return RestaurantStaff.objects.all()
+        """
+        Список сотрудников ресторанов видимых пользователю request.user
+        """
+        if self.request.user.is_staff:
+            return RestaurantStaff.objects.all()
+        restaurant_ids = set(
+            self.request.user.restaurant_staff.values_list('restaurant_id', flat=True)
+        )
+        return RestaurantStaff.objects.filter(restaurant__id__in=restaurant_ids)

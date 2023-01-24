@@ -31,7 +31,6 @@ class MenuCourseRetrieveTest(BaseTestCase):
         """Неавторизованный пользователь может видеть опубликованное блюдо"""
         ans = self.client.get(self.__get_url())
         self.assertEqual(ans.status_code, 200)
-        info = ans.json()
 
 
 class MenuSectionListTest(BaseTestCase):
