@@ -4,6 +4,8 @@
 
 from django.db.models import Q
 
+from django_filters.rest_framework import DjangoFilterBackend
+
 from rest_framework import viewsets
 
 from menus.models import MenuCourse, MenuSection, Menu
@@ -28,6 +30,8 @@ class MenuCourseViewSet(viewsets.ModelViewSet):
     queryset = MenuCourse.objects.all()
     permission_classes = [MenuCoursePermission]
     serializer_class = MenuCourseSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['menu', 'section']
     http_method_names = ['get', 'head', 'options', 'post', 'put', 'patch', 'delete']
 
     def get_queryset(self):
@@ -41,11 +45,12 @@ class MenuCourseViewSet(viewsets.ModelViewSet):
         if self.request.user.is_authenticated:
             if self.request.user.is_staff:
                 return MenuCourse.objects.all()
+            restaurant_ids = set(self.request.user.restaurant_staff.values_list('restaurant_id', flat=True))
             return MenuCourse.objects.filter(
-                Q(menu__published=True) |
-                Q(menu__restaurant__id__in=self.request.user.restaurant_staff.values_list('restaurant_id', flat=True))
+                Q(menu__published=True, published=True) |
+                Q(menu__restaurant__id__in=restaurant_ids)
             ).all()
-        return MenuCourse.objects.filter(menu__published=True).all()
+        return MenuCourse.objects.filter(menu__published=True, published=True).all()
 
 
 class MenuSectionViewSet(viewsets.ModelViewSet):
@@ -57,6 +62,8 @@ class MenuSectionViewSet(viewsets.ModelViewSet):
     queryset = MenuSection.objects.all()
     permission_classes = [MenuSectionPermission]
     serializer_class = MenuSectionSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['menu']
     http_method_names = ['get', 'head', 'options', 'post', 'put', 'patch', 'delete']
 
     def get_queryset(self):
@@ -85,6 +92,8 @@ class MenuViewSet(viewsets.ModelViewSet):
     model = Menu
     permission_classes = [MenuPermission]
     serializer_class = MenuSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['restaurant']
     http_method_names = ['get', 'head', 'options', 'post', 'put', 'patch', 'delete']
 
     def get_queryset(self):

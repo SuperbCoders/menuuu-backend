@@ -372,3 +372,13 @@ class BaseTestCase(APITestCase):
         restaurant.set_current_language('ru')
         self.assertEqual(restaurant.name, "Придорожное кафе")
         self.assertEqual(restaurant.description, "Первое попавшееся кафе")
+
+    def verify_chocolate_sandwich(self, info):
+        """
+        Проверить, что словарь info соответствует данным о бутерброде с
+        шоколадным маслом.
+        """
+        self.assertEqual(info['id'], self._data['chocolate_sandwich'].pk)
+        self.assertEqual(info['translations']['en']['title'], "Sandwich with chocolate butter")
+        self.assertEqual(info['price'], '30.00')
+        self.assertEqual(info['published'], True)
