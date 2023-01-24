@@ -579,7 +579,7 @@ class RestaurantStaffUserFilterTest(BaseTestCase):
     """
 
     def __get_url(self):
-        return f"/api/v1/restaurant_staff/?user={self._data['cheap_owner'].pk}"
+        return f"/api/v1/restaurant_staff/?user={self._data['cheap_worker'].pk}"
 
     def __verify_cheap_worker(self, info):
         """
