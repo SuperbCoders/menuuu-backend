@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # Модули сторонних разработчиков
+    'django_filters',
     'drf_yasg',
     'parler',
     'phonenumber_field',

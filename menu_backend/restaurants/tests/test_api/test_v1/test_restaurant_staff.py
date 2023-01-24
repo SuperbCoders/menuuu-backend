@@ -543,7 +543,7 @@ class RestaurantStaffDeleteTest(BaseTestCase):
         """Работник не может уволить работника чужого ресторана"""
         with self.logged_in('premium_worker'):
             ans = self.client.delete(self.__get_url())
-        self.assertEqual(ans.status_code, 403)
+        self.assertEqual(ans.status_code, 404)
         # Проверяем, что должность работника не изменилась
         self.assertTrue(self._data['cheap_worker'].restaurant_staff.exists())
         self.assertTrue(
@@ -555,7 +555,7 @@ class RestaurantStaffDeleteTest(BaseTestCase):
         """Владелец не может уволить работника чужого ресторана"""
         with self.logged_in('premium_owner'):
             ans = self.client.delete(self.__get_url())
-        self.assertEqual(ans.status_code, 403)
+        self.assertEqual(ans.status_code, 404)
         # Проверяем, что должность работника не изменилась
         self.assertTrue(self._data['cheap_worker'].restaurant_staff.exists())
         self.assertTrue(
@@ -570,3 +570,76 @@ class RestaurantStaffDeleteTest(BaseTestCase):
         self.assertEqual(ans.status_code, 204)
         # Проверяем, что работник больше не числится в ресторане
         self.assertFalse(self._data['cheap_worker'].restaurant_staff.exists())
+
+
+class RestaurantStaffUserFilterTest(BaseTestCase):
+    """
+    Тесты для API получения списка всех работников ресторанов, с фильтрацией по
+    пользователю
+    """
+
+    def __get_url(self):
+        return f"/api/v1/restaurant_staff/?user={self._data['cheap_owner'].pk}"
+
+    def __verify_cheap_worker(self, info):
+        """
+        Проверить, что словарь info содержит корректую информацию о должности
+        работника cheap_worker в своем ресторане
+        """
+        self.assertEqual(info['position'], "worker")
+        self.assertEqual(info['restaurant'], self._data['cheap_restaurant'].pk)
+        self.assertEqual(info['user'], self._data['cheap_worker'].pk)
+
+    def test_unauthorized(self):
+        """Неавторизованный пользователь не видит список сотрудников ресторанов"""
+        ans = self.client.get(self.__get_url())
+        self.assertEqual(ans.status_code, 403)
+
+    def test_some_user(self):
+        """Пользователь без работы не видит список сотрудников ресторанов"""
+        with self.logged_in('some_user'):
+            ans = self.client.get(self.__get_url())
+        self.assertEqual(ans.status_code, 403)
+
+    def test_cheap_worker(self):
+        """Сотрудник ресторана видит собственную должность"""
+        with self.logged_in('cheap_worker'):
+            ans = self.client.get(self.__get_url())
+        self.assertEqual(ans.status_code, 200)
+        results = ans.json()['results']
+        self.assertEqual(len(results), 1)
+        self.__verify_cheap_worker(results[0])
+
+    def test_cheap_owner(self):
+        """Хозяин ресторана видит должности своего сотрудника"""
+        with self.logged_in('cheap_owner'):
+            ans = self.client.get(self.__get_url())
+        self.assertEqual(ans.status_code, 200)
+        results = ans.json()['results']
+        self.assertEqual(len(results), 1)
+        self.__verify_cheap_worker(results[0])
+
+    def test_premium_worker(self):
+        """Сотрудник ресторана не видит сотрудников чужого ресторана"""
+        with self.logged_in('premium_worker'):
+            ans = self.client.get(self.__get_url())
+        self.assertEqual(ans.status_code, 200)
+        results = ans.json()['results']
+        self.assertEqual(len(results), 0)
+
+    def test_premium_owner(self):
+        """Хозяин ресторана видит не видит сотрудников чужого ресторана"""
+        with self.logged_in('premium_owner'):
+            ans = self.client.get(self.__get_url())
+        self.assertEqual(ans.status_code, 200)
+        results = ans.json()['results']
+        self.assertEqual(len(results), 0)
+
+    def test_admin(self):
+        """Администратор видит список должностей пользователя в ресторанах"""
+        with self.logged_in('admin'):
+            ans = self.client.get(self.__get_url())
+        self.assertEqual(ans.status_code, 200)
+        results = ans.json()['results']
+        self.assertEqual(len(results), 1)
+        self.__verify_cheap_worker(results[0])

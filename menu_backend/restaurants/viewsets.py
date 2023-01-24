@@ -3,6 +3,8 @@
 должностями пользователей ресторанов.
 """
 
+from django_filters.rest_framework import DjangoFilterBackend
+
 from rest_framework import viewsets
 
 from restaurants.models import (
@@ -78,6 +80,8 @@ class RestaurantStaffViewSet(viewsets.ModelViewSet):
     model = RestaurantStaff
     permission_classes = [RestaurantStaffPermission]
     serializer_class = RestaurantStaffSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['restaurant', 'user']
     http_method_names = [
         'get', 'head', 'options', 'post', 'put', 'patch', 'delete'
     ]
