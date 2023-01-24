@@ -283,3 +283,49 @@ class RestaurantStaffCreateTest(BaseTestCase):
                 user=self._data['some_user'], position='worker'
             ).exists()
         )
+
+
+class RestaurantStaffUpdateTest(BaseTestCase):
+    """
+    Тесты для API изменения данных о должности работника в ресторане
+    """
+
+    def __get_url(self):
+        staff = self._data['cheap_worker'].restaurant_staff.first()
+        return f"/api/v1/restaurant_staff/{staff.pk}/"
+
+    def __put_new_restaurant_staff(self):
+        """
+        Выполнить PUT запрос на изменение должности одного из работников ресторана
+        на владельца
+        """
+        return self.client.put(
+            self.__get_url(),
+            {
+                'position': 'owner',
+                'user': self._data['some_user'].pk,
+                'restaurant': self._data['cheap_restaurant'].pk
+            },
+            format='json'
+        )
+
+    def test_unauthorized(self):
+        """Неавторизованный пользователь может изменить должность работника"""
+        ans = self.__put_new_restaurant_staff()
+        self.assertEqual(ans.status_code, 403)
+        # Проверяем, что должность работника не изменилась
+        self.assertEqual(
+            self._data['cheap_worker'].restaurant_staff.first().position,
+            "worker"
+        )
+
+    def test_some_user(self):
+        """Зарегистрированный пользователь может изменить должность работника"""
+        with self.logged_in('some_user'):
+            ans = self.__put_new_restaurant_staff()
+        self.assertEqual(ans.status_code, 403)
+        # Проверяем, что должность работника не изменилась
+        self.assertEqual(
+            self._data['cheap_worker'].restaurant_staff.first().position,
+            "worker"
+        )
