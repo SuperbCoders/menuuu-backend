@@ -303,14 +303,14 @@ class RestaurantStaffUpdateTest(BaseTestCase):
             self.__get_url(),
             {
                 'position': 'owner',
-                'user': self._data['some_user'].pk,
+                'user': self._data['cheap_worker'].pk,
                 'restaurant': self._data['cheap_restaurant'].pk
             },
             format='json'
         )
 
     def test_unauthorized(self):
-        """Неавторизованный пользователь может изменить должность работника"""
+        """Неавторизованный пользователь не может изменить должность работника"""
         ans = self.__put_new_restaurant_staff()
         self.assertEqual(ans.status_code, 403)
         # Проверяем, что должность работника не изменилась
@@ -320,7 +320,7 @@ class RestaurantStaffUpdateTest(BaseTestCase):
         )
 
     def test_some_user(self):
-        """Зарегистрированный пользователь может изменить должность работника"""
+        """Зарегистрированный пользователь не может изменить должность работника"""
         with self.logged_in('some_user'):
             ans = self.__put_new_restaurant_staff()
         self.assertEqual(ans.status_code, 403)
@@ -329,3 +329,244 @@ class RestaurantStaffUpdateTest(BaseTestCase):
             self._data['cheap_worker'].restaurant_staff.first().position,
             "worker"
         )
+
+    def test_cheap_worker(self):
+        """Работник не может изменить свою должность"""
+        with self.logged_in('cheap_worker'):
+            ans = self.__put_new_restaurant_staff()
+        self.assertEqual(ans.status_code, 403)
+        # Проверяем, что должность работника не изменилась
+        self.assertEqual(
+            self._data['cheap_worker'].restaurant_staff.first().position,
+            "worker"
+        )
+
+    def test_cheap_owner(self):
+        """Хозяин ресторана делает работника совладельцем"""
+        with self.logged_in('cheap_owner'):
+            ans = self.__put_new_restaurant_staff()
+        self.assertEqual(ans.status_code, 200)
+        # Проверяем, что должность работника изменилась как надо
+        self.assertEqual(
+            self._data['cheap_worker'].restaurant_staff.first().position,
+            "owner"
+        )
+
+    def test_premium_worker(self):
+        """Работник не может изменить должность работника чужого ресторана"""
+        with self.logged_in('premium_worker'):
+            ans = self.__put_new_restaurant_staff()
+        self.assertEqual(ans.status_code, 404)
+        # Проверяем, что должность работника не изменилась
+        self.assertEqual(
+            self._data['cheap_worker'].restaurant_staff.first().position,
+            "worker"
+        )
+
+    def test_premium_owner(self):
+        """Вдаделец не может изменить должность работника чужого ресторана"""
+        with self.logged_in('premium_owner'):
+            ans = self.__put_new_restaurant_staff()
+        self.assertEqual(ans.status_code, 404)
+        # Проверяем, что должность работника не изменилась
+        self.assertEqual(
+            self._data['cheap_worker'].restaurant_staff.first().position,
+            "worker"
+        )
+
+    def test_admin(self):
+        """Администратор делает работника ресторана совладельцем"""
+        with self.logged_in('admin'):
+            ans = self.__put_new_restaurant_staff()
+        self.assertEqual(ans.status_code, 200)
+        # Проверяем, что должность работника изменилась как надо
+        self.assertEqual(
+            self._data['cheap_worker'].restaurant_staff.first().position,
+            "owner"
+        )
+
+
+class RestaurantStaffPartialUpdateTest(BaseTestCase):
+    """
+    Тесты для API частичного изменения данных о должности работника в ресторане
+    """
+
+    def __get_url(self):
+        staff = self._data['cheap_worker'].restaurant_staff.first()
+        return f"/api/v1/restaurant_staff/{staff.pk}/"
+
+    def __patch_new_restaurant_staff(self):
+        """
+        Выполнить PUT запрос на изменение должности одного из работников ресторана
+        на владельца
+        """
+        return self.client.patch(
+            self.__get_url(),
+            {
+                'position': 'owner',
+                'user': self._data['cheap_worker'].pk,
+                'restaurant': self._data['cheap_restaurant'].pk
+            },
+            format='json'
+        )
+
+    def test_unauthorized(self):
+        """Неавторизованный пользователь не может изменить должность работника"""
+        ans = self.__patch_new_restaurant_staff()
+        self.assertEqual(ans.status_code, 403)
+        # Проверяем, что должность работника не изменилась
+        self.assertEqual(
+            self._data['cheap_worker'].restaurant_staff.first().position,
+            "worker"
+        )
+
+    def test_some_user(self):
+        """Зарегистрированный пользователь не может изменить должность работника"""
+        with self.logged_in('some_user'):
+            ans = self.__patch_new_restaurant_staff()
+        self.assertEqual(ans.status_code, 403)
+        # Проверяем, что должность работника не изменилась
+        self.assertEqual(
+            self._data['cheap_worker'].restaurant_staff.first().position,
+            "worker"
+        )
+
+    def test_cheap_worker(self):
+        """Работник не может изменить свою должность"""
+        with self.logged_in('cheap_worker'):
+            ans = self.__patch_new_restaurant_staff()
+        self.assertEqual(ans.status_code, 403)
+        # Проверяем, что должность работника не изменилась
+        self.assertEqual(
+            self._data['cheap_worker'].restaurant_staff.first().position,
+            "worker"
+        )
+
+    def test_cheap_owner(self):
+        """Хозяин ресторана делает работника совладельцем"""
+        with self.logged_in('cheap_owner'):
+            ans = self.__patch_new_restaurant_staff()
+        self.assertEqual(ans.status_code, 200)
+        # Проверяем, что должность работника изменилась как надо
+        self.assertEqual(
+            self._data['cheap_worker'].restaurant_staff.first().position,
+            "owner"
+        )
+
+    def test_premium_worker(self):
+        """Работник не может изменить должность работника чужого ресторана"""
+        with self.logged_in('premium_worker'):
+            ans = self.__patch_new_restaurant_staff()
+        self.assertEqual(ans.status_code, 404)
+        # Проверяем, что должность работника не изменилась
+        self.assertEqual(
+            self._data['cheap_worker'].restaurant_staff.first().position,
+            "worker"
+        )
+
+    def test_premium_owner(self):
+        """Вдаделец не может изменить должность работника чужого ресторана"""
+        with self.logged_in('premium_owner'):
+            ans = self.__patch_new_restaurant_staff()
+        self.assertEqual(ans.status_code, 404)
+        # Проверяем, что должность работника не изменилась
+        self.assertEqual(
+            self._data['cheap_worker'].restaurant_staff.first().position,
+            "worker"
+        )
+
+    def test_admin(self):
+        """Администратор делает работника ресторана совладельцем"""
+        with self.logged_in('admin'):
+            ans = self.__patch_new_restaurant_staff()
+        self.assertEqual(ans.status_code, 200)
+        # Проверяем, что должность работника изменилась как надо
+        self.assertEqual(
+            self._data['cheap_worker'].restaurant_staff.first().position,
+            "owner"
+        )
+
+
+class RestaurantStaffDeleteTest(BaseTestCase):
+    """
+    Тесты для API удаления данных о должности работника в ресторане
+    """
+
+    def __get_url(self):
+        staff = self._data['cheap_worker'].restaurant_staff.first()
+        return f"/api/v1/restaurant_staff/{staff.pk}/"
+
+    def test_unauthorized(self):
+        """Неавторизованный пользователь не может уволить работника"""
+        ans = self.client.delete(self.__get_url())
+        self.assertEqual(ans.status_code, 403)
+        # Проверяем, что должность работника не изменилась
+        self.assertTrue(self._data['cheap_worker'].restaurant_staff.exists())
+        self.assertTrue(
+            self._data['cheap_worker'].restaurant_staff.first().position,
+            "worker"
+        )
+
+    def test_some_user(self):
+        """Зарегистрированный пользователь не может уволить работника"""
+        with self.logged_in('some_user'):
+            ans = self.client.delete(self.__get_url())
+        self.assertEqual(ans.status_code, 403)
+        # Проверяем, что должность работника не изменилась
+        self.assertTrue(self._data['cheap_worker'].restaurant_staff.exists())
+        self.assertTrue(
+            self._data['cheap_worker'].restaurant_staff.first().position,
+            "worker"
+        )
+
+    def test_cheap_worker(self):
+        """Работник не может отменить свое место работы сам"""
+        with self.logged_in('cheap_worker'):
+            ans = self.client.delete(self.__get_url())
+        self.assertEqual(ans.status_code, 403)
+        # Проверяем, что должность работника не изменилась
+        self.assertTrue(self._data['cheap_worker'].restaurant_staff.exists())
+        self.assertTrue(
+            self._data['cheap_worker'].restaurant_staff.first().position,
+            "worker"
+        )
+
+    def test_cheap_owner(self):
+        """Хозяин ресторана увольняет работника"""
+        with self.logged_in('cheap_owner'):
+            ans = self.client.delete(self.__get_url())
+        self.assertEqual(ans.status_code, 204)
+        # Проверяем, что работник больше не числится в ресторане
+        self.assertFalse(self._data['cheap_worker'].restaurant_staff.exists())
+
+    def test_premium_worker(self):
+        """Работник не может уволить работника чужого ресторана"""
+        with self.logged_in('premium_worker'):
+            ans = self.client.delete(self.__get_url())
+        self.assertEqual(ans.status_code, 403)
+        # Проверяем, что должность работника не изменилась
+        self.assertTrue(self._data['cheap_worker'].restaurant_staff.exists())
+        self.assertTrue(
+            self._data['cheap_worker'].restaurant_staff.first().position,
+            "worker"
+        )
+
+    def test_premium_owner(self):
+        """Владелец не может уволить работника чужого ресторана"""
+        with self.logged_in('premium_owner'):
+            ans = self.client.delete(self.__get_url())
+        self.assertEqual(ans.status_code, 403)
+        # Проверяем, что должность работника не изменилась
+        self.assertTrue(self._data['cheap_worker'].restaurant_staff.exists())
+        self.assertTrue(
+            self._data['cheap_worker'].restaurant_staff.first().position,
+            "worker"
+        )
+
+    def test_admin(self):
+        """Администратор убирает должность работника в ресторане"""
+        with self.logged_in('admin'):
+            ans = self.client.delete(self.__get_url())
+        self.assertEqual(ans.status_code, 204)
+        # Проверяем, что работник больше не числится в ресторане
+        self.assertFalse(self._data['cheap_worker'].restaurant_staff.exists())
