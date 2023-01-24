@@ -15,6 +15,12 @@ class MenuPermission(permissions.BasePermission):
     """
 
     def has_permission(self, request, view):
+        """
+        Просматривать меню имеют право все (неопубликованные меню скрыты от
+        глаз посторонних пользователей в методе get_queryset соответствующего
+        обработчика). При добавлении нового меню проверяется право пользователя
+        редактировать меню соответствующего ресторана.
+        """
         if request.method in permissions.SAFE_METHODS:
             return True
         if not request.user.is_authenticated or not request.user.is_active:
@@ -30,6 +36,11 @@ class MenuPermission(permissions.BasePermission):
         return request.user.is_staff or request.user.restaurant_staff.exists()
 
     def has_object_permission(self, request, view, obj):
+        """
+        Разрешаем редактировать меню пользователю, работающему в ресторане, с которым
+        связано это меню или администратору. Если меню опубликовано то просматривать
+        его могут все.
+        """
         if obj.check_published() and request.method in permissions.SAFE_METHODS:
             return True
         if not request.user.is_authenticated:
