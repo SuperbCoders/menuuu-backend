@@ -30,7 +30,7 @@ from restaurants.viewsets import (
     RestaurantStaffViewSet
 )
 from restaurants.views import UnauthorizedRestaturantView
-from users.views import UserCreationView
+from users.views import UserCreationView, LoginView, LogoutView
 
 
 router_v1 = routers.SimpleRouter()
@@ -60,7 +60,11 @@ urlpatterns = [
     # Управление переводами строк через встроенную админку
     path('rosetta/', include('rosetta.urls')),
     # Регистрация нового пользователя
-    path("api/v1/users/register/", UserCreationView.as_view(), name="user_register"),
+    path('api/v1/users/register/', UserCreationView.as_view(), name="user_register"),
+    # Вход в систему
+    path('api/v1/users/login/', LoginView.as_view(), name='user_login'),
+    # Выход из системы
+    path('api/v1/users/logout/', LogoutView.as_view(), name='user_logout'),
     # Описание API
     path(
         'api/v1/swagger/',
