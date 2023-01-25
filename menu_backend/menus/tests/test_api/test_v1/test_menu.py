@@ -20,6 +20,51 @@ class MenuListTest(BaseTestCase):
         self.assertEqual(info['count'], 2)
         self.assertEqual(len(info['results']), 2)
 
+    def test_some_user(self):
+        """Зарегистрированный пользователь видит все опубликованные меню"""
+        with self.logged_in('some_user'):
+            ans = self.client.get(self.URL)
+        self.assertEqual(ans.status_code, 200)
+        info = ans.json()
+        self.assertEqual(info['count'], 2)
+        self.assertEqual(len(info['results']), 2)
+
+    def test_cheap_worker(self):
+        """Работник ресторана видит неопубликованные меню своего ресторана"""
+        with self.logged_in('cheap_worker'):
+            ans = self.client.get(self.URL)
+        self.assertEqual(ans.status_code, 200)
+        info = ans.json()
+        self.assertEqual(info['count'], 3)
+        self.assertEqual(len(info['results']), 3)
+
+    def test_cheap_owner(self):
+        """Хозяин ресторана видит неопубликованные меню своего ресторана"""
+        with self.logged_in('cheap_owner'):
+            ans = self.client.get(self.URL)
+        self.assertEqual(ans.status_code, 200)
+        info = ans.json()
+        self.assertEqual(info['count'], 3)
+        self.assertEqual(len(info['results']), 3)
+
+    def test_premium_worker(self):
+        """Работник не видит неопубликованные меню чужого ресторана"""
+        with self.logged_in('premium_worker'):
+            ans = self.client.get(self.URL)
+        self.assertEqual(ans.status_code, 200)
+        info = ans.json()
+        self.assertEqual(info['count'], 2)
+        self.assertEqual(len(info['results']), 2)
+
+    def test_premium_owner(self):
+        """Владелец не видит неопубликованные меню чужого ресторана"""
+        with self.logged_in('premium_owner'):
+            ans = self.client.get(self.URL)
+        self.assertEqual(ans.status_code, 200)
+        info = ans.json()
+        self.assertEqual(info['count'], 2)
+        self.assertEqual(len(info['results']), 2)
+
     def test_admin(self):
         """Администратор видит все опубликованные меню включая неопубликованные"""
         with self.logged_in('admin'):

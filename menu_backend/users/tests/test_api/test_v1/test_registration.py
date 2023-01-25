@@ -3,8 +3,6 @@
 из системы
 """
 
-from django.utils.translation import gettext_lazy as _
-
 from users.models import User
 from restaurants.tests._fixtures import BaseTestCase
 
@@ -41,3 +39,7 @@ class TestRegister(BaseTestCase):
         self.assertEqual(new_user.username, 'new_user')
         self.assertEqual(new_user.email, 'new_user@localhost')
         self.assertEqual(new_user.phone, '+79109876543')
+        # И что от его имени можно войти, но он не имеет полномочий
+        self.assertEqual(new_user.is_active, True)
+        self.assertEqual(new_user.is_staff, False)
+        self.assertEqual(new_user.is_superuser, False)
