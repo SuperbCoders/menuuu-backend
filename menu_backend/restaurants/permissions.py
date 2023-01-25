@@ -93,8 +93,8 @@ class RestaurantStaffPermission(permissions.BasePermission):
         if request.method == 'POST':
             # При добавлении нового сотрудника придется извлекать идентификатор
             # ресторана из данных запроса и проверять права для него...
-            restaurant_id = request.data['restaurant']
-            if not Restaurant.objects.filter(pk=restaurant_id).exists():
+            restaurant_id = request.data.get('restaurant', None)
+            if restaurant_id is None or not Restaurant.objects.filter(pk=restaurant_id).exists():
                 return False
             restaurant = Restaurant.objects.get(pk=restaurant_id)
             return restaurant.check_owner(request.user)

@@ -29,8 +29,8 @@ class MenuPermission(permissions.BasePermission):
         if request.method == 'POST':
             # При добавлении нового меню придется извлекать идентификатор
             # ресторана из данных запроса и проверять права для него...
-            restaurant_id = request.DATA['restaurant']
-            if not Restaurant.objects.filter(pk=restaurant_id).exists():
+            restaurant_id = request.data.get('restaurant', None)
+            if restaurant_id is None or not Restaurant.objects.filter(pk=restaurant_id).exists():
                 return False
             restaurant = Restaurant.objects.get(pk=restaurant_id)
             return restaurant.check_owner_or_worker(request.user)
@@ -67,8 +67,8 @@ class MenuSectionPermission(permissions.BasePermission):
         if request.method == 'POST':
             # При добавлении нового раздела придется извлекать идентификатор
             # меню из данных запроса и проверять права для него...
-            menu_id = request.DATA['menu']
-            if not Menu.objects.filter(pk=menu_id).exists():
+            menu_id = request.data.get('menu', None)
+            if menu_id is None or not Menu.objects.filter(pk=menu_id).exists():
                 return False
             menu = Menu.objects.get(pk=menu_id)
             return menu.check_restaurant_staff(request.user)
@@ -104,8 +104,8 @@ class MenuCoursePermission(permissions.BasePermission):
         if request.method == 'POST':
             # При добавлении нового блюда придется извлекать идентификатор
             # меню из данных запроса и проверять права для него...
-            menu_id = request.DATA['menu']
-            if not Menu.objects.filter(pk=menu_id).exists():
+            menu_id = request.data.get('menu', None)
+            if menu_id is None or not Menu.objects.filter(pk=menu_id).exists():
                 return False
             menu = Menu.objects.get(pk=menu_id)
             return menu.check_restaurant_staff(request.user)

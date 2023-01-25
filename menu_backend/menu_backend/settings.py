@@ -31,8 +31,9 @@ SITE_URL = os.getenv("SITE_URL", "http://127.0.0.1:8000")
 # Допустимые значения адреса продакшн-сервера
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '*').split(',')
 
-# Допустимые значения адресов для CSRF
+# Допустимые значения адресов для CSRF или CORS
 CSRF_TRUSTED_ORIGINS = os.getenv('CSRF_TRUSTED_ORIGINS', 'http://127.0.0.1').split(',')
+CORS_ALLOWED_ORIGINS = os.getenv('CORS_ALLOWED_ORIGINS', 'http://127.0.0.1').split(',')
 
 # Использовать собственную модель для пользователей
 AUTH_USER_MODEL = 'users.User'
@@ -47,11 +48,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # Модули сторонних разработчиков
+    'corsheaders',
     'django_filters',
     'drf_yasg',
     'parler',
     'phonenumber_field',
     'rest_framework',
+    'rest_framework.authtoken',
     'rosetta',
     # Наши собственные модули
     'users',
@@ -168,6 +171,10 @@ REST_FRAMEWORK = {
     # права доступа.
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAdminUser',
+    ],
+    # Используем авторизацию пользователей по токенам
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
     ]
 }
 
