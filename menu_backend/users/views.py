@@ -14,6 +14,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from users.models import User
+from users.swagger import swagger_login
 from users.serializers import UserCreationSerializer
 
 
@@ -48,6 +49,7 @@ class LoginView(APIView):
     permission_classes = [AllowAny]
     http_method_names = ['post', 'options']
 
+    @swagger_login
     def post(self, request):
         """Вход пользователя в систему"""
         logger = logging.getLogger('default')
