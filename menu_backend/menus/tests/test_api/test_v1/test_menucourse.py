@@ -238,7 +238,7 @@ class MenuCourseCreateTest(BaseTestCase):
         """Неавторизованный пользователь не может добавить блюдо"""
         self.__verify_no_new_course()
         ans = self.__post_new_course_data()
-        self.assertEqual(ans.status_code, 403)
+        self.assertEqual(ans.status_code, 401)
         self.__verify_no_new_course()
 
     def test_some_user(self):
@@ -255,7 +255,7 @@ class MenuCourseCreateTest(BaseTestCase):
         with self.logged_in('cheap_worker'):
             ans = self.__post_new_course_data()
         self.assertEqual(ans.status_code, 201)
-        self.__verify_new_course()
+        self.__verify_new_course(ans.json()['id'])
 
     def test_cheap_owner(self):
         """Хозяин ресторана может добавить блюдо в меню этого ресторана"""
@@ -263,7 +263,7 @@ class MenuCourseCreateTest(BaseTestCase):
         with self.logged_in('cheap_owner'):
             ans = self.__post_new_course_data()
         self.assertEqual(ans.status_code, 201)
-        self.__verify_new_course()
+        self.__verify_new_course(ans.json()['id'])
 
     def test_premium_worker(self):
         """Работник ресторана не может добавить блюдо в меню другого ресторана"""
@@ -287,13 +287,16 @@ class MenuCourseCreateTest(BaseTestCase):
         with self.logged_in('admin'):
             ans = self.__post_new_course_data()
         self.assertEqual(ans.status_code, 201)
-        self.__verify_new_course()
+        self.__verify_new_course(ans.json()['id'])
 
 
 class MenuCourseCreateInvalidTest(BaseTestCase):
     """
     Тесты для API создания нового блюда - проверяют, что нельзя создать блюдо,
     не привязанное к конкретному меню.
+
+    Поскольку производится проверка прав доступа пользователя к меню, в случае
+    отсутствия идентификатора меню возвращается ошибка 403 а не 400.
     """
 
     def __get_url(self):
@@ -324,7 +327,7 @@ class MenuCourseCreateInvalidTest(BaseTestCase):
         """Неавторизованный пользователь не может добавить блюдо"""
         self.__verify_no_new_course()
         ans = self.__post_new_course_data()
-        self.assertEqual(ans.status_code, 403)
+        self.assertEqual(ans.status_code, 401)
         self.__verify_no_new_course()
 
     def test_some_user(self):
@@ -340,7 +343,7 @@ class MenuCourseCreateInvalidTest(BaseTestCase):
         self.__verify_no_new_course()
         with self.logged_in('cheap_worker'):
             ans = self.__post_new_course_data()
-        self.assertEqual(ans.status_code, 400)
+        self.assertEqual(ans.status_code, 403)
         self.__verify_no_new_course()
 
     def test_cheap_owner(self):
@@ -348,7 +351,7 @@ class MenuCourseCreateInvalidTest(BaseTestCase):
         self.__verify_no_new_course()
         with self.logged_in('cheap_owner'):
             ans = self.__post_new_course_data()
-        self.assertEqual(ans.status_code, 400)
+        self.assertEqual(ans.status_code, 403)
         self.__verify_no_new_course()
 
     def test_premium_worker(self):
@@ -356,7 +359,7 @@ class MenuCourseCreateInvalidTest(BaseTestCase):
         self.__verify_no_new_course()
         with self.logged_in('premium_worker'):
             ans = self.__post_new_course_data()
-        self.assertEqual(ans.status_code, 400)
+        self.assertEqual(ans.status_code, 403)
         self.__verify_no_new_course()
 
     def test_premium_owner(self):
@@ -364,7 +367,7 @@ class MenuCourseCreateInvalidTest(BaseTestCase):
         self.__verify_no_new_course()
         with self.logged_in('premium_owner'):
             ans = self.__post_new_course_data()
-        self.assertEqual(ans.status_code, 400)
+        self.assertEqual(ans.status_code, 403)
         self.__verify_no_new_course()
 
     def test_admin(self):
@@ -372,7 +375,7 @@ class MenuCourseCreateInvalidTest(BaseTestCase):
         self.__verify_no_new_course()
         with self.logged_in('admin'):
             ans = self.__post_new_course_data()
-        self.assertEqual(ans.status_code, 400)
+        self.assertEqual(ans.status_code, 403)
         self.__verify_no_new_course()
 
 
@@ -427,47 +430,47 @@ class PublishedMenuCourseUpdateTest(BaseTestCase):
     def test_unauthorized(self):
         """Неавторизованный пользователь не может изменить блюдо"""
         ans = self.__put_new_course_data()
-        self.assertEqual(ans.status_code, 403)
+        self.assertEqual(ans.status_code, 401)
         self.__verify_course_unchanged()
 
     def test_some_user(self):
         """Пользователь не связанный с рестораном не может изменить блюдо"""
-        ans = self.__put_new_course_data()
         with self.logged_in('some_user'):
-            self.assertEqual(ans.status_code, 403)
+            ans = self.__put_new_course_data()
+        self.assertEqual(ans.status_code, 403)
         self.__verify_course_unchanged()
 
     def test_cheap_worker(self):
         """Работник ресторана изменяет информацию о блюде"""
-        ans = self.__put_new_course_data()
         with self.logged_in('cheap_worker'):
-            self.assertEqual(ans.status_code, 200)
+            ans = self.__put_new_course_data()
+        self.assertEqual(ans.status_code, 200)
         self.__verify_course_changed()
 
     def test_cheap_owner(self):
         """Хозяин ресторана изменяет информацию о блюде"""
-        ans = self.__put_new_course_data()
         with self.logged_in('cheap_owner'):
-            self.assertEqual(ans.status_code, 200)
+            ans = self.__put_new_course_data()
+        self.assertEqual(ans.status_code, 200)
         self.__verify_course_changed()
 
     def test_premium_worker(self):
         """Работник ресторана не может изменить блюдо другого ресторана"""
-        ans = self.__put_new_course_data()
         with self.logged_in('premium_worker'):
-            self.assertEqual(ans.status_code, 403)
+            ans = self.__put_new_course_data()
+        self.assertEqual(ans.status_code, 403)
         self.__verify_course_unchanged()
 
     def test_premium_owner(self):
         """Хозяин ресторана не может изменить блюдо другого ресторана"""
-        ans = self.__put_new_course_data()
         with self.logged_in('premium_owner'):
-            self.assertEqual(ans.status_code, 403)
+            ans = self.__put_new_course_data()
+        self.assertEqual(ans.status_code, 403)
         self.__verify_course_unchanged()
 
     def test_admin(self):
         """Администратор изменяет информацию о блюде"""
-        ans = self.__put_new_course_data()
         with self.logged_in('admin'):
-            self.assertEqual(ans.status_code, 200)
+            ans = self.__put_new_course_data()
+        self.assertEqual(ans.status_code, 200)
         self.__verify_course_changed()

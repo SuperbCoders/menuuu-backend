@@ -33,7 +33,7 @@ class MenuPermission(permissions.BasePermission):
             if restaurant_id is None or not Restaurant.objects.filter(pk=restaurant_id).exists():
                 return False
             restaurant = Restaurant.objects.get(pk=restaurant_id)
-            return restaurant.check_owner_or_worker(request.user)
+            return restaurant.check_owner_or_worker(request.user) or request.user.is_staff
         return request.user.is_staff or request.user.restaurant_staff.exists()
 
     def has_object_permission(self, request, view, obj):
@@ -71,7 +71,7 @@ class MenuSectionPermission(permissions.BasePermission):
             if menu_id is None or not Menu.objects.filter(pk=menu_id).exists():
                 return False
             menu = Menu.objects.get(pk=menu_id)
-            return menu.check_restaurant_staff(request.user)
+            return menu.check_restaurant_staff(request.user) or request.user.is_staff
         return request.user.is_staff or request.user.restaurant_staff.exists()
 
     def has_object_permission(self, request, view, obj):
@@ -108,7 +108,7 @@ class MenuCoursePermission(permissions.BasePermission):
             if menu_id is None or not Menu.objects.filter(pk=menu_id).exists():
                 return False
             menu = Menu.objects.get(pk=menu_id)
-            return menu.check_restaurant_staff(request.user)
+            return menu.check_restaurant_staff(request.user) or request.user.is_staff
         return request.user.is_staff or request.user.restaurant_staff.exists()
 
     def has_object_permission(self, request, view, obj):
