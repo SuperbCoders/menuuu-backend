@@ -16,7 +16,7 @@ class RestaurantStaffListTest(BaseTestCase):
     def test_unauthorized(self):
         """Неавторизованный пользователь не видит список сотрудников ресторанов"""
         ans = self.client.get(self.__get_url())
-        self.assertEqual(ans.status_code, 403)
+        self.assertEqual(ans.status_code, 401)
 
     def test_some_user(self):
         """Пользователь без работы не видит список сотрудников ресторанов"""
@@ -143,7 +143,7 @@ class RestaurantStaffRetrieveTest(BaseTestCase):
     def test_unauthorized(self):
         """Неавторизованный пользователь не видит запись о сотруднике ресторана"""
         ans = self.client.get(self.__get_url())
-        self.assertEqual(ans.status_code, 403)
+        self.assertEqual(ans.status_code, 401)
 
     def test_some_user(self):
         """Пользователь без работы не видит запись о сотруднике ресторана"""
@@ -224,7 +224,7 @@ class RestaurantStaffCreateTest(BaseTestCase):
     def test_unauthorized(self):
         """Неавторизованный пользователь не может добавить в ресторан нового сотрудника"""
         ans = self.__post_new_restaurant_staff()
-        self.assertEqual(ans.status_code, 403)
+        self.assertEqual(ans.status_code, 401)
         # Новый работник не был добавлен - проверяем это
         self.assertFalse(self._data['some_user'].restaurant_staff.exists())
 
@@ -312,7 +312,7 @@ class RestaurantStaffUpdateTest(BaseTestCase):
     def test_unauthorized(self):
         """Неавторизованный пользователь не может изменить должность работника"""
         ans = self.__put_new_restaurant_staff()
-        self.assertEqual(ans.status_code, 403)
+        self.assertEqual(ans.status_code, 401)
         # Проверяем, что должность работника не изменилась
         self.assertEqual(
             self._data['cheap_worker'].restaurant_staff.first().position,
@@ -413,7 +413,7 @@ class RestaurantStaffPartialUpdateTest(BaseTestCase):
     def test_unauthorized(self):
         """Неавторизованный пользователь не может изменить должность работника"""
         ans = self.__patch_new_restaurant_staff()
-        self.assertEqual(ans.status_code, 403)
+        self.assertEqual(ans.status_code, 401)
         # Проверяем, что должность работника не изменилась
         self.assertEqual(
             self._data['cheap_worker'].restaurant_staff.first().position,
@@ -499,7 +499,7 @@ class RestaurantStaffDeleteTest(BaseTestCase):
     def test_unauthorized(self):
         """Неавторизованный пользователь не может уволить работника"""
         ans = self.client.delete(self.__get_url())
-        self.assertEqual(ans.status_code, 403)
+        self.assertEqual(ans.status_code, 401)
         # Проверяем, что должность работника не изменилась
         self.assertTrue(self._data['cheap_worker'].restaurant_staff.exists())
         self.assertTrue(
@@ -593,7 +593,7 @@ class RestaurantStaffUserFilterTest(BaseTestCase):
     def test_unauthorized(self):
         """Неавторизованный пользователь не видит список сотрудников ресторанов"""
         ans = self.client.get(self.__get_url())
-        self.assertEqual(ans.status_code, 403)
+        self.assertEqual(ans.status_code, 401)
 
     def test_some_user(self):
         """Пользователь без работы не видит список сотрудников ресторанов"""
@@ -675,7 +675,7 @@ class RestaurantStaffRestaurantFilterTest(BaseTestCase):
     def test_unauthorized(self):
         """Неавторизованный пользователь не видит список сотрудников ресторанов"""
         ans = self.client.get(self.__get_url())
-        self.assertEqual(ans.status_code, 403)
+        self.assertEqual(ans.status_code, 401)
 
     def test_some_user(self):
         """Пользователь без работы не видит список сотрудников ресторанов"""

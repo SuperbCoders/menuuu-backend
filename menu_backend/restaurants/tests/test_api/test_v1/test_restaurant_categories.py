@@ -167,7 +167,7 @@ class RestaurantCategoryCreateTest(BaseTestCase):
             },
             format='json'
         )
-        self.assertEqual(ans.status_code, 403)
+        self.assertEqual(ans.status_code, 401)
         # Проверить, что категория не была добавлена
         self.assertEqual(RestaurantCategory.objects.count(), 1)
 
@@ -283,7 +283,7 @@ class RestaurantCategoryUpdateTest(BaseTestCase):
             },
             format='json'
         )
-        self.assertEqual(ans.status_code, 403)
+        self.assertEqual(ans.status_code, 401)
         # Проверить, что категория не была изменена
         self.assertEqual(RestaurantCategory.objects.count(), 1)
         self.assertEqual(RestaurantCategory.objects.language('en').first().name, "Fastfood")
@@ -404,7 +404,7 @@ class RestaurantCategoryDeleteTest(BaseTestCase):
         """Неавторизованный пользователь не может удалить существующую категорию ресторанов"""
         self.assertEqual(RestaurantCategory.objects.count(), 1)
         ans = self.client.delete(self.__get_url())
-        self.assertEqual(ans.status_code, 403)
+        self.assertEqual(ans.status_code, 401)
         # Проверить, что категория не была изменена
         self.assertEqual(RestaurantCategory.objects.count(), 1)
         self.assertEqual(RestaurantCategory.objects.language('en').first().name, "Fastfood")
@@ -416,7 +416,7 @@ class RestaurantCategoryDeleteTest(BaseTestCase):
         with self.logged_in('some_user'):
             ans = self.client.delete(self.__get_url())
         self.assertEqual(ans.status_code, 403)
-        # Проверить, что категория не была изменена
+        # Проверить, что категория не была удалена
         self.assertEqual(RestaurantCategory.objects.count(), 1)
         self.assertEqual(RestaurantCategory.objects.language('en').first().name, "Fastfood")
         self.assertEqual(RestaurantCategory.objects.language('ru').first().name, "Фастфуд")
@@ -427,7 +427,18 @@ class RestaurantCategoryDeleteTest(BaseTestCase):
         with self.logged_in('cheap_worker'):
             ans = self.client.delete(self.__get_url())
         self.assertEqual(ans.status_code, 403)
-        # Проверить, что категория не была изменена
+        # Проверить, что категория не была удалена
+        self.assertEqual(RestaurantCategory.objects.count(), 1)
+        self.assertEqual(RestaurantCategory.objects.language('en').first().name, "Fastfood")
+        self.assertEqual(RestaurantCategory.objects.language('ru').first().name, "Фастфуд")
+
+    def test_cheap_owner(self):
+        """Хозяин дешевого ресторана не может удалить существующую категорию ресторанов"""
+        self.assertEqual(RestaurantCategory.objects.count(), 1)
+        with self.logged_in('cheap_owner'):
+            ans = self.client.delete(self.__get_url())
+        self.assertEqual(ans.status_code, 403)
+        # Проверить, что категория не была удалена
         self.assertEqual(RestaurantCategory.objects.count(), 1)
         self.assertEqual(RestaurantCategory.objects.language('en').first().name, "Fastfood")
         self.assertEqual(RestaurantCategory.objects.language('ru').first().name, "Фастфуд")

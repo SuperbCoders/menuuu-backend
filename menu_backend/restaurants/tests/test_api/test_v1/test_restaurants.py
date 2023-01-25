@@ -184,7 +184,7 @@ class RestaurantCreateTest(BaseTestCase):
         """Неавторизованный пользователь не может добавить ресторан"""
         self.assertEqual(Restaurant.objects.count(), 2)
         ans = self.__post_new_restaurant_data()
-        self.assertEqual(ans.status_code, 403)
+        self.assertEqual(ans.status_code, 401)
         # Проверяем, что ресторан не был добавлен
         self.assertEqual(Restaurant.objects.count(), 2)
 
@@ -357,7 +357,7 @@ class RestaurantUpdateTest(BaseTestCase):
     def test_unauthorized(self):
         """Неавторизованный пользователь не может редактировать информацию о ресторане"""
         ans = self.__put_new_restaurant_data()
-        self.assertEqual(ans.status_code, 403)
+        self.assertEqual(ans.status_code, 401)
         # Проверяем, что ресторан не был изменен
         self.verify_cheap_restaurant_unchanged()
 
@@ -451,7 +451,7 @@ class RestaurantPatchTest(BaseTestCase):
     def test_unauthorized(self):
         """Неавторизованный пользователь не может редактировать информацию о ресторане"""
         ans = self.__patch_new_restaurant_data()
-        self.assertEqual(ans.status_code, 403)
+        self.assertEqual(ans.status_code, 401)
         # Проверяем, что ресторан не был изменен
         self.verify_cheap_restaurant_unchanged()
 
@@ -531,7 +531,7 @@ class RestaurantDeleteTest(BaseTestCase):
         """Неавторизованный пользователь не может удалить ресторан"""
         self.assertEqual(Restaurant.objects.count(), 2)
         ans = self.__delete_new_restaurant_data()
-        self.assertEqual(ans.status_code, 403)
+        self.assertEqual(ans.status_code, 401)
         # Проверяем, что ресторан не был удален или изменен
         self.verify_cheap_restaurant_unchanged()
 
