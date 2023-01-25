@@ -59,6 +59,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     # Управление переводами строк через встроенную админку
     path('rosetta/', include('rosetta.urls')),
+    # OAuth2
+    path('o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
     # Регистрация нового пользователя
     path('api/v1/users/register/', UserCreationView.as_view(), name="user_register"),
     # Вход в систему

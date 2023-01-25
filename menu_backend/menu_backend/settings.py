@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'django_filters',
     'drf_yasg',
+    'oauth2_provider',
     'parler',
     'phonenumber_field',
     'rest_framework',
