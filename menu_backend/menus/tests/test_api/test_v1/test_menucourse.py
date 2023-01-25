@@ -96,3 +96,91 @@ class PublishedMenuCourseRetrieveTest(BaseTestCase):
             ans = self.client.get(self.__get_url())
         self.assertEqual(ans.status_code, 200)
         self.verify_chocolate_sandwich(ans.json())
+
+    def test_cheap_worker(self):
+        """Работник ресторана может видеть опубликованное блюдо своего ресторана"""
+        with self.logged_in('cheap_worker'):
+            ans = self.client.get(self.__get_url())
+        self.assertEqual(ans.status_code, 200)
+        self.verify_chocolate_sandwich(ans.json())
+
+    def test_cheap_owner(self):
+        """Хозяин ресторана может видеть опубликованное блюдо своего ресторана"""
+        with self.logged_in('cheap_owner'):
+            ans = self.client.get(self.__get_url())
+        self.assertEqual(ans.status_code, 200)
+        self.verify_chocolate_sandwich(ans.json())
+
+    def test_premium_worker(self):
+        """Работник ресторана может видеть опубликованное блюдо чужого ресторана"""
+        with self.logged_in('premium_worker'):
+            ans = self.client.get(self.__get_url())
+        self.assertEqual(ans.status_code, 200)
+        self.verify_chocolate_sandwich(ans.json())
+
+    def test_premium_owner(self):
+        """Хозяин ресторана может видеть опубликованное блюдо чужого ресторана"""
+        with self.logged_in('premium_owner'):
+            ans = self.client.get(self.__get_url())
+        self.assertEqual(ans.status_code, 200)
+        self.verify_chocolate_sandwich(ans.json())
+
+    def test_admin(self):
+        """Администратор может видеть опубликованное блюдо"""
+        with self.logged_in('admin'):
+            ans = self.client.get(self.__get_url())
+        self.assertEqual(ans.status_code, 200)
+        self.verify_chocolate_sandwich(ans.json())
+
+
+class UnpublishedMenuCourseRetrieveTest(BaseTestCase):
+    """
+    Тесты для API получения информации об определенном неопубликованном блюде
+    """
+
+    def __get_url(self):
+        return f"/api/v1/menu_courses/{self._data['disabled_water'].pk}/"
+
+    def test_unauthorized(self):
+        """Неавторизованный пользователь не видит неопубликованное блюдо"""
+        ans = self.client.get(self.__get_url())
+        self.assertEqual(ans.status_code, 404)
+
+    def test_some_user(self):
+        """Зарегистрированный пользователь не видит неопубликованное блюдо"""
+        with self.logged_in('some_user'):
+            ans = self.client.get(self.__get_url())
+        self.assertEqual(ans.status_code, 404)
+
+    def test_cheap_worker(self):
+        """Работник ресторана видит неопубликованное блюдо своего ресторана"""
+        with self.logged_in('cheap_worker'):
+            ans = self.client.get(self.__get_url())
+        self.assertEqual(ans.status_code, 200)
+        self.verify_disabled_water(ans.json())
+
+    def test_cheap_owner(self):
+        """Хозяин ресторана видит неопубликованное блюдо своего ресторана"""
+        with self.logged_in('cheap_worker'):
+            ans = self.client.get(self.__get_url())
+        self.assertEqual(ans.status_code, 200)
+        self.verify_disabled_water(ans.json())
+
+    def test_premium_worker(self):
+        """Работник ресторана не видит неопубликованное блюдо чужого ресторана"""
+        with self.logged_in('premium_worker'):
+            ans = self.client.get(self.__get_url())
+        self.assertEqual(ans.status_code, 404)
+
+    def test_premium_owner(self):
+        """Хозяин ресторана не видит неопубликованное блюдо чужого ресторана"""
+        with self.logged_in('premium_owner'):
+            ans = self.client.get(self.__get_url())
+        self.assertEqual(ans.status_code, 404)
+
+    def test_admin(self):
+        """Администратор видит любое неопубликованное блюдо"""
+        with self.logged_in('admin'):
+            ans = self.client.get(self.__get_url())
+        self.assertEqual(ans.status_code, 200)
+        self.verify_disabled_water(ans.json())

@@ -382,3 +382,13 @@ class BaseTestCase(APITestCase):
         self.assertEqual(info['translations']['en']['title'], "Sandwich with chocolate butter")
         self.assertEqual(info['price'], '30.00')
         self.assertEqual(info['published'], True)
+
+    def verify_disabled_water(self, info):
+        """
+        Проверить, что словарь info соответствует данным об отсутствующей
+        в продаже минеральной воде
+        """
+        self.assertEqual(info['id'], self._data['disabled_water'].pk)
+        self.assertEqual(info['translations']['en']['title'], "Unavailable mineral water")
+        self.assertEqual(info['price'], '30.00')
+        self.assertEqual(info['published'], False)
