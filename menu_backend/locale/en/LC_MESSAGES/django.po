@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-16 14:47+0300\n"
+"POT-Creation-Date: 2023-01-25 21:36+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,56 +17,303 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-#: menu_backend/settings.py:123
+
+#: menu_backend/settings.py:141
 msgid "English"
 msgstr ""
 
-#: menu_backend/settings.py:124
+#: menu_backend/settings.py:142
 msgid "Russian"
 msgstr ""
 
-#: restaurants/models.py:28
-msgid "restaurant"
+#: menu_backend/urls.py:50
+msgid "Menu service for restaurants"
 msgstr ""
 
-#: restaurants/models.py:29
-msgid "restaurants"
+#: menus/models.py:31
+msgid "menu"
 msgstr ""
 
-#: restaurants/models.py:34
-msgid "Restaurant name"
+#: menus/models.py:32
+msgid "menus"
 msgstr ""
 
-#: restaurants/models.py:39
-msgid "Restaurant description"
+#: menus/models.py:37 menus/models.py:104 menus/models.py:152
+msgid "Title"
 msgstr ""
 
-#: restaurants/models.py:54
-msgid "Restaurant owner"
-msgstr ""
-
-#: restaurants/models.py:55
-msgid "Restaurant worker"
-msgstr ""
-
-#: restaurants/models.py:61
-msgid "restaurant ownership or employment"
-msgstr ""
-
-#: restaurants/models.py:62
-msgid "restaurant ownerships or employments"
-msgstr ""
-
-#: restaurants/models.py:66
-msgid "User"
-msgstr ""
-
-#: restaurants/models.py:73
+#: menus/models.py:44 restaurants/models.py:217
 msgid "Restaurant"
 msgstr ""
 
-#: restaurants/models.py:80
+#: menus/models.py:49 menus/models.py:181
+msgid "Published"
+msgstr ""
+
+#: menus/models.py:98
+msgid "menu section"
+msgstr ""
+
+#: menus/models.py:99
+msgid "menus sections"
+msgstr ""
+
+#: menus/models.py:111 menus/models.py:164
+msgid "Menu"
+msgstr ""
+
+#: menus/models.py:146
+msgid "course"
+msgstr ""
+
+#: menus/models.py:147
+msgid "courses"
+msgstr ""
+
+#: menus/models.py:157
+msgid "Composition"
+msgstr ""
+
+#: menus/models.py:171
+msgid "Menu section"
+msgstr ""
+
+#: menus/models.py:178
+msgid "Price"
+msgstr ""
+
+#: menus/models.py:185
+msgid "Cooking time"
+msgstr ""
+
+#: menus/models.py:189
+msgid "Options"
+msgstr ""
+
+#: restaurants/models.py:34
+msgid "restaurant category"
+msgstr ""
+
+#: restaurants/models.py:35
+msgid "restaurant categories"
+msgstr ""
+
+#: restaurants/models.py:40
+msgid "Category name"
+msgstr ""
+
+#: restaurants/models.py:58
+msgid "restaurant"
+msgstr ""
+
+#: restaurants/models.py:59
+msgid "restaurants"
+msgstr ""
+
+#: restaurants/models.py:64
+msgid "Restaurant name"
+msgstr ""
+
+#: restaurants/models.py:69
+msgid "Restaurant description"
+msgstr ""
+
+#: restaurants/models.py:74
+msgid "Nickname"
+msgstr ""
+
+#: restaurants/models.py:79
+msgid "Logo"
+msgstr ""
+
+#: restaurants/models.py:83
+msgid "Picture"
+msgstr ""
+
+#: restaurants/models.py:88 restaurants/swagger.py:68
+msgid "Restaurant category"
+msgstr ""
+
+#: restaurants/models.py:94
+msgid "Number of stars"
+msgstr ""
+
+#: restaurants/models.py:100
+msgid "Country"
+msgstr ""
+
+#: restaurants/models.py:106
+msgid "City"
+msgstr ""
+
+#: restaurants/models.py:112
+msgid "Street"
+msgstr ""
+
+#: restaurants/models.py:118
+msgid "Building"
+msgstr ""
+
+#: restaurants/models.py:124
+msgid "Address details"
+msgstr ""
+
+#: restaurants/models.py:130
+msgid "Zip code"
+msgstr ""
+
+#: restaurants/models.py:137
+msgid "Longitude"
+msgstr ""
+
+#: restaurants/models.py:142
+msgid "Latitude"
+msgstr ""
+
+#: restaurants/models.py:145
+msgid "Phone number"
+msgstr ""
+
+#: restaurants/models.py:150
+msgid "Site URL"
+msgstr ""
+
+#: restaurants/models.py:169
+msgid "Generating a QR code for URL: {}"
+msgstr ""
+
+#: restaurants/models.py:198
+msgid "Restaurant owner"
+msgstr ""
+
+#: restaurants/models.py:199
+msgid "Restaurant worker"
+msgstr ""
+
+#: restaurants/models.py:205
+msgid "restaurant ownership or employment"
+msgstr ""
+
+#: restaurants/models.py:206
+msgid "restaurant ownerships or employments"
+msgstr ""
+
+#: restaurants/models.py:210
+msgid "User"
+msgstr ""
+
+#: restaurants/models.py:224
 msgid "Position"
+msgstr ""
+
+#: restaurants/swagger.py:12
+msgid "Get the menu"
+msgstr ""
+
+#: restaurants/swagger.py:13
+msgid "Get the current menu for the specified restaurant"
+msgstr ""
+
+#: restaurants/swagger.py:36
+msgid "The identified of the restaurant (same with 'id' parameter)"
+msgstr ""
+
+#: restaurants/swagger.py:40
+msgid "The name of the restaurant"
+msgstr ""
+
+#: restaurants/swagger.py:44
+msgid "The description of the restaurant"
+msgstr ""
+
+#: restaurants/swagger.py:48
+msgid "The contact phone number of the restaurant"
+msgstr ""
+
+#: restaurants/swagger.py:52
+msgid "The restaurant's site url"
+msgstr ""
+
+#: restaurants/swagger.py:56
+msgid "The URL of restaurant's logo image, if available"
+msgstr ""
+
+#: restaurants/swagger.py:60
+msgid "The URL of restaurant's picture, if available"
+msgstr ""
+
+#: restaurants/swagger.py:64
+msgid ""
+"Number of stars. Greater value means greater quality and greater prices. "
+"Worst value is 1 while the value 0 means information is not available."
+msgstr ""
+
+#: restaurants/swagger.py:72
+msgid "Category name. It may be somewhat like 'italian', 'chinese', etc."
+msgstr ""
+
+#: restaurants/swagger.py:78
+msgid "Restaurant address"
+msgstr ""
+
+#: restaurants/swagger.py:82
+msgid "Country name"
+msgstr ""
+
+#: restaurants/swagger.py:86
+msgid "City name"
+msgstr ""
+
+#: restaurants/swagger.py:90
+msgid "Street name"
+msgstr ""
+
+#: restaurants/swagger.py:94
+msgid "Building number"
+msgstr ""
+
+#: restaurants/swagger.py:98
+msgid "Address details like entrance number, level number, etc."
+msgstr ""
+
+#: restaurants/swagger.py:102
+msgid "Zip/postal code"
+msgstr ""
+
+#: restaurants/swagger.py:106
+msgid "Latitude if available"
+msgstr ""
+
+#: restaurants/swagger.py:110
+msgid "Longitude if available"
+msgstr ""
+
+#: restaurants/swagger.py:115
+msgid "Restaurant's menu"
+msgstr ""
+
+#: restaurants/swagger.py:120
+msgid "Menu title"
+msgstr ""
+
+#: tariffs/models.py:14 tariffs/models.py:15
+msgid "tariff"
+msgstr ""
+
+#: tariffs/models.py:20
+msgid "Name"
+msgstr ""
+
+#: tariffs/models.py:25
+msgid "Description"
+msgstr ""
+
+#: tariffs/models.py:30
+msgid "Price per month"
+msgstr ""
+
+#: tariffs/models.py:34
+msgid "Price per year"
 msgstr ""
 
 #: users/models.py:27
@@ -79,4 +326,58 @@ msgstr ""
 
 #: users/models.py:31
 msgid "phone number"
+msgstr ""
+
+#: users/swagger.py:13
+msgid "Вход пользователя в систему"
+msgstr ""
+
+#: users/swagger.py:14
+msgid "Вход в систему по имени пользователя и паролю"
+msgstr ""
+
+#: users/swagger.py:20
+msgid "Имя пользователя"
+msgstr ""
+
+#: users/swagger.py:24
+msgid "Пароль пользователя"
+msgstr ""
+
+#: users/swagger.py:36
+msgid "Сообщение об успешном входе"
+msgstr ""
+
+#: users/swagger.py:40
+msgid "Идентификатор пользователя"
+msgstr ""
+
+#: users/swagger.py:44
+msgid "Токен доступа"
+msgstr ""
+
+#: users/swagger.py:56
+msgid "Сообщение об ошибке - неверный формат запроса"
+msgstr ""
+
+#: users/swagger.py:68
+msgid "Сообщение об ошибке - неправильный пароль"
+msgstr ""
+
+#: users/tests/test_api/test_v1/test_login.py:24 users/views.py:60
+msgid "Username and password must be provided"
+msgstr ""
+
+#: users/tests/test_api/test_v1/test_login.py:34
+#: users/tests/test_api/test_v1/test_login.py:46 users/views.py:77
+msgid "Incorrect username or password"
+msgstr ""
+
+#: users/tests/test_api/test_v1/test_login.py:62
+#: users/tests/test_api/test_v1/test_login.py:80 users/views.py:69
+msgid "Successfully logged in"
+msgstr ""
+
+#: users/tests/test_api/test_v1/test_login.py:89 users/views.py:101
+msgid "Successfully logged out"
 msgstr ""
