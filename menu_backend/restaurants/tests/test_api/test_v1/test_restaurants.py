@@ -588,3 +588,17 @@ class RestaurantDeleteTest(BaseTestCase):
         self.assertEqual(ans.status_code, 204)
         # Проверяем, что ресторан был удален
         self.__verify_cheap_restaurant_deleted()
+
+
+class RestaurantQRCodeTest(BaseTestCase):
+    """
+    Тесты для API получения QR-кода для ресторана
+    """
+
+    def __get_url(self, restaurant_name: str = 'cheap_restaurant'):
+        return f"/api/v1/restaurants/{self._data[restaurant_name].pk}/qrcode/"
+
+    def test_unauthorized(self):
+        """Неавторизованный пользователь получает QR-код ресторана"""
+        ans = self.client.get(self.__get_url())
+        self.assertEqual(ans.status_code, 200)

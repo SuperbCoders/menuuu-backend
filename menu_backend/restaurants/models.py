@@ -162,10 +162,10 @@ class Restaurant(TranslatableModel):
     def generate_qrcode(self):
         """Генерирует QR код для доступа к меню ресторана через API"""
         logger = logging.getLogger('root')
-        if self.nickname:
-            data = settings.SITE_URL + "/" + self.nickname
+        if self.slug:
+            data = settings.SITE_URL + "/" + self.slug
         else:
-            data = settings.SITE_URL + "/id" + self.pk
+            data = settings.SITE_URL + f"/id{self.pk}"
         logger.info(_("Generating a QR code for URL: {}").format(data))
         img = qrcode.make(data)
         return img

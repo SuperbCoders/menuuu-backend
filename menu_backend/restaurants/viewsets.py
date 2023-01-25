@@ -3,9 +3,14 @@
 должностями пользователей ресторанов.
 """
 
+from django.http import HttpResponse
+from django.shortcuts import get_object_or_404
+
 from django_filters.rest_framework import DjangoFilterBackend
 
 from rest_framework import viewsets
+from rest_framework.decorators import action
+from rest_framework.permissions import AllowAny
 
 from restaurants.models import (
     Restaurant,
@@ -69,6 +74,17 @@ class RestaurantViewSet(viewsets.ModelViewSet):
             user = request.user
             if user.is_authenticated and user.is_active:
                 restaurant.restaurant_staff.create(position='owner', user=user)
+        return response
+
+    @action(detail=True, methods=['get'], url_path='qrcode', permission_classes=[AllowAny])
+    def qrcode(self, request, pk: int):
+        """
+        Вернуть изображение qr-кода для заданного ресторана
+        """
+        restaurant = get_object_or_404(Restaurant, pk=pk)
+        response = HttpResponse(content_type='image/png')
+        restaurant.generate_qrcode().save(response, "PNG")
+        response['Content-Disposition'] = 'attachment; filename="qrcode.png"'
         return response
 
 
