@@ -10,18 +10,18 @@ from drf_yasg.utils import swagger_auto_schema
 
 
 swagger_login = swagger_auto_schema(
-    operation_summary=_("Вход пользователя в систему"),
-    operation_description=_("Вход в систему по имени пользователя и паролю"),
+    operation_summary=_("Log in"),
+    operation_description=_("Log in with username and password"),
     request_body=openapi.Schema(
         type=openapi.TYPE_OBJECT,
         properties = {
             'username': openapi.Schema(
                 type=openapi.TYPE_STRING,
-                description=_("Имя пользователя")
+                description=_("Username")
             ),
             'password': openapi.Schema(
                 type=openapi.TYPE_STRING,
-                description=_("Пароль пользователя")
+                description=_("Password")
             ),
         }
     ),
@@ -33,15 +33,15 @@ swagger_login = swagger_auto_schema(
                 properties={
                     'detail': openapi.Schema(
                         type=openapi.TYPE_STRING,
-                        description=_("Сообщение об успешном входе")
+                        description=_("Success message")
                     ),
                     'user': openapi.Schema(
                         type=openapi.TYPE_INTEGER,
-                        description=_("Идентификатор пользователя")
+                        description=_("User id")
                     ),
                     'token': openapi.Schema(
                         type=openapi.TYPE_STRING,
-                        description=_("Токен доступа")
+                        description=_("Access token")
                     )
                 }
             )
@@ -53,7 +53,7 @@ swagger_login = swagger_auto_schema(
                 properties={
                     'detail': openapi.Schema(
                         type=openapi.TYPE_STRING,
-                        description=_("Сообщение об ошибке - неверный формат запроса")
+                        description=_("Error message - username or password not provided")
                     ),
                 }
             )
@@ -65,7 +65,7 @@ swagger_login = swagger_auto_schema(
                 properties={
                     'detail': openapi.Schema(
                         type=openapi.TYPE_STRING,
-                        description=_("Сообщение об ошибке - неправильный пароль")
+                        description=_("Error message - incorrect username or password")
                     ),
                 }
             )
