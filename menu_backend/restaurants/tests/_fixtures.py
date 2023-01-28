@@ -11,6 +11,7 @@ from rest_framework.test import APITestCase
 
 from restaurants.models import Restaurant, RestaurantCategory
 from users.models import User
+from tariffs.models import Tariff
 
 
 def populate_test_data():
@@ -24,8 +25,23 @@ def populate_test_data():
     *   Категорию ресторанов - фаствуд
 
     *   Две ресторана - первый фастфуд, второй премиум класса
+
+    *   Меню в фастфуд ресторане и пустое неактивное меню в нем же
+
+    *   Тариф для обслуживания ресторанов
     """
     test_data = {}
+    # Создаем тариф
+    test_data['tariff'] = Tariff.objects.create(
+        name='Basic',
+        description='Basic tariff',
+        month_price=100,
+        year_price=1000
+    )
+    test_data['tariff'].set_current_language('ru')
+    test_data['tariff'].name = "Базовый"
+    test_data['tariff'].description = "Базовый тариф"
+    test_data['tariff'].save()
     # Создаем категорию ресторанов
     test_data['category'] = RestaurantCategory.objects.create(
         name='Fastfood'
