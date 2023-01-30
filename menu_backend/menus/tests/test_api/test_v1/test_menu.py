@@ -493,3 +493,27 @@ class IncorrectMenuCreateTest(BaseTestCase):
         # И что старое меню премиум-ресторана все еще активно
         self.assertTrue(Menu.objects.get(pk=self._data['premium_menu'].pk).published)
         self.assertTrue(Menu.objects.get(pk=self._data['cheap_menu'].pk).published)
+
+    def test_cheap_worker(self):
+        """Работник ресторана не может загружать некорректное меню"""
+        self.assertEqual(Menu.objects.count(), 3)
+        with self.logged_in('cheap_worker'):
+            ans = self.__post_new_menu_data()
+        self.assertEqual(ans.status_code, 403)
+        # Проверить, что новое меню не было добавлено
+        self.assertEqual(Menu.objects.count(), 3)
+        # И что старое меню премиум-ресторана все еще активно
+        self.assertTrue(Menu.objects.get(pk=self._data['premium_menu'].pk).published)
+        self.assertTrue(Menu.objects.get(pk=self._data['cheap_menu'].pk).published)
+
+    def test_cheap_owner(self):
+        """Хозяин ресторана не может загружать некорректное меню"""
+        self.assertEqual(Menu.objects.count(), 3)
+        with self.logged_in('cheap_owner'):
+            ans = self.__post_new_menu_data()
+        self.assertEqual(ans.status_code, 403)
+        # Проверить, что новое меню не было добавлено
+        self.assertEqual(Menu.objects.count(), 3)
+        # И что старое меню премиум-ресторана все еще активно
+        self.assertTrue(Menu.objects.get(pk=self._data['premium_menu'].pk).published)
+        self.assertTrue(Menu.objects.get(pk=self._data['cheap_menu'].pk).published)
