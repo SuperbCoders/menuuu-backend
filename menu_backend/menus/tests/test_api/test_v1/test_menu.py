@@ -187,9 +187,12 @@ class UnpublishedMenuRetrieveTest(BaseTestCase):
         self.verify_cheap_inactive_menu(ans.json())
 
 
-class MenuCreateTest(BaseTestCase):
+class ActiveMenuCreateTest(BaseTestCase):
     """
-    Тесты для создания нового меню для премиум-ресторана
+    Тесты для создания нового опубликованного меню для премиум-ресторана.
+    Право это делать имеет только владелец и работник премиум-ресторана
+    а также администратор. При успешном добавлении нового меню старое
+    должно остаться, но стать неопубликованным.
     """
 
     def __get_url(self):
@@ -216,7 +219,7 @@ class MenuCreateTest(BaseTestCase):
         """Неавторизованный пользователь не может загружать новое меню"""
         self.assertEqual(Menu.objects.count(), 3)
         ans = self.__post_new_menu_data()
-        self.assertEqual(ans.status_code, 403)
+        self.assertEqual(ans.status_code, 401)
         # Проверить, что новое меню не было добавлено
         self.assertEqual(Menu.objects.count(), 3)
         # И что старое меню премиум-ресторана все еще активно
@@ -232,3 +235,76 @@ class MenuCreateTest(BaseTestCase):
         self.assertEqual(Menu.objects.count(), 3)
         # И что старое меню премиум-ресторана все еще активно
         self.assertTrue(Menu.objects.get(pk=self._data['premium_menu'].pk).published)
+
+    def test_cheap_worker(self):
+        """Работник ресторана не может загружать новое меню для другого ресторана"""
+        self.assertEqual(Menu.objects.count(), 3)
+        with self.logged_in('cheap_worker'):
+            ans = self.__post_new_menu_data()
+        self.assertEqual(ans.status_code, 403)
+        # Проверить, что новое меню не было добавлено
+        self.assertEqual(Menu.objects.count(), 3)
+        # И что старое меню премиум-ресторана все еще активно
+        self.assertTrue(Menu.objects.get(pk=self._data['premium_menu'].pk).published)
+
+    def test_cheap_owner(self):
+        """Хозяин ресторана не может загружать новое меню для другого ресторана"""
+        self.assertEqual(Menu.objects.count(), 3)
+        with self.logged_in('cheap_owner'):
+            ans = self.__post_new_menu_data()
+        self.assertEqual(ans.status_code, 403)
+        # Проверить, что новое меню не было добавлено
+        self.assertEqual(Menu.objects.count(), 3)
+        # И что старое меню премиум-ресторана все еще активно
+        self.assertTrue(Menu.objects.get(pk=self._data['premium_menu'].pk).published)
+
+    def test_premium_worker(self):
+        """Работник ресторана загружает для своего ресторана новое меню"""
+        self.assertEqual(Menu.objects.count(), 3)
+        with self.logged_in('premium_worker'):
+            ans = self.__post_new_menu_data()
+        self.assertEqual(ans.status_code, 201)
+        # Проверить, что новое меню не было добавлено
+        self.assertEqual(Menu.objects.count(), 4)
+        # И что старое меню премиум-ресторана все неактивно
+        self.assertFalse(Menu.objects.get(pk=self._data['premium_menu'].pk).published)
+        # И что новое меню активно и правильно называется
+        new_pk = ans.json()['id']
+        new_menu = Menu.objects.get(pk=new_pk)
+        self.assertTrue(new_menu.published)
+        self.assertEqual(new_menu.title, "New menu")
+        self.assertEqual(new_menu.restaurant.pk, self._data['premium_restaurant'].pk)
+
+    def test_premium_owner(self):
+        """Владелец ресторана загружает для своего ресторана новое меню"""
+        self.assertEqual(Menu.objects.count(), 3)
+        with self.logged_in('premium_owner'):
+            ans = self.__post_new_menu_data()
+        self.assertEqual(ans.status_code, 201)
+        # Проверить, что новое меню не было добавлено
+        self.assertEqual(Menu.objects.count(), 4)
+        # И что старое меню премиум-ресторана все неактивно
+        self.assertFalse(Menu.objects.get(pk=self._data['premium_menu'].pk).published)
+        # И что новое меню активно и правильно называется
+        new_pk = ans.json()['id']
+        new_menu = Menu.objects.get(pk=new_pk)
+        self.assertTrue(new_menu.published)
+        self.assertEqual(new_menu.title, "New menu")
+        self.assertEqual(new_menu.restaurant.pk, self._data['premium_restaurant'].pk)
+
+    def test_admin(self):
+        """Администратор загружает для ресторана новое меню"""
+        self.assertEqual(Menu.objects.count(), 3)
+        with self.logged_in('admin'):
+            ans = self.__post_new_menu_data()
+        self.assertEqual(ans.status_code, 201)
+        # Проверить, что новое меню не было добавлено
+        self.assertEqual(Menu.objects.count(), 4)
+        # И что старое меню премиум-ресторана все неактивно
+        self.assertFalse(Menu.objects.get(pk=self._data['premium_menu'].pk).published)
+        # И что новое меню активно и правильно называется
+        new_pk = ans.json()['id']
+        new_menu = Menu.objects.get(pk=new_pk)
+        self.assertTrue(new_menu.published)
+        self.assertEqual(new_menu.title, "New menu")
+        self.assertEqual(new_menu.restaurant.pk, self._data['premium_restaurant'].pk)
