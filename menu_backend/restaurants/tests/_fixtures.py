@@ -309,6 +309,26 @@ class BaseTestCase(APITestCase):
         # self.assertEqual(info['translations']['ru']['title'], "Меню")
         self.assertEqual(info['published'], True)
         self.assertEqual(info['restaurant'], self._data['cheap_restaurant'].pk)
+        # Проверить, что в меню есть разделы десертов и напитков
+        self.assertCountEqual(
+            [item['translations']['en']['title'] for item in info['sections']],
+            ['Drinks', 'Desserts']
+        )
+        for item in info['sections']:
+            if item['id'] == self._data['drinks_section'].pk:
+                self.verify_drinks_section(item)
+            if item['id'] == self._data['desserts_section'].pk:
+                self.verify_desserts_section(item)
+
+    def verify_cheap_inactive_menu(self, info):
+        """
+        Проверить, что словарь info соответствует данным о неактивном меню дешевого
+        ресторана.
+        """
+        self.assertEqual(info['translations']['en']['title'], "Inactive menu")
+        self.assertEqual(info['published'], False)
+        self.assertEqual(info['restaurant'], self._data['cheap_restaurant'].pk)
+        self.assertEqual(info['sections'], [])
 
     def verify_cheap_restaurant(self, info):
         """
@@ -408,3 +428,17 @@ class BaseTestCase(APITestCase):
         self.assertEqual(info['translations']['en']['title'], "Unavailable mineral water")
         self.assertEqual(info['price'], '30.00')
         self.assertEqual(info['published'], False)
+
+    def verify_drinks_section(self, info):
+        """
+        Проверить, что словарь info соответствует разделу напитков опубликованного
+        меню дешевого ресторана.
+        """
+        self.assertEqual(info['translations']['en']['title'], "Drinks")
+
+    def verify_desserts_section(self, info):
+        """
+        Проверить, что словарь info соответствует разделу десертов опубликованного
+        меню дешевого ресторана.
+        """
+        self.assertEqual(info['translations']['en']['title'], "Desserts")

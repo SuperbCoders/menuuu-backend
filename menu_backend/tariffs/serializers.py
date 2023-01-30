@@ -5,8 +5,6 @@
 from parler_rest.serializers import TranslatableModelSerializer
 from parler_rest.fields import TranslatedFieldsField
 
-from rest_framework.serializers import ModelSerializer
-
 from tariffs.models import Tariff
 
 

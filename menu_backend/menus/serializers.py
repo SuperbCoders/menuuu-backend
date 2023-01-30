@@ -33,6 +33,7 @@ class MenuSectionSerializer(TranslatableModelSerializer):
     class Meta:
         model = MenuSection
         fields = [
+            'id',
             'translations',
             'menu',
             'published_courses'
@@ -50,6 +51,7 @@ class MenuSerializer(TranslatableModelSerializer):
     class Meta:
         model = Menu
         fields = [
+            'id',
             'translations',
             'restaurant',
             'published',
