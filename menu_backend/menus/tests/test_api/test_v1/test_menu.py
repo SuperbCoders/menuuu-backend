@@ -642,7 +642,7 @@ class MenuUpdateTest(BaseTestCase):
         self.assertEqual(Menu.objects.count(), 3)
         with self.logged_in('premium_worker'):
             ans = self.__put_new_menu_data()
-        self.assertEqual(ans.status_code, 200)
+        self.assertEqual(ans.status_code, 403)
         # Проверить, что меню не изменилось
         self.assertEqual(Menu.objects.count(), 3)
         self.__verify_cheap_menu_unchanged()
@@ -652,7 +652,7 @@ class MenuUpdateTest(BaseTestCase):
         self.assertEqual(Menu.objects.count(), 3)
         with self.logged_in('premium_owner'):
             ans = self.__put_new_menu_data()
-        self.assertEqual(ans.status_code, 200)
+        self.assertEqual(ans.status_code, 403)
         # Проверить, что меню не изменилось
         self.assertEqual(Menu.objects.count(), 3)
         self.__verify_cheap_menu_unchanged()
