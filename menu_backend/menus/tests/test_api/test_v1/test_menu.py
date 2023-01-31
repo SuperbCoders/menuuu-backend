@@ -553,3 +553,47 @@ class IncorrectMenuCreateTest(BaseTestCase):
         # И что старое меню премиум-ресторана все еще активно
         self.assertTrue(Menu.objects.get(pk=self._data['premium_menu'].pk).published)
         self.assertTrue(Menu.objects.get(pk=self._data['cheap_menu'].pk).published)
+
+
+class MenuUpdateTest(BaseTestCase):
+    """
+    Тесты для API изменения меню
+    """
+
+    def __get_url(self):
+        return f"/api/v1/menu/{self._data['cheap_menu'].pk}/"
+
+    def __put_new_menu_data(self):
+        """
+        Выполнить PUT-запрос для обновления меню и вернуть результат
+        """
+        return self.client.put(
+            self.__get_url(),
+            {
+                'restaurant': self._data['cheap_restaurant'].pk,
+                'translations': {
+                    'en': {'title': "Updated menu"},
+                    'ru': {'title': "Обновленное меню"},
+                },
+                'published': True
+            },
+            format='json'
+        )
+
+    def __verify_cheap_menu_unchanged(self):
+        """Проверить что меню фастфуд-ресторана не было изменено"""
+        menu = Menu.objects.get(pk=self._data['cheap_menu'].pk)
+        self.assertTrue(menu.published)
+        self.assertEqual(menu.restaurant.pk, self._data['cheap_restaurant'].pk)
+        self.assertEqual(menu.title, "Menu")
+        menu.set_current_language('ru')
+        self.assertEqual(menu.title, "Меню")
+
+    def test_unauthorized(self):
+        """Неавторизованный пользователь не редактировать меню"""
+        self.assertEqual(Menu.objects.count(), 3)
+        ans = self.__put_new_menu_data()
+        self.assertEqual(ans.status_code, 401)
+        # Проверить, что меню не было изменено
+        self.assertEqual(Menu.objects.count(), 3)
+        self.__verify_cheap_menu_unchanged()
