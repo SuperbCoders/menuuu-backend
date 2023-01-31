@@ -590,7 +590,7 @@ class MenuUpdateTest(BaseTestCase):
         self.assertEqual(menu.title, "Меню")
 
     def __verify_cheap_menu_changed(self):
-        """Проверить что меню фастфуд-ресторана не было изменено"""
+        """Проверить что меню фастфуд-ресторана было изменено"""
         menu = Menu.objects.get(pk=self._data['cheap_menu'].pk)
         self.assertTrue(menu.published)
         self.assertEqual(menu.restaurant.pk, self._data['cheap_restaurant'].pk)
@@ -662,6 +662,114 @@ class MenuUpdateTest(BaseTestCase):
         self.assertEqual(Menu.objects.count(), 3)
         with self.logged_in('admin'):
             ans = self.__put_new_menu_data()
+        self.assertEqual(ans.status_code, 200)
+        # Проверить, что меню изменилось как надо
+        self.assertEqual(Menu.objects.count(), 3)
+        self.__verify_cheap_menu_changed()
+
+
+class MenuPartialUpdateTest(BaseTestCase):
+    """
+    Тесты для API частичного изменения меню методом PATCH
+    """
+
+    def __get_url(self):
+        return f"/api/v1/menu/{self._data['cheap_menu'].pk}/"
+
+    def __patch_new_menu_data(self):
+        """
+        Выполнить PATCH-запрос для обновления меню и вернуть результат
+        """
+        return self.client.patch(
+            self.__get_url(),
+            {
+                'published': False
+            },
+            format='json'
+        )
+
+    def __verify_cheap_menu_unchanged(self):
+        """Проверить что меню фастфуд-ресторана не было изменено"""
+        menu = Menu.objects.get(pk=self._data['cheap_menu'].pk)
+        self.assertTrue(menu.published)
+        self.assertEqual(menu.restaurant.pk, self._data['cheap_restaurant'].pk)
+        self.assertEqual(menu.title, "Menu")
+        menu.set_current_language('ru')
+        self.assertEqual(menu.title, "Меню")
+
+    def __verify_cheap_menu_changed(self):
+        """Проверить что у меню фастфуд-ресторана был сброшен флаг активности"""
+        menu = Menu.objects.get(pk=self._data['cheap_menu'].pk)
+        self.assertFalse(menu.published)
+        self.assertEqual(menu.restaurant.pk, self._data['cheap_restaurant'].pk)
+        self.assertEqual(menu.title, "Menu")
+        menu.set_current_language('ru')
+        self.assertEqual(menu.title, "Меню")
+
+    def test_unauthorized(self):
+        """Неавторизованный пользователь не редактировать меню"""
+        self.assertEqual(Menu.objects.count(), 3)
+        ans = self.__patch_new_menu_data()
+        self.assertEqual(ans.status_code, 401)
+        # Проверить, что меню не было изменено
+        self.assertEqual(Menu.objects.count(), 3)
+        self.__verify_cheap_menu_unchanged()
+
+    def test_some_user(self):
+        """Авторизованный пользователь не редактировать меню"""
+        self.assertEqual(Menu.objects.count(), 3)
+        with self.logged_in('some_user'):
+            ans = self.__patch_new_menu_data()
+        self.assertEqual(ans.status_code, 403)
+        # Проверить, что меню не было изменено
+        self.assertEqual(Menu.objects.count(), 3)
+        self.__verify_cheap_menu_unchanged()
+
+    def test_cheap_worker(self):
+        """Работник ресторана редактирует меню своего ресторана"""
+        self.assertEqual(Menu.objects.count(), 3)
+        with self.logged_in('cheap_worker'):
+            ans = self.__patch_new_menu_data()
+        self.assertEqual(ans.status_code, 200)
+        # Проверить, что меню изменилось как надо
+        self.assertEqual(Menu.objects.count(), 3)
+        self.__verify_cheap_menu_changed()
+
+    def test_cheap_owner(self):
+        """Хозяин ресторана редактирует меню своего ресторана"""
+        self.assertEqual(Menu.objects.count(), 3)
+        with self.logged_in('cheap_owner'):
+            ans = self.__patch_new_menu_data()
+        self.assertEqual(ans.status_code, 200)
+        # Проверить, что меню изменилось как надо
+        self.assertEqual(Menu.objects.count(), 3)
+        self.__verify_cheap_menu_changed()
+
+    def test_premium_worker(self):
+        """Работник ресторана не может редактировать меню чужого ресторана"""
+        self.assertEqual(Menu.objects.count(), 3)
+        with self.logged_in('premium_worker'):
+            ans = self.__patch_new_menu_data()
+        self.assertEqual(ans.status_code, 403)
+        # Проверить, что меню не изменилось
+        self.assertEqual(Menu.objects.count(), 3)
+        self.__verify_cheap_menu_unchanged()
+
+    def test_premium_owner(self):
+        """Хозяин ресторана не может редактировать меню чужого ресторана"""
+        self.assertEqual(Menu.objects.count(), 3)
+        with self.logged_in('premium_owner'):
+            ans = self.__patch_new_menu_data()
+        self.assertEqual(ans.status_code, 403)
+        # Проверить, что меню не изменилось
+        self.assertEqual(Menu.objects.count(), 3)
+        self.__verify_cheap_menu_unchanged()
+
+    def test_admin(self):
+        """Администратор редактирует меню ресторана"""
+        self.assertEqual(Menu.objects.count(), 3)
+        with self.logged_in('admin'):
+            ans = self.__patch_new_menu_data()
         self.assertEqual(ans.status_code, 200)
         # Проверить, что меню изменилось как надо
         self.assertEqual(Menu.objects.count(), 3)
