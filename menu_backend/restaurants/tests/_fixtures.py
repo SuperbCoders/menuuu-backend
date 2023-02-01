@@ -11,6 +11,7 @@ from rest_framework.test import APITestCase
 
 from restaurants.models import Restaurant, RestaurantCategory
 from users.models import User
+from tariffs.models import Tariff
 
 
 def populate_test_data():
@@ -24,8 +25,23 @@ def populate_test_data():
     *   Категорию ресторанов - фаствуд
 
     *   Две ресторана - первый фастфуд, второй премиум класса
+
+    *   Меню в фастфуд ресторане и пустое неактивное меню в нем же
+
+    *   Тариф для обслуживания ресторанов
     """
     test_data = {}
+    # Создаем тариф
+    test_data['tariff'] = Tariff.objects.create(
+        name='Basic',
+        description='Basic tariff',
+        month_price=100,
+        year_price=1000
+    )
+    test_data['tariff'].set_current_language('ru')
+    test_data['tariff'].name = "Базовый"
+    test_data['tariff'].description = "Базовый тариф"
+    test_data['tariff'].save()
     # Создаем категорию ресторанов
     test_data['category'] = RestaurantCategory.objects.create(
         name='Fastfood'
@@ -84,6 +100,14 @@ def populate_test_data():
     test_data['desserts_section'].set_current_language('ru')
     test_data['desserts_section'].title = "Десерты"
     test_data['desserts_section'].save()
+    # Пустой раздел неактивного меню
+    test_data['inactive_section'] = test_data['inactive_menu'].sections.create(
+        title='Main courses'
+    )
+    test_data['inactive_section'].set_current_language('ru')
+    test_data['inactive_section'].title = "Основные блюда"
+    test_data['inactive_section'].save()
+    # Несколько блюд для активного меню - напитки и десерты
     test_data['sparkling_water'] = test_data['drinks_section'].courses.create(
         menu=test_data['cheap_menu'],
         published=True,
@@ -293,6 +317,29 @@ class BaseTestCase(APITestCase):
         # self.assertEqual(info['translations']['ru']['title'], "Меню")
         self.assertEqual(info['published'], True)
         self.assertEqual(info['restaurant'], self._data['cheap_restaurant'].pk)
+        # Проверить, что в меню есть разделы десертов и напитков
+        self.assertCountEqual(
+            [item['translations']['en']['title'] for item in info['sections']],
+            ['Drinks', 'Desserts']
+        )
+        for item in info['sections']:
+            if item['id'] == self._data['drinks_section'].pk:
+                self.verify_drinks_section(item)
+            if item['id'] == self._data['desserts_section'].pk:
+                self.verify_desserts_section(item)
+
+    def verify_cheap_inactive_menu(self, info):
+        """
+        Проверить, что словарь info соответствует данным о неактивном меню дешевого
+        ресторана.
+        """
+        self.assertEqual(info['translations']['en']['title'], "Inactive menu")
+        self.assertEqual(info['published'], False)
+        self.assertEqual(info['restaurant'], self._data['cheap_restaurant'].pk)
+        sections = info['sections']
+        self.assertEqual(len(sections), 1)
+        self.assertEqual(sections[0]['published_courses'], [])
+        self.assertEqual(sections[0]['translations']['en']['title'], "Main courses")
 
     def verify_cheap_restaurant(self, info):
         """
@@ -392,3 +439,25 @@ class BaseTestCase(APITestCase):
         self.assertEqual(info['translations']['en']['title'], "Unavailable mineral water")
         self.assertEqual(info['price'], '30.00')
         self.assertEqual(info['published'], False)
+
+    def verify_drinks_section(self, info):
+        """
+        Проверить, что словарь info соответствует разделу напитков опубликованного
+        меню дешевого ресторана.
+        """
+        self.assertEqual(info['translations']['en']['title'], "Drinks")
+
+    def verify_desserts_section(self, info):
+        """
+        Проверить, что словарь info соответствует разделу десертов опубликованного
+        меню дешевого ресторана.
+        """
+        self.assertEqual(info['translations']['en']['title'], "Desserts")
+
+    def verify_published_sections(self, info):
+        """
+        Проверить, что словарь info содержит список всех опубликованных разделов меню
+        """
+        self.assertEqual(info['count'], 2)
+        results = info['results']
+        self.assertEqual(len(results), 2)

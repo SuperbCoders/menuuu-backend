@@ -25,7 +25,7 @@ class RestaurantCategoryPermission(permissions.BasePermission):
 
     def has_object_permission(self, request, view, obj):
         """
-        Проверка права на выполнения запроса request для ресторана obj
+        Проверка права на выполнения запроса request для категории ресторанов obj
         """
         if request.method in permissions.SAFE_METHODS:
             return True

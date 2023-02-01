@@ -30,6 +30,7 @@ from restaurants.viewsets import (
     RestaurantStaffViewSet
 )
 from restaurants.views import UnauthorizedRestaturantView
+from tariffs.viewsets import TariffViewSet
 from users.views import UserCreationView, LoginView, LogoutView
 
 
@@ -40,6 +41,7 @@ router_v1.register('menu', MenuViewSet, basename='menu')
 router_v1.register('restaurant_categories', RestaurantCategoryViewSet, basename='restaurant_category')
 router_v1.register('restaurants', RestaurantViewSet, basename='restaurant')
 router_v1.register('restaurant_staff', RestaurantStaffViewSet, basename='restaurant_staff')
+router_v1.register('tariffs', TariffViewSet, basename='tariff')
 
 
 # Генерируем страницу с документацией по API

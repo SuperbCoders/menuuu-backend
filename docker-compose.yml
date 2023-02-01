@@ -44,7 +44,7 @@ services:
       - django
       - db
     ports:
-      - "8000:80"
+      - "80:80"
 
 volumes:
   static_volume:
