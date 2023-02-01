@@ -902,4 +902,64 @@ class MenuDeleteTest(BaseTestCase):
         self.assertEqual(ans.status_code, 401)
         # Проверить, что меню не было удалено
         self.assertEqual(Menu.objects.count(), 3)
-        self.assertEqual(Menu.objects.filter(pk=self._data['inactive_menu'].pk).count(), 1)
+        self.assertTrue(Menu.objects.filter(pk=self._data['inactive_menu'].pk).exists())
+
+    def test_some_user(self):
+        """Авторизованный пользователь не может удалить меню"""
+        self.assertEqual(Menu.objects.count(), 3)
+        with self.logged_in('some_user'):
+            ans = self.client.delete(self.__get_url())
+        self.assertEqual(ans.status_code, 403)
+        # Проверить, что меню не было удалено
+        self.assertEqual(Menu.objects.count(), 3)
+        self.assertTrue(Menu.objects.filter(pk=self._data['inactive_menu'].pk).exists())
+
+    def test_cheap_worker(self):
+        """Работник ресторана удаляет меню своего ресторана"""
+        self.assertEqual(Menu.objects.count(), 3)
+        with self.logged_in('cheap_worker'):
+            ans = self.client.delete(self.__get_url())
+        self.assertEqual(ans.status_code, 204)
+        # Проверить, что меню удалено
+        self.assertEqual(Menu.objects.count(), 2)
+        self.assertFalse(Menu.objects.filter(pk=self._data['inactive_menu'].pk).exists())
+
+    def test_cheap_owner(self):
+        """Хозяин ресторана удаляет меню своего ресторана"""
+        self.assertEqual(Menu.objects.count(), 3)
+        with self.logged_in('cheap_owner'):
+            ans = self.client.delete(self.__get_url())
+        self.assertEqual(ans.status_code, 204)
+        # Проверить, что меню удалено
+        self.assertEqual(Menu.objects.count(), 2)
+        self.assertFalse(Menu.objects.filter(pk=self._data['inactive_menu'].pk).exists())
+
+    def test_premium_worker(self):
+        """Работник ресторана не может удалить меню другого ресторана"""
+        self.assertEqual(Menu.objects.count(), 3)
+        with self.logged_in('premium_worker'):
+            ans = self.client.delete(self.__get_url())
+        self.assertEqual(ans.status_code, 404)
+        # Проверить, что меню не было удалено
+        self.assertEqual(Menu.objects.count(), 3)
+        self.assertTrue(Menu.objects.filter(pk=self._data['inactive_menu'].pk).exists())
+
+    def test_premium_owner(self):
+        """Хозяин ресторана не может удалить меню другого ресторана"""
+        self.assertEqual(Menu.objects.count(), 3)
+        with self.logged_in('premium_owner'):
+            ans = self.client.delete(self.__get_url())
+        self.assertEqual(ans.status_code, 404)
+        # Проверить, что меню не было удалено
+        self.assertEqual(Menu.objects.count(), 3)
+        self.assertTrue(Menu.objects.filter(pk=self._data['inactive_menu'].pk).exists())
+
+    def test_admin(self):
+        """Администратор удаляет меню"""
+        self.assertEqual(Menu.objects.count(), 3)
+        with self.logged_in('cheap_owner'):
+            ans = self.client.delete(self.__get_url())
+        self.assertEqual(ans.status_code, 204)
+        # Проверить, что меню удалено
+        self.assertEqual(Menu.objects.count(), 2)
+        self.assertFalse(Menu.objects.filter(pk=self._data['inactive_menu'].pk).exists())
