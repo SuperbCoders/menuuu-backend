@@ -113,7 +113,7 @@ DATABASES = {
 
 
 # Используем базу по умолчанию
-DATABASES['default'] = DATABASES['testing']
+DATABASES['default'] = DATABASES['working']
 
 
 # Проверки надежности паролей пользователей
