@@ -881,3 +881,25 @@ class InactiveMenuPartialUpdateTest(BaseTestCase):
         # Проверить, что меню изменилось как надо
         self.assertEqual(Menu.objects.count(), 3)
         self.__verify_inactive_menu_changed()
+
+
+class MenuDeleteTest(BaseTestCase):
+    """
+    Тесты для API удаления меню
+    ---------------------------
+
+    Удаляет неактивное меню дешевого ресторана. Сделать это могут только сотрудник
+    или владелец дешевого ресторана либо администратор.
+    """
+
+    def __get_url(self):
+        return f"/api/v1/menu/{self._data['inactive_menu'].pk}/"
+
+    def test_unauthorized(self):
+        """Неавторизованный пользователь не может удалить меню"""
+        self.assertEqual(Menu.objects.count(), 3)
+        ans = self.client.delete(self.__get_url())
+        self.assertEqual(ans.status_code, 401)
+        # Проверить, что меню не было удалено
+        self.assertEqual(Menu.objects.count(), 3)
+        self.assertEqual(Menu.objects.filter(pk=self._data['inactive_menu'].pk).count(), 1)
