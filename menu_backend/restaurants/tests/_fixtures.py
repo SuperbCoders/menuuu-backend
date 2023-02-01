@@ -100,6 +100,14 @@ def populate_test_data():
     test_data['desserts_section'].set_current_language('ru')
     test_data['desserts_section'].title = "Десерты"
     test_data['desserts_section'].save()
+    # Пустой раздел неактивного меню
+    test_data['inactive_section'] = test_data['inactive_menu'].sections.create(
+        title='Main courses'
+    )
+    test_data['inactive_section'].set_current_language('ru')
+    test_data['inactive_section'].title = "Основные блюда"
+    test_data['inactive_section'].save()
+    # Несколько блюд для активного меню - напитки и десерты
     test_data['sparkling_water'] = test_data['drinks_section'].courses.create(
         menu=test_data['cheap_menu'],
         published=True,
@@ -328,7 +336,10 @@ class BaseTestCase(APITestCase):
         self.assertEqual(info['translations']['en']['title'], "Inactive menu")
         self.assertEqual(info['published'], False)
         self.assertEqual(info['restaurant'], self._data['cheap_restaurant'].pk)
-        self.assertEqual(info['sections'], [])
+        sections = info['sections']
+        self.assertEqual(len(sections), 1)
+        self.assertEqual(sections[0]['published_courses'], [])
+        self.assertEqual(sections[0]['translations']['en']['title'], "Main courses")
 
     def verify_cheap_restaurant(self, info):
         """
@@ -442,3 +453,11 @@ class BaseTestCase(APITestCase):
         меню дешевого ресторана.
         """
         self.assertEqual(info['translations']['en']['title'], "Desserts")
+
+    def verify_published_sections(self, info):
+        """
+        Проверить, что словарь info содержит список всех опубликованных разделов меню
+        """
+        self.assertEqual(info['count'], 2)
+        results = info['results']
+        self.assertEqual(len(results), 2)
