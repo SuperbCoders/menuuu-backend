@@ -822,6 +822,7 @@ class InactiveMenuPartialUpdateTest(BaseTestCase):
         self.assertEqual(Menu.objects.count(), 3)
         with self.logged_in('some_user'):
             ans = self.__patch_new_menu_data()
+        # Статус 403, так как пользователь не может применять к меню метод PATCH
         self.assertEqual(ans.status_code, 403)
         # Проверить, что меню не было изменено
         self.assertEqual(Menu.objects.count(), 3)
@@ -852,7 +853,9 @@ class InactiveMenuPartialUpdateTest(BaseTestCase):
         self.assertEqual(Menu.objects.count(), 3)
         with self.logged_in('premium_worker'):
             ans = self.__patch_new_menu_data()
-        self.assertEqual(ans.status_code, 403)
+        # Статус 404 а не 403, так как если меню неопубликовано, то для
+        # посторонних оно как бы не существует
+        self.assertEqual(ans.status_code, 404)
         # Проверить, что меню не было изменено
         self.assertEqual(Menu.objects.count(), 3)
         self.__verify_inactive_menu_unchanged()
@@ -862,7 +865,9 @@ class InactiveMenuPartialUpdateTest(BaseTestCase):
         self.assertEqual(Menu.objects.count(), 3)
         with self.logged_in('premium_owner'):
             ans = self.__patch_new_menu_data()
-        self.assertEqual(ans.status_code, 403)
+        # Статус 404 а не 403, так как если меню неопубликовано, то для
+        # посторонних оно как бы не существует
+        self.assertEqual(ans.status_code, 404)
         # Проверить, что меню не было изменено
         self.assertEqual(Menu.objects.count(), 3)
         self.__verify_inactive_menu_unchanged()
