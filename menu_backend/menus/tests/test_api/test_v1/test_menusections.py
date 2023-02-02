@@ -125,3 +125,58 @@ class PublishedMenuSectionRetrieveTest(BaseTestCase):
             ans = self.client.get(self.__get_url())
         self.assertEqual(ans.status_code, 200)
         self.verify_drinks_section(ans.json())
+
+
+class UnpublishedMenuSectionRetrieveTest(BaseTestCase):
+    """
+    Тесты для API получения одиночного раздела неопубликованного меню.
+    Эта возможность должна быть доступна только тем, кто имеет право
+    редактировать это меню.
+    """
+
+    def __get_url(self):
+        return f"/api/v1/menu_sections/{self._data['inactive_section'].pk}/"
+
+    def test_unauthorized(self):
+        """Неавторизованный пользователь не видит раздел неопубликованного меню"""
+        ans = self.client.get(self.__get_url())
+        self.assertEqual(ans.status_code, 404)
+
+    def test_some_user(self):
+        """Авторизованный пользователь не видит раздел неопубликованного меню"""
+        with self.logged_in('some_user'):
+            ans = self.client.get(self.__get_url())
+        self.assertEqual(ans.status_code, 404)
+
+    def test_cheap_worker(self):
+        """Работник ресторана просматривает раздел неопубликованного меню"""
+        with self.logged_in('cheap_worker'):
+            ans = self.client.get(self.__get_url())
+        self.assertEqual(ans.status_code, 200)
+        self.verify_inactive_section(ans.json())
+
+    def test_cheap_owner(self):
+        """Хозяин ресторана просматривает раздел неопубликованного меню"""
+        with self.logged_in('cheap_owner'):
+            ans = self.client.get(self.__get_url())
+        self.assertEqual(ans.status_code, 200)
+        self.verify_inactive_section(ans.json())
+
+    def test_premium_worker(self):
+        """Работник не видит раздел неопубликованного меню чужого ресторана"""
+        with self.logged_in('premium_worker'):
+            ans = self.client.get(self.__get_url())
+        self.assertEqual(ans.status_code, 404)
+
+    def test_premium_owner(self):
+        """Хозяин не видит раздел неопубликованного меню чужого ресторана"""
+        with self.logged_in('premium_owner'):
+            ans = self.client.get(self.__get_url())
+        self.assertEqual(ans.status_code, 404)
+
+    def test_admin(self):
+        """Администратор просматривает раздел неопубликованного меню"""
+        with self.logged_in('admin'):
+            ans = self.client.get(self.__get_url())
+        self.assertEqual(ans.status_code, 200)
+        self.verify_inactive_section(ans.json())

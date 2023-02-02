@@ -230,7 +230,7 @@ def cleanup_test_data(test_data):
     """
     Уничтожает тестовые данные
     """
-    test_data['inactive_menu'].save()
+    test_data['inactive_menu'].delete()
     test_data['cheap_menu'].delete()
     test_data['cheap_restaurant'].delete()
     test_data['premium_menu'].delete()
@@ -453,6 +453,13 @@ class BaseTestCase(APITestCase):
         меню дешевого ресторана.
         """
         self.assertEqual(info['translations']['en']['title'], "Desserts")
+
+    def verify_inactive_section(self, info):
+        """
+        Проверить, что словарь info соответствует разделу основных блюд
+        неопубликованного меню дешевого ресторана.
+        """
+        self.assertEqual(info['translations']['en']['title'], "Main courses")
 
     def verify_published_sections(self, info):
         """
