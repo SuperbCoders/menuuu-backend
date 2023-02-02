@@ -42,3 +42,27 @@ class MenuSectionListTest(BaseTestCase):
         self.assertEqual(ans.status_code, 200)
         info = ans.json()
         self.verify_all_sections(info)
+
+    def test_premium_worker(self):
+        """Работник ресторана не видит раздел чужого неопубликованного меню"""
+        with self.logged_in('premium_worker'):
+            ans = self.client.get(self.URL)
+        self.assertEqual(ans.status_code, 200)
+        info = ans.json()
+        self.verify_published_sections(info)
+
+    def test_premium_owner(self):
+        """Хозяин ресторана не видит раздел чужого неопубликованного меню"""
+        with self.logged_in('premium_owner'):
+            ans = self.client.get(self.URL)
+        self.assertEqual(ans.status_code, 200)
+        info = ans.json()
+        self.verify_published_sections(info)
+
+    def test_admin(self):
+        """Администратор видит все разделы всех меню, в том числе неопубликованных"""
+        with self.logged_in('admin'):
+            ans = self.client.get(self.URL)
+        self.assertEqual(ans.status_code, 200)
+        info = ans.json()
+        self.verify_all_sections(info)
