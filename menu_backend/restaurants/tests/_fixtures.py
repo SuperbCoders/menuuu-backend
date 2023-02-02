@@ -461,3 +461,12 @@ class BaseTestCase(APITestCase):
         self.assertEqual(info['count'], 2)
         results = info['results']
         self.assertEqual(len(results), 2)
+
+    def verify_all_sections(self, info):
+        """
+        Проверить, что словарь info содержит список всех разделов меню, как
+        опубликованных так и неопубликованных
+        """
+        self.assertEqual(info['count'], 3)
+        results = info['results']
+        self.assertEqual(len(results), 3)

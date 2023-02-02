@@ -26,3 +26,19 @@ class MenuSectionListTest(BaseTestCase):
         self.assertEqual(ans.status_code, 200)
         info = ans.json()
         self.verify_published_sections(info)
+
+    def test_cheap_worker(self):
+        """Сотрудник ресторана видит также и разделы неопубликованных меню своего ресторана"""
+        with self.logged_in('cheap_worker'):
+            ans = self.client.get(self.URL)
+        self.assertEqual(ans.status_code, 200)
+        info = ans.json()
+        self.verify_all_sections(info)
+
+    def test_cheap_owner(self):
+        """Хозяин ресторана видит также и разделы неопубликованных меню своего ресторана"""
+        with self.logged_in('cheap_owner'):
+            ans = self.client.get(self.URL)
+        self.assertEqual(ans.status_code, 200)
+        info = ans.json()
+        self.verify_all_sections(info)

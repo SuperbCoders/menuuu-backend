@@ -3,11 +3,12 @@
 """
 
 from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin as OriginalUserAdmin
 
 from users.models import User
 
 
-class UserAdmin(admin.ModelAdmin):
+class UserAdmin(OriginalUserAdmin):
     """
     Настройки админки для модели пользователей
     """
@@ -22,8 +23,11 @@ class UserAdmin(admin.ModelAdmin):
         # Полномочия в системе
         ('is_active', 'is_staff', 'is_superuser'),
         # Прочие сведения
-        ('date_joined', 'last_login')
+        ('date_joined', 'last_login'),
+        # Форма изменения пароля
+        ('password', )
     )
+    fieldsets = None
 
 
 admin.site.register(User, UserAdmin)
