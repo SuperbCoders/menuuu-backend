@@ -104,3 +104,24 @@ class PublishedMenuSectionRetrieveTest(BaseTestCase):
             ans = self.client.get(self.__get_url())
         self.assertEqual(ans.status_code, 200)
         self.verify_drinks_section(ans.json())
+
+    def test_premium_worker(self):
+        """Работник ресторана просматривает раздел меню другого ресторана"""
+        with self.logged_in('premium_worker'):
+            ans = self.client.get(self.__get_url())
+        self.assertEqual(ans.status_code, 200)
+        self.verify_drinks_section(ans.json())
+
+    def test_premium_owner(self):
+        """Хозяин ресторана просматривает раздел меню другого ресторана"""
+        with self.logged_in('premium_owner'):
+            ans = self.client.get(self.__get_url())
+        self.assertEqual(ans.status_code, 200)
+        self.verify_drinks_section(ans.json())
+
+    def test_admin(self):
+        """Администратор просматривает раздел меню"""
+        with self.logged_in('admin'):
+            ans = self.client.get(self.__get_url())
+        self.assertEqual(ans.status_code, 200)
+        self.verify_drinks_section(ans.json())
