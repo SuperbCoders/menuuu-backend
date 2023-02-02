@@ -66,3 +66,41 @@ class MenuSectionListTest(BaseTestCase):
         self.assertEqual(ans.status_code, 200)
         info = ans.json()
         self.verify_all_sections(info)
+
+
+class PublishedMenuSectionRetrieveTest(BaseTestCase):
+    """
+    Тесты для API получения одиночного раздела опубликованного меню.
+    Эта возможность должна быть доступна всем пользователям, включая
+    неавторизованных.
+    """
+
+    def __get_url(self):
+        return f"/api/v1/menu_sections/{self._data['drinks_section'].pk}/"
+
+    def test_unauthorized(self):
+        """Неавторизованный пользователь просматривает раздел меню"""
+        ans = self.client.get(self.__get_url())
+        self.assertEqual(ans.status_code, 200)
+        self.verify_drinks_section(ans.json())
+
+    def test_some_user(self):
+        """Авторизованный пользователь просматривает раздел меню"""
+        with self.logged_in('some_user'):
+            ans = self.client.get(self.__get_url())
+        self.assertEqual(ans.status_code, 200)
+        self.verify_drinks_section(ans.json())
+
+    def test_cheap_worker(self):
+        """Работник ресторана просматривает раздел меню"""
+        with self.logged_in('cheap_worker'):
+            ans = self.client.get(self.__get_url())
+        self.assertEqual(ans.status_code, 200)
+        self.verify_drinks_section(ans.json())
+
+    def test_cheap_owner(self):
+        """Хозяин ресторана просматривает раздел меню"""
+        with self.logged_in('cheap_owner'):
+            ans = self.client.get(self.__get_url())
+        self.assertEqual(ans.status_code, 200)
+        self.verify_drinks_section(ans.json())

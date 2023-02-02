@@ -34,6 +34,7 @@ class UsersConfig(AppConfig):
                     username=os.getenv("ADMIN_USERNAME", "admin"),
                     password=os.getenv("ADMIN_PASSWORD", "admin"),
                     email=os.getenv("ADMIN_EMAIL", "admin@localhost"),
+                    phone=os.getenv("ADMIN_PHONE", '')
                 )
         except (OperationalError, ProgrammingError):
             # В процессе начального создания базы таблицы пользователей еще нет,
