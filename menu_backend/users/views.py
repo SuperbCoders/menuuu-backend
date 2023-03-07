@@ -14,7 +14,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from users.models import User
-from users.swagger import swagger_login
+from users.swagger import swagger_login, swagger_logout
 from users.serializers import UserCreationSerializer
 
 
@@ -88,6 +88,7 @@ class LogoutView(APIView):
     http_method_names = ['post', 'options']
     permission_classes = [IsAuthenticated]
 
+    @swagger_logout
     def post(self, request):
         """Выход пользователя из системы"""
         logger = logging.getLogger('default')
