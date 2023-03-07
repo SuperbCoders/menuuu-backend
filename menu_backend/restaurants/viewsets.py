@@ -53,14 +53,12 @@ class RestaurantViewSet(viewsets.ModelViewSet):
     Набор API-обработчиков для управления ресторанами
     """
     model = Restaurant
+    queryset = Restaurant.objects.all()
     permission_classes = [RestaurantPermission]
     serializer_class = RestaurantSerializer
-    http_method_names = [
-        'get', 'head', 'options', 'post', 'put', 'patch', 'delete'
-    ]
-
-    def get_queryset(self):
-        return Restaurant.objects.all()
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['category']
+    http_method_names = ['get', 'head', 'options', 'post', 'put', 'patch', 'delete']
 
     def create(self, request):
         """
