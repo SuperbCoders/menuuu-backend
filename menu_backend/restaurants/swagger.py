@@ -33,7 +33,7 @@ swagger_public_menu = swagger_auto_schema(
             properties={
                 'id': openapi.Schema(
                     type=openapi.TYPE_INTEGER,
-                    description=_("The identified of the restaurant (same with 'id' parameter)")
+                    description=_("The identifier of the restaurant (same with 'id' parameter)")
                 ),
                 'name': openapi.Schema(
                     type=openapi.TYPE_STRING,
