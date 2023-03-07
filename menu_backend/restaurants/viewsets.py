@@ -96,18 +96,19 @@ class RestaurantStaffViewSet(viewsets.ModelViewSet):
     в ресторанах
     """
     model = RestaurantStaff
+    queryset = RestaurantStaff.objects.all()
     permission_classes = [RestaurantStaffPermission]
     serializer_class = RestaurantStaffSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['restaurant', 'user']
-    http_method_names = [
-        'get', 'head', 'options', 'post', 'put', 'patch', 'delete'
-    ]
+    http_method_names = ['get', 'head', 'options', 'post', 'put', 'patch', 'delete']
 
     def get_queryset(self):
         """
         Список сотрудников ресторанов видимых пользователю request.user
         """
+        if not self.request.user.is_authenticated:
+            return RestaurantStaff.objects.filter(id__in=set())
         if self.request.user.is_staff:
             return RestaurantStaff.objects.all()
         restaurant_ids = set(
