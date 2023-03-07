@@ -15,14 +15,14 @@ swagger_public_menu = swagger_auto_schema(
         openapi.Parameter(
             'id',
             openapi.IN_PATH,
-            description="The primary key of the restaurant",
+            description=_("The primary key of the restaurant"),
             type=openapi.TYPE_INTEGER,
             required=True
         ),
         openapi.Parameter(
             'language',
             openapi.IN_QUERY,
-            description="Return the menu at this language",
+            description=_("Return the menu at this language"),
             type=openapi.TYPE_STRING,
             required=False
         ),
@@ -123,6 +123,29 @@ swagger_public_menu = swagger_auto_schema(
                 )
             }
         ),
-        404: "Restaurant not found"
+        404: openapi.Response(_("Restaurant not found"))
     }
 )
+
+
+swagger_qrcode = swagger_auto_schema(
+    operation_name=_("Generate QR code"),
+    operation_description=_("Generate QR code to access the restaurant's public menu"),
+    manual_parameters=[
+        openapi.Parameter(
+            'id',
+            openapi.IN_PATH,
+            description=_("The primary key of the restaurant"),
+            type=openapi.TYPE_INTEGER,
+            required=True
+        )
+    ],
+    responses = {
+        200: openapi.Response(
+            _("PNG image for QR code"),
+            schema=openapi.Schema(type=openapi.TYPE_FILE)
+        ),
+        404: openapi.Response(_("Restaurant not found"))
+    }
+)
+

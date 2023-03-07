@@ -27,6 +27,7 @@ from restaurants.serializers import (
     RestaurantStaffSerializer,
     RestaurantCategorySerializer
 )
+from restaurants.swagger import swagger_qrcode
 
 
 class RestaurantCategoryViewSet(viewsets.ModelViewSet):
@@ -76,6 +77,7 @@ class RestaurantViewSet(viewsets.ModelViewSet):
                 restaurant.restaurant_staff.create(position='owner', user=user)
         return response
 
+    @swagger_qrcode
     @action(detail=True, methods=['get'], url_path='qrcode', permission_classes=[AllowAny])
     def qrcode(self, request, pk: int):
         """
