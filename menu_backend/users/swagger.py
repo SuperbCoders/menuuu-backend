@@ -47,7 +47,7 @@ swagger_login = swagger_auto_schema(
             )
         ),
         400: openapi.Response(
-            _("Bad request"),
+            "Bad request",
             openapi.Schema(
                 type=openapi.TYPE_OBJECT,
                 properties={
@@ -59,7 +59,7 @@ swagger_login = swagger_auto_schema(
             )
         ),
         403: openapi.Response(
-            _("Forbidden"),
+            "Forbidden",
             openapi.Schema(
                 type=openapi.TYPE_OBJECT,
                 properties={
@@ -79,7 +79,7 @@ swagger_logout = swagger_auto_schema(
     operation_description=_("Log out the current user"),
     responses={
         200: openapi.Response(
-            _("Successfully logged out"),
+            "OK",
             openapi.Schema(
                 type=openapi.TYPE_OBJECT,
                 properties={
@@ -90,8 +90,6 @@ swagger_logout = swagger_auto_schema(
                 }
             )
         ),
-        401: openapi.Response(
-            _("Not authenticated")
-        )
+        401: openapi.Response("Not authenticated")
     }
 )

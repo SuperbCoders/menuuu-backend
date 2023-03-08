@@ -8,135 +8,136 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-07 19:11+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2023-03-08 15:32+0000\n"
+"PO-Revision-Date: 2023-03-08 15:36+0000\n"
+"Last-Translator:   <admin@localhost>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Translated-Using: django-rosetta 0.9.8\n"
 
 #: menu_backend/settings.py:141
 msgid "English"
-msgstr ""
+msgstr "English"
 
 #: menu_backend/settings.py:142
 msgid "Russian"
-msgstr ""
+msgstr "Russian"
 
 #: menu_backend/urls.py:52
 msgid "Menu service for restaurants"
-msgstr ""
+msgstr "Menu service for restaurants"
 
 #: menus/models.py:31
 msgid "menu"
-msgstr ""
+msgstr "menu"
 
 #: menus/models.py:32
 msgid "menus"
-msgstr ""
+msgstr "menus"
 
 #: menus/models.py:37 menus/models.py:104 menus/models.py:152
 msgid "Title"
-msgstr ""
+msgstr "Title"
 
 #: menus/models.py:44 restaurants/models.py:217
 msgid "Restaurant"
-msgstr ""
+msgstr "Restaurant"
 
 #: menus/models.py:49 menus/models.py:181
 msgid "Published"
-msgstr ""
+msgstr "Published"
 
 #: menus/models.py:98
 msgid "menu section"
-msgstr ""
+msgstr "menu section"
 
 #: menus/models.py:99
 msgid "menus sections"
-msgstr ""
+msgstr "menu sections"
 
 #: menus/models.py:111 menus/models.py:164
 msgid "Menu"
-msgstr ""
+msgstr "Menu"
 
 #: menus/models.py:146
 msgid "course"
-msgstr ""
+msgstr "course"
 
 #: menus/models.py:147
 msgid "courses"
-msgstr ""
+msgstr "courses"
 
 #: menus/models.py:157
 msgid "Composition"
-msgstr ""
+msgstr "Composition"
 
 #: menus/models.py:171
 msgid "Menu section"
-msgstr ""
+msgstr "Menu section"
 
 #: menus/models.py:178
 msgid "Price"
-msgstr ""
+msgstr "Price"
 
 #: menus/models.py:185
 msgid "Cooking time"
-msgstr ""
+msgstr "Cooking time"
 
 #: menus/models.py:189
 msgid "Options"
-msgstr ""
+msgstr "Options"
 
 #: restaurants/models.py:34
 msgid "restaurant category"
-msgstr ""
+msgstr "restaurant category"
 
 #: restaurants/models.py:35
 msgid "restaurant categories"
-msgstr ""
+msgstr "restaurant categories"
 
 #: restaurants/models.py:40
 msgid "Category name"
-msgstr ""
+msgstr "Category name"
 
 #: restaurants/models.py:58
 msgid "restaurant"
-msgstr ""
+msgstr "restaurant"
 
 #: restaurants/models.py:59
 msgid "restaurants"
-msgstr ""
+msgstr "restaurants"
 
 #: restaurants/models.py:64
 msgid "Restaurant name"
-msgstr ""
+msgstr "Restaurant name"
 
 #: restaurants/models.py:69
 msgid "Restaurant description"
-msgstr ""
+msgstr "Restaurant description"
 
 #: restaurants/models.py:74
 msgid "Nickname"
-msgstr ""
+msgstr "Nickname"
 
 #: restaurants/models.py:79
 msgid "Logo"
-msgstr ""
+msgstr "Logo"
 
 #: restaurants/models.py:83
 msgid "Picture"
-msgstr ""
+msgstr "Picture"
 
 #: restaurants/models.py:88 restaurants/swagger.py:68
 msgid "Restaurant category"
-msgstr ""
+msgstr "Restaurant category"
 
 #: restaurants/models.py:94
 msgid "Number of stars"
-msgstr ""
+msgstr "Number of stars"
 
 #: restaurants/models.py:100
 msgid "Country"
@@ -380,16 +381,8 @@ msgstr ""
 msgid "Access token"
 msgstr ""
 
-#: users/swagger.py:50
-msgid "Bad request"
-msgstr ""
-
 #: users/swagger.py:56
 msgid "Error message - username or password not provided"
-msgstr ""
-
-#: users/swagger.py:62
-msgid "Forbidden"
 msgstr ""
 
 #: users/swagger.py:68
@@ -404,17 +397,8 @@ msgstr ""
 msgid "Log out the current user"
 msgstr ""
 
-#: users/swagger.py:82 users/tests/test_api/test_v1/test_login.py:89
-#: users/views.py:102
-msgid "Successfully logged out"
-msgstr ""
-
 #: users/swagger.py:88
 msgid "Message: successfully logged out"
-msgstr ""
-
-#: users/swagger.py:94
-msgid "Not authenticated"
 msgstr ""
 
 #: users/tests/test_api/test_v1/test_login.py:24 users/views.py:60
@@ -429,4 +413,8 @@ msgstr ""
 #: users/tests/test_api/test_v1/test_login.py:62
 #: users/tests/test_api/test_v1/test_login.py:80 users/views.py:69
 msgid "Successfully logged in"
+msgstr ""
+
+#: users/tests/test_api/test_v1/test_login.py:89 users/views.py:102
+msgid "Successfully logged out"
 msgstr ""

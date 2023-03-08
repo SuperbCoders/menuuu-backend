@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-07 19:11+0000\n"
-"PO-Revision-Date: 2023-03-07 19:16+0000\n"
+"POT-Creation-Date: 2023-03-08 15:32+0000\n"
+"PO-Revision-Date: 2023-03-08 15:34+0000\n"
 "Last-Translator:   <admin@localhost>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -216,7 +216,6 @@ msgid "Get the current menu for the specified restaurant"
 msgstr "Получить текущее меню указанного ресторана"
 
 #: restaurants/swagger.py:18 restaurants/swagger.py:138
-#| msgid "The name of the restaurant"
 msgid "The primary key of the restaurant"
 msgstr "Первичный ключ ресторана"
 
@@ -225,7 +224,6 @@ msgid "Return the menu at this language"
 msgstr "Отобразить меню на этом языке"
 
 #: restaurants/swagger.py:36
-#| msgid "The identified of the restaurant (same with 'id' parameter)"
 msgid "The identifier of the restaurant (same with 'id' parameter)"
 msgstr "Идентификатор ресторана (совпадает с параметром id)"
 
@@ -310,12 +308,10 @@ msgid "Menu title"
 msgstr "Заголовок меню"
 
 #: restaurants/swagger.py:126 restaurants/swagger.py:148
-#| msgid "Restaurant owner"
 msgid "Restaurant not found"
 msgstr "Ресторан не найден"
 
 #: restaurants/swagger.py:132
-#| msgid "Generating a QR code for URL: {}"
 msgid "Generate QR code"
 msgstr "Сгенерировать QR код"
 
@@ -364,12 +360,10 @@ msgid "Log in"
 msgstr "Войти в систему"
 
 #: users/swagger.py:14
-#| msgid "Incorrect username or password"
 msgid "Log in with username and password"
 msgstr "Войти с использованием имени пользователя и пароля"
 
 #: users/swagger.py:20
-#| msgid "User"
 msgid "Username"
 msgstr "Имя пользователя"
 
@@ -382,7 +376,6 @@ msgid "Success message"
 msgstr "Сообщение об успехе"
 
 #: users/swagger.py:40
-#| msgid "User"
 msgid "User id"
 msgstr "Идентификатор пользователя"
 
@@ -390,21 +383,11 @@ msgstr "Идентификатор пользователя"
 msgid "Access token"
 msgstr "Токен доступа"
 
-#: users/swagger.py:50
-msgid "Bad request"
-msgstr "Bad request"
-
 #: users/swagger.py:56
-#| msgid "Username and password must be provided"
 msgid "Error message - username or password not provided"
 msgstr "Сообщение об ошибке - имя пользователя или пароль не указаны"
 
-#: users/swagger.py:62
-msgid "Forbidden"
-msgstr "Forbidden"
-
 #: users/swagger.py:68
-#| msgid "Incorrect username or password"
 msgid "Error message - incorrect username or password"
 msgstr "Сообщение об ошибке - имя пользователя или пароль неверны"
 
@@ -416,19 +399,9 @@ msgstr "Выйти из системы"
 msgid "Log out the current user"
 msgstr "Выйти из системы"
 
-#: users/swagger.py:82 users/tests/test_api/test_v1/test_login.py:89
-#: users/views.py:102
-msgid "Successfully logged out"
-msgstr "Вы вышли из системы"
-
 #: users/swagger.py:88
-#| msgid "Successfully logged out"
 msgid "Message: successfully logged out"
 msgstr "Сообщение: Вы вышли из системы"
-
-#: users/swagger.py:94
-msgid "Not authenticated"
-msgstr "Вы не авторизованы"
 
 #: users/tests/test_api/test_v1/test_login.py:24 users/views.py:60
 msgid "Username and password must be provided"
@@ -443,3 +416,16 @@ msgstr "Неверное имя пользователя и пароль"
 #: users/tests/test_api/test_v1/test_login.py:80 users/views.py:69
 msgid "Successfully logged in"
 msgstr "Вы вошли в систему"
+
+#: users/tests/test_api/test_v1/test_login.py:89 users/views.py:102
+msgid "Successfully logged out"
+msgstr "Вы вышли из системы"
+
+#~ msgid "Bad request"
+#~ msgstr "Bad request"
+
+#~ msgid "Forbidden"
+#~ msgstr "Forbidden"
+
+#~ msgid "Not authenticated"
+#~ msgstr "Вы не авторизованы"
