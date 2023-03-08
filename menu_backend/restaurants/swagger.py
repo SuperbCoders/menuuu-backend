@@ -118,6 +118,69 @@ swagger_public_menu = swagger_auto_schema(
                         'title': openapi.Schema(
                             type=openapi.TYPE_STRING,
                             description=_("Menu title")
+                        ),
+                        'sections': openapi.Schema(
+                            type=openapi.TYPE_ARRAY,
+                            description=_("Menu sections"),
+                            items=openapi.Items(
+                                type=openapi.TYPE_OBJECT,
+                                properties={
+                                    'title': openapi.Schema(
+                                        type=openapi.TYPE_STRING,
+                                        description=_("Menu section title")
+                                    ),
+                                    'courses': openapi.Schema(
+                                        type=openapi.TYPE_ARRAY,
+                                        description=_("Menu courses within this section"),
+                                        items=openapi.Items(
+                                            type=openapi.TYPE_OBJECT,
+                                            properties={
+                                                'title': openapi.Schema(
+                                                    type=openapi.TYPE_STRING,
+                                                    description=_("Course name")
+                                                ),
+                                                'composition': openapi.Schema(
+                                                    type=openapi.TYPE_STRING,
+                                                    description=_("Course composition description")
+                                                ),
+                                                'price': openapi.Schema(
+                                                    type=openapi.TYPE_INTEGER,
+                                                    description=_("Course price")
+                                                ),
+                                                'cooking_time': openapi.Schema(
+                                                    type=openapi.TYPE_STRING,
+                                                    description=_("Cooking time")
+                                                ),
+                                            }
+                                        )
+                                    )
+                                }
+                            )
+                        ),
+                        'courses': openapi.Schema(
+                            type=openapi.TYPE_ARRAY,
+                            description=_("Menu courses not belonging to any section"),
+                            items=openapi.Items(
+                                type=openapi.TYPE_OBJECT,
+                                properties={
+                                    'title': openapi.Schema(
+                                        type=openapi.TYPE_STRING,
+                                        description=_("Course name")
+                                    ),
+                                    'composition': openapi.Schema(
+                                        type=openapi.TYPE_STRING,
+                                        description=_("Course composition description")
+                                    ),
+                                    'price': openapi.Schema(
+                                        type=openapi.TYPE_INTEGER,
+                                        description=_("Course price")
+                                    ),
+                                    'cooking_time': openapi.Schema(
+                                        type=openapi.TYPE_STRING,
+                                        description=_("Cooking time")
+                                    ),
+                                }
+                            )
                         )
                     }
                 )

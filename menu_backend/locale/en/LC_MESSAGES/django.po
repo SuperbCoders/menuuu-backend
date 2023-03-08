@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-08 15:32+0000\n"
+"POT-Creation-Date: 2023-03-08 17:39+0000\n"
 "PO-Revision-Date: 2023-03-08 15:36+0000\n"
 "Last-Translator:   <admin@localhost>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -83,7 +83,7 @@ msgstr "Menu section"
 msgid "Price"
 msgstr "Price"
 
-#: menus/models.py:185
+#: menus/models.py:185 restaurants/swagger.py:152 restaurants/swagger.py:180
 msgid "Cooking time"
 msgstr "Cooking time"
 
@@ -215,7 +215,7 @@ msgstr ""
 msgid "Get the current menu for the specified restaurant"
 msgstr ""
 
-#: restaurants/swagger.py:18 restaurants/swagger.py:138
+#: restaurants/swagger.py:18 restaurants/swagger.py:201
 msgid "The primary key of the restaurant"
 msgstr ""
 
@@ -305,19 +305,55 @@ msgstr ""
 msgid "Menu title"
 msgstr ""
 
-#: restaurants/swagger.py:126 restaurants/swagger.py:148
+#: restaurants/swagger.py:124
+#, fuzzy
+#| msgid "Menu section"
+msgid "Menu sections"
+msgstr "Menu section"
+
+#: restaurants/swagger.py:130
+#, fuzzy
+#| msgid "Menu section"
+msgid "Menu section title"
+msgstr "Menu section"
+
+#: restaurants/swagger.py:134
+msgid "Menu courses within this section"
+msgstr ""
+
+#: restaurants/swagger.py:140 restaurants/swagger.py:168
+#, fuzzy
+#| msgid "Category name"
+msgid "Course name"
+msgstr "Category name"
+
+#: restaurants/swagger.py:144 restaurants/swagger.py:172
+#, fuzzy
+#| msgid "Restaurant description"
+msgid "Course composition description"
+msgstr "Restaurant description"
+
+#: restaurants/swagger.py:148 restaurants/swagger.py:176
+msgid "Course price"
+msgstr ""
+
+#: restaurants/swagger.py:162
+msgid "Menu courses not belonging to any section"
+msgstr ""
+
+#: restaurants/swagger.py:189 restaurants/swagger.py:211
 msgid "Restaurant not found"
 msgstr ""
 
-#: restaurants/swagger.py:132
+#: restaurants/swagger.py:195
 msgid "Generate QR code"
 msgstr ""
 
-#: restaurants/swagger.py:133
+#: restaurants/swagger.py:196
 msgid "Generate QR code to access the restaurant's public menu"
 msgstr ""
 
-#: restaurants/swagger.py:145
+#: restaurants/swagger.py:208
 msgid "PNG image for QR code"
 msgstr ""
 
