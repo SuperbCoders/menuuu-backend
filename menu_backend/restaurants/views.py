@@ -47,7 +47,7 @@ def menu_to_json(menu, language: str = settings.LANGUAGE_CODE):
     """
     menu.set_current_language(language)
     obj = {'sections': [], 'courses': [], 'title': menu.title}
-    for section in menu.sections.all():
+    for section in menu.sections.filter(published=True).all():
         obj['sections'].append(section_to_json(section, language))
     for course in menu.courses.filter(section__isnull=True, published=True).all():
         obj['courses'].append(course_to_json(course, language))
