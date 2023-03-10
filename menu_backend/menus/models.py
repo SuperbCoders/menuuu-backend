@@ -114,7 +114,7 @@ class MenuSection(TranslatableModel):
     )
     published = models.BooleanField(
         verbose_name=_('Published'),
-        default=False, blank=False, null=False
+        default=True, blank=False, null=False
     )
 
     def __str__(self):
@@ -183,7 +183,7 @@ class MenuCourse(TranslatableModel):
     )
     published = models.BooleanField(
         verbose_name=_('Published'),
-        default=False, blank=False, null=False
+        default=True, blank=False, null=False
     )
     cooking_time = models.DurationField(
         verbose_name=_('Cooking time'),

@@ -35,6 +35,7 @@ class MenuSectionSerializer(TranslatableModelSerializer):
         fields = [
             'id',
             'translations',
+            'published',
             'menu',
             'published_courses'
         ]

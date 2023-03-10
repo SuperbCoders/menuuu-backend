@@ -446,6 +446,7 @@ class BaseTestCase(APITestCase):
         меню дешевого ресторана.
         """
         self.assertEqual(info['translations']['en']['title'], "Drinks")
+        self.assertEqual(info['published'], True)
 
     def verify_desserts_section(self, info):
         """
@@ -453,6 +454,7 @@ class BaseTestCase(APITestCase):
         меню дешевого ресторана.
         """
         self.assertEqual(info['translations']['en']['title'], "Desserts")
+        self.assertEqual(info['published'], True)
 
     def verify_inactive_section(self, info):
         """
