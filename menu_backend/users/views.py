@@ -13,6 +13,9 @@ from rest_framework.generics import CreateAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from restaurants.models import Restaurant
+from restaurants.serializers import RestaurantSerializer
+
 from users.models import User
 from users.swagger import swagger_login, swagger_logout
 from users.serializers import UserCreationSerializer
@@ -100,3 +103,29 @@ class LogoutView(APIView):
         logger.info(f"The user '{request.user.username}' logged out")
         logout(request)
         return Response({'detail': _("Successfully logged out")}, status=200)
+
+
+class MyRestaurantsView(APIView):
+    """
+    Список ресторанов, которыми владеет текущий пользователь.
+    """
+    http_method_names = ['get', 'head', 'options']
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        """Получение пользователем списка своих ресторанов"""
+        user = self.request.user
+        restaurant_ids = set(
+            user.restaurant_staff.filter(position='owner').values_list(
+                'restaurant_id', flat=True
+            )
+        )
+        restaurants = Restaurant.objects.filter(id__in=restaurant_ids).all()
+        results = [RestaurantSerializer(item).data for item in restaurants]
+        return Response(
+            {
+                'count': len(results),
+                'results': results
+            },
+            status=200
+        )

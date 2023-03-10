@@ -31,7 +31,7 @@ from restaurants.viewsets import (
 )
 from restaurants.views import UnauthorizedRestaturantView
 from tariffs.viewsets import TariffViewSet
-from users.views import UserCreationView, LoginView, LogoutView
+from users.views import UserCreationView, LoginView, LogoutView, MyRestaurantsView
 
 
 router_v1 = routers.SimpleRouter()
@@ -67,6 +67,8 @@ urlpatterns = [
     path('api/v1/users/login/', LoginView.as_view(), name='user_login'),
     # Выход из системы
     path('api/v1/users/logout/', LogoutView.as_view(), name='user_logout'),
+    # Получение пользователем списка ресторанов, которыми он владеет
+    path('api/v1/users/my_restaurants/', MyRestaurantsView.as_view(), name='user_restaurants'),
     # Описание API
     path(
         'api/v1/swagger/',
