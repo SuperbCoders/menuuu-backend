@@ -5,7 +5,7 @@
 from restaurants.tests._fixtures import BaseTestCase
 
 
-class MyRestaurantsTestCase(BaseTestCase):
+class MyProblemsTestCase(BaseTestCase):
     """
     Тесты для доступа к функции получения списка проблем со своими ресторанами
     """
@@ -24,6 +24,17 @@ class MyRestaurantsTestCase(BaseTestCase):
             ans = self.client.get(self.__get_url())
         self.assertEqual(ans.status_code, 200)
         info = ans.json()
+        self.assertCountEqual(info.keys(), ['count', 'results'])
+        self.assertEqual(info['count'], 0)
+        self.assertEqual(info['results'], [])
+
+    def test_cheap_owner(self):
+        """Владелец ресторана видит список проблем этого ресторана"""
+        with self.logged_in('cheap_owner'):
+            ans = self.client.get(self.__get_url())
+        self.assertEqual(ans.status_code, 200)
+        info = ans.json()
+        print(info)
         self.assertCountEqual(info.keys(), ['count', 'results'])
         self.assertEqual(info['count'], 0)
         self.assertEqual(info['results'], [])

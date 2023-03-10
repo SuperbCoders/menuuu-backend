@@ -80,7 +80,7 @@ class Menu(TranslatableModel):
         разделах меню.
         """
         return self.courses.filter(
-            Q(is_published=True) & (
+            Q(published=True) & (
                 Q(section__isnull=True) | Q(section__published=True)
             )
         )
