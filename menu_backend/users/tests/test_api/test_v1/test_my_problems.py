@@ -54,10 +54,13 @@ class MyProblemsTestCase(BaseTestCase):
             ans = self.client.get(self.__get_url())
         self.assertEqual(ans.status_code, 200)
         info = ans.json()
-        print(info)
         self.assertCountEqual(info.keys(), ['count', 'results'])
-        self.assertEqual(info['count'], 0)
-        self.assertEqual(info['results'], [])
+        # В меню этого ресторана еще нет ни одного блюда, так что есть проблема
+        self.assertEqual(info['count'], 1)
+        self.assertEqual(
+            info['results'],
+            ['Меню ресторана Premium restaurant пусто']
+        )
 
     def test_premium_worker(self):
         """Сотрудник не являющийся владельцем ресторана видит пустой список проблем"""
