@@ -129,3 +129,31 @@ class MyRestaurantsView(APIView):
             },
             status=200
         )
+
+
+class MyProblemsView(APIView):
+    """
+    Список проблем с данными о ресторанах, которыми владеет текущий пользователь
+    """
+    http_method_names = ['get', 'head', 'options']
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        """Получение пользователем списка своих ресторанов"""
+        user = self.request.user
+        restaurant_ids = set(
+            user.restaurant_staff.filter(position='owner').values_list(
+                'restaurant_id', flat=True
+            )
+        )
+        restaurants = Restaurant.objects.filter(id__in=restaurant_ids).all()
+        problems = []
+        for restaurant in restaurants:
+            problems += restaurant.get_problems()
+        return Response(
+            {
+                'count': len(problems),
+                'results': problems
+            },
+            status=200
+        )
