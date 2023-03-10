@@ -10,6 +10,7 @@
 """
 
 from django.db import models
+from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 
 from parler.models import TranslatableModel, TranslatedFields
@@ -71,6 +72,18 @@ class Menu(TranslatableModel):
         Проверить, что пользователь работает в ресторане, к которому относится меню
         """
         return self.restaurant.check_owner_or_worker(user)
+
+    @property
+    def all_published_courses(self):
+        """
+        Возвращает Queryset со списком всех опубликованных блюд в опубликованных
+        разделах меню.
+        """
+        return self.courses.filter(
+            Q(is_published=True) & (
+                Q(section__isnull=True) | Q(section__published=True)
+            )
+        )
 
     def save(self, *args, **kwargs):
         """

@@ -188,6 +188,24 @@ class Restaurant(TranslatableModel):
             return False
         return self.restaurant_staff.filter(user=user).exists()
 
+    def get_problems(self):
+        """
+        Возвращает список текстовых строк с описанием проблем с данными о ресторане,
+        включая отсутствие владельца, отсутствие опубликованного меню, пустые разделы
+        меню и т.п.
+        """
+        problems = []
+        if not self.restaurant_staff.filter(position='owner').exists():
+            problems.append(f"Ресторан {self.name} не имеет пользователя-владельца")
+        if self.current_menu is None:
+            problems.append(f"Ресторан {self.name} не имеет опубликованного меню")
+        if not self.current_menu.all_published_courses.exists():
+            problems.append(f"Меню ресторана {self.name} пусто")
+        for section in self.current_menu.sections.filter(published=True).all():
+            if not section.courses.filter(published=True).exists():
+                problems.append(f"Раздел {section.name} меню ресторана {self.name} пуст")
+        return problems
+
 
 class RestaurantStaff(models.Model):
     """
