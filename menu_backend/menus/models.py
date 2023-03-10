@@ -112,6 +112,10 @@ class MenuSection(TranslatableModel):
         related_name='sections',
         blank=False, null=False
     )
+    published = models.BooleanField(
+        verbose_name=_('Published'),
+        default=False, blank=False, null=False
+    )
 
     def __str__(self):
         return self.title
@@ -125,7 +129,7 @@ class MenuSection(TranslatableModel):
         """
         Проверить, что меню, к которому относится этот раздел, опубликовано
         """
-        return self.menu.check_published()
+        return self.published and self.menu.check_published()
 
     def check_restaurant_staff(self, user):
         """
@@ -195,9 +199,10 @@ class MenuCourse(TranslatableModel):
 
     def check_published(self):
         """
-        Проверить, что меню, к которому относится это блюдо, опубликовано
+        Проверить, что меню, к которому относится это блюдо, опубликовано и
+        само блюдо также опубликовано.
         """
-        return self.menu.check_published() and self.published
+        return self.published and self.section.check_published()
 
     def check_restaurant_staff(self, user):
         """
