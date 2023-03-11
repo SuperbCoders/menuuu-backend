@@ -98,6 +98,7 @@ swagger_logout = swagger_auto_schema(
 swagger_user_problems = swagger_auto_schema(
     operation_summary=_("Get the problem list"),
     operation_description=_("Get the list of problems of current user's restaurants"),
+    responses={
         200: openapi.Response(
             "OK",
             openapi.Schema(
@@ -119,4 +120,5 @@ swagger_user_problems = swagger_auto_schema(
             )
         ),
         401: openapi.Response("Not authenticated")
+    }
 )
