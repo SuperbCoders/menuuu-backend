@@ -209,7 +209,7 @@ swagger_user_restaurants = swagger_auto_schema(
                                                     type=openapi.TYPE_OBJECT,
                                                     properties={
                                                         'name': openapi.Schema(
-                                                            description=_("Restaurant category name in English"),
+                                                            description=_("Restaurant category name"),
                                                             type=openapi.TYPE_STRING
                                                         ),
                                                     }
@@ -275,7 +275,197 @@ swagger_user_restaurants = swagger_auto_schema(
                                             description=_("Menu primary key"),
                                             type=openapi.TYPE_INTEGER
                                         ),
-                                    }
+                                        'translations': openapi.Schema(
+                                            title=_("Menu title"),
+                                            desctiption=_("The title of the menu, in different languages"),
+                                            type=openapi.TYPE_OBJECT,
+                                            properties={
+                                                'en': openapi.Schema(
+                                                    title=_("In English"),
+                                                    description=_("Title of the menu, in English"),
+                                                    type=openapi.TYPE_OBJECT,
+                                                    properties={
+                                                        'title': openapi.Schema(
+                                                            description=_("Title of the menu"),
+                                                            type=openapi.TYPE_STRING
+                                                        ),
+                                                    }
+                                                )
+                                            }
+                                        ),
+                                        'restaurant': openapi.Schema(
+                                            description=_("Restaurant primary key"),
+                                            type=openapi.TYPE_INTEGER
+                                        ),
+                                        'published': openapi.Schema(
+                                            description=_("True if the menu is currently published"),
+                                            type=openapi.TYPE_BOOLEAN
+                                        ),
+                                        'sections': openapi.Schema(
+                                            description=_("Sections of the menu"),
+                                            type=openapi.TYPE_ARRAY,
+                                            items=openapi.Items(
+                                                type=openapi.TYPE_OBJECT,
+                                                properties={
+                                                    'id': openapi.Schema(
+                                                        description=_("Section primary key"),
+                                                        type=openapi.TYPE_INTEGER
+                                                    ),
+                                                    'translations': openapi.Schema(
+                                                        title=_("Menu section title"),
+                                                        desctiption=_("The title of the menu section, in different languages"),
+                                                        type=openapi.TYPE_OBJECT,
+                                                        properties={
+                                                            'en': openapi.Schema(
+                                                                title=_("In English"),
+                                                                description=_("Title of the section, in English"),
+                                                                type=openapi.TYPE_OBJECT,
+                                                                properties={
+                                                                    'title': openapi.Schema(
+                                                                        description=_("Title of the section"),
+                                                                        type=openapi.TYPE_STRING
+                                                                    ),
+                                                                }
+                                                            )
+                                                        }
+                                                    ),
+                                                    'menu': openapi.Schema(
+                                                        description=_("Menu primary key"),
+                                                        type=openapi.TYPE_INTEGER
+                                                    ),
+                                                    'published': openapi.Schema(
+                                                        description=_("True if the menu section is currently published"),
+                                                        type=openapi.TYPE_BOOLEAN
+                                                    ),
+                                                    'published_courses': openapi.Schema(
+                                                        description=_("Published courses within this section"),
+                                                        type=openapi.TYPE_ARRAY,
+                                                        items=openapi.Items(
+                                                            type=openapi.TYPE_OBJECT,
+                                                            properties={
+                                                                'id': openapi.Schema(
+                                                                    description=_("Course primary key"),
+                                                                    type=openapi.TYPE_INTEGER
+                                                                ),
+                                                                'translations': openapi.Schema(
+                                                                    title=_("Title and composition"),
+                                                                    description=_("The title and the composition of the course, in different languages"),
+                                                                    type=openapi.TYPE_OBJECT,
+                                                                    properties={
+                                                                        'en': openapi.Schema(
+                                                                            title=_("In English"),
+                                                                            description=_("The title and the composition of the course, in English"),
+                                                                            type=openapi.TYPE_OBJECT,
+                                                                            properties={
+                                                                                'title': openapi.Schema(
+                                                                                    description=_("Course title in English"),
+                                                                                    type=openapi.TYPE_STRING
+                                                                                ),
+                                                                                'composition': openapi.Schema(
+                                                                                    description=_("Course composition in English"),
+                                                                                    type=openapi.TYPE_STRING
+                                                                                ),
+                                                                            }
+                                                                        )
+                                                                    }
+                                                                ),
+                                                                'menu': openapi.Schema(
+                                                                    description=_("Menu primary key"),
+                                                                    type=openapi.TYPE_INTEGER
+                                                                ),
+                                                                'section': openapi.Schema(
+                                                                    description=_("Menu section primary key"),
+                                                                    type=openapi.TYPE_INTEGER
+                                                                ),
+                                                                'published': openapi.Schema(
+                                                                    description=_("True if the course is currently published"),
+                                                                    type=openapi.TYPE_BOOLEAN
+                                                                ),
+                                                                'price': openapi.Schema(
+                                                                    description=_("Course price"),
+                                                                    type=openapi.TYPE_STRING,
+                                                                    format="decimal"
+                                                                ),
+                                                                'cooking_time': openapi.Schema(
+                                                                    description=_("Cooking time"),
+                                                                    type=openapi.TYPE_STRING,
+                                                                ),
+                                                                'options': openapi.Schema(
+                                                                    title=_("Options"),
+                                                                    descripttion=_("Any additional information as a JSON object"),
+                                                                    type=openapi.TYPE_OBJECT,
+                                                                    properties={}
+                                                                )
+                                                            }
+                                                        )
+                                                    )
+                                                }
+                                            )
+                                        ),
+                                        'extra_published_courses': openapi.Schema(
+                                            description=_("Published courses that do not belong to any section"),
+                                            type=openapi.TYPE_ARRAY,
+                                            items=openapi.Items(
+                                                type=openapi.TYPE_OBJECT,
+                                                properties={
+                                                    'id': openapi.Schema(
+                                                        description=_("Course primary key"),
+                                                        type=openapi.TYPE_INTEGER
+                                                    ),
+                                                    'translations': openapi.Schema(
+                                                        title=_("Title and composition"),
+                                                        description=_("The title and the composition of the course, in different languages"),
+                                                        type=openapi.TYPE_OBJECT,
+                                                        properties={
+                                                            'en': openapi.Schema(
+                                                                title=_("In English"),
+                                                                description=_("The title and the composition of the course, in English"),
+                                                                type=openapi.TYPE_OBJECT,
+                                                                properties={
+                                                                    'title': openapi.Schema(
+                                                                        description=_("Course title in English"),
+                                                                        type=openapi.TYPE_STRING
+                                                                    ),
+                                                                    'composition': openapi.Schema(
+                                                                        description=_("Course composition in English"),
+                                                                        type=openapi.TYPE_STRING
+                                                                    ),
+                                                                }
+                                                            )
+                                                        }
+                                                    ),
+                                                    'menu': openapi.Schema(
+                                                        description=_("Menu primary key"),
+                                                        type=openapi.TYPE_INTEGER
+                                                    ),
+                                                    'section': openapi.Schema(
+                                                        description=_("Menu section primary key"),
+                                                        type=openapi.TYPE_INTEGER
+                                                    ),
+                                                    'published': openapi.Schema(
+                                                        description=_("True if the course is currently published"),
+                                                        type=openapi.TYPE_BOOLEAN
+                                                    ),
+                                                    'price': openapi.Schema(
+                                                        description=_("Course price"),
+                                                        type=openapi.TYPE_STRING,
+                                                        format="decimal"
+                                                    ),
+                                                    'cooking_time': openapi.Schema(
+                                                        description=_("Cooking time"),
+                                                        type=openapi.TYPE_STRING,
+                                                    ),
+                                                    'options': openapi.Schema(
+                                                        title=_("Options"),
+                                                        descripttion=_("Any additional information as a JSON object"),
+                                                        type=openapi.TYPE_OBJECT,
+                                                        properties={}
+                                                    )
+                                                }
+                                            )
+                                        ),
+                                    },
+                                    required=['restaurant', 'translations']
                                 )
                             },
                             required=['translations', 'stars', 'country', 'city', 'building', 'zip_code']
