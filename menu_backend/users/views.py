@@ -17,7 +17,7 @@ from restaurants.models import Restaurant
 from restaurants.serializers import RestaurantSerializer
 
 from users.models import User
-from users.swagger import swagger_login, swagger_logout
+from users.swagger import swagger_login, swagger_logout, swagger_user_problems
 from users.serializers import UserCreationSerializer
 
 
@@ -138,8 +138,9 @@ class MyProblemsView(APIView):
     http_method_names = ['get', 'head', 'options']
     permission_classes = [IsAuthenticated]
 
+    @swagger_user_problems
     def get(self, request):
-        """Получение пользователем списка своих ресторанов"""
+        """Получение пользователем списка проблем в данных своих ресторанов"""
         user = self.request.user
         restaurant_ids = set(
             user.restaurant_staff.filter(position='owner').values_list(

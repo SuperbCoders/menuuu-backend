@@ -93,3 +93,30 @@ swagger_logout = swagger_auto_schema(
         401: openapi.Response("Not authenticated")
     }
 )
+
+
+swagger_user_problems = swagger_auto_schema(
+    operation_summary=_("Get the problem list"),
+    operation_description=_("Get the list of problems of current user's restaurants"),
+        200: openapi.Response(
+            "OK",
+            openapi.Schema(
+                type=openapi.TYPE_OBJECT,
+                properties={
+                    'count': openapi.Schema(
+                        type=openapi.TYPE_INTEGER,
+                        description=_("The number of the problems found")
+                    ),
+                    'results': openapi.Schema(
+                        type=openapi.TYPE_ARRAY,
+                        description=_("The list of the problems found"),
+                        items=openapi.Items(
+                            type=openapi.TYPE_STRING,
+                            description_=("Problem description string")
+                        )
+                    )
+                }
+            )
+        ),
+        401: openapi.Response("Not authenticated")
+)
