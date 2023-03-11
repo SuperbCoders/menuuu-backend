@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-08 17:39+0000\n"
+"POT-Creation-Date: 2023-03-11 13:09+0000\n"
 "PO-Revision-Date: 2023-03-08 15:36+0000\n"
 "Last-Translator:   <admin@localhost>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -27,67 +27,67 @@ msgstr "English"
 msgid "Russian"
 msgstr "Russian"
 
-#: menu_backend/urls.py:52
+#: menu_backend/urls.py:58
 msgid "Menu service for restaurants"
 msgstr "Menu service for restaurants"
 
-#: menus/models.py:31
+#: menus/models.py:32
 msgid "menu"
 msgstr "menu"
 
-#: menus/models.py:32
+#: menus/models.py:33
 msgid "menus"
 msgstr "menus"
 
-#: menus/models.py:37 menus/models.py:104 menus/models.py:152
+#: menus/models.py:38 menus/models.py:117 menus/models.py:169
 msgid "Title"
 msgstr "Title"
 
-#: menus/models.py:44 restaurants/models.py:217
+#: menus/models.py:45 restaurants/models.py:235
 msgid "Restaurant"
 msgstr "Restaurant"
 
-#: menus/models.py:49 menus/models.py:181
+#: menus/models.py:50 menus/models.py:129 menus/models.py:198
 msgid "Published"
 msgstr "Published"
 
-#: menus/models.py:98
+#: menus/models.py:111
 msgid "menu section"
 msgstr "menu section"
 
-#: menus/models.py:99
+#: menus/models.py:112
 msgid "menus sections"
 msgstr "menu sections"
 
-#: menus/models.py:111 menus/models.py:164
+#: menus/models.py:124 menus/models.py:181 users/swagger.py:270
 msgid "Menu"
 msgstr "Menu"
 
-#: menus/models.py:146
+#: menus/models.py:163
 msgid "course"
 msgstr "course"
 
-#: menus/models.py:147
+#: menus/models.py:164
 msgid "courses"
 msgstr "courses"
 
-#: menus/models.py:157
+#: menus/models.py:174
 msgid "Composition"
 msgstr "Composition"
 
-#: menus/models.py:171
+#: menus/models.py:188
 msgid "Menu section"
 msgstr "Menu section"
 
-#: menus/models.py:178
+#: menus/models.py:195
 msgid "Price"
 msgstr "Price"
 
-#: menus/models.py:185 restaurants/swagger.py:152 restaurants/swagger.py:180
+#: menus/models.py:202 restaurants/swagger.py:152 restaurants/swagger.py:180
 msgid "Cooking time"
 msgstr "Cooking time"
 
-#: menus/models.py:189
+#: menus/models.py:206
 msgid "Options"
 msgstr "Options"
 
@@ -99,7 +99,7 @@ msgstr "restaurant category"
 msgid "restaurant categories"
 msgstr "restaurant categories"
 
-#: restaurants/models.py:40
+#: restaurants/models.py:40 users/swagger.py:202
 msgid "Category name"
 msgstr "Category name"
 
@@ -183,27 +183,27 @@ msgstr ""
 msgid "Generating a QR code for URL: {}"
 msgstr ""
 
-#: restaurants/models.py:198
+#: restaurants/models.py:216
 msgid "Restaurant owner"
 msgstr ""
 
-#: restaurants/models.py:199
+#: restaurants/models.py:217
 msgid "Restaurant worker"
 msgstr ""
 
-#: restaurants/models.py:205
+#: restaurants/models.py:223
 msgid "restaurant ownership or employment"
 msgstr ""
 
-#: restaurants/models.py:206
+#: restaurants/models.py:224
 msgid "restaurant ownerships or employments"
 msgstr ""
 
-#: restaurants/models.py:210
+#: restaurants/models.py:228
 msgid "User"
 msgstr ""
 
-#: restaurants/models.py:224
+#: restaurants/models.py:242
 msgid "Position"
 msgstr ""
 
@@ -437,20 +437,225 @@ msgstr ""
 msgid "Message: successfully logged out"
 msgstr ""
 
-#: users/tests/test_api/test_v1/test_login.py:24 users/views.py:60
+#: users/swagger.py:99
+msgid "Get the problem list"
+msgstr ""
+
+#: users/swagger.py:100
+msgid "Get the list of problems of current user's restaurants"
+msgstr ""
+
+#: users/swagger.py:109
+msgid "The number of the problems found"
+msgstr ""
+
+#: users/swagger.py:113
+msgid "The list of the problems found"
+msgstr ""
+
+#: users/swagger.py:116
+msgid "Problem description string"
+msgstr ""
+
+#: users/swagger.py:128
+#, fuzzy
+#| msgid "restaurants"
+msgid "Get my restaurant list"
+msgstr "restaurants"
+
+#: users/swagger.py:129
+msgid "Get the list of the current user's restaurants."
+msgstr ""
+
+#: users/swagger.py:138
+msgid "The number of the current user's restaurants"
+msgstr ""
+
+#: users/swagger.py:141
+#, fuzzy
+#| msgid "Restaurant"
+msgid "Restaurant list"
+msgstr "Restaurant"
+
+#: users/swagger.py:143
+msgid "The list of the current user's restaurants"
+msgstr ""
+
+#: users/swagger.py:148
+#, fuzzy
+#| msgid "Restaurant name"
+msgid "Restaurant's primary key"
+msgstr "Restaurant name"
+
+#: users/swagger.py:152
+#, fuzzy
+#| msgid "Restaurant description"
+msgid "Name and description"
+msgstr "Restaurant description"
+
+#: users/swagger.py:153
+msgid "The name and the description of the restaurant, in different languages"
+msgstr ""
+
+#: users/swagger.py:157 users/swagger.py:207
+#, fuzzy
+#| msgid "English"
+msgid "In English"
+msgstr "English"
+
+#: users/swagger.py:158
+msgid "The name and the description of the restaurant, in English"
+msgstr ""
+
+#: users/swagger.py:162
+#, fuzzy
+#| msgid "Restaurant name"
+msgid "Restaurant name in English"
+msgstr "Restaurant name"
+
+#: users/swagger.py:166
+#, fuzzy
+#| msgid "Restaurant description"
+msgid "Restaurant description in English"
+msgstr "Restaurant description"
+
+#: users/swagger.py:174
+msgid ""
+"The short URL-friendly name of the restaurant (A-Z, 0-9 and - symbols only)"
+msgstr ""
+
+#: users/swagger.py:179
+msgid "The restaurant's logo image URL"
+msgstr ""
+
+#: users/swagger.py:184
+#, fuzzy
+#| msgid "restaurant categories"
+msgid "The restaurant's picture URL"
+msgstr "restaurant categories"
+
+#: users/swagger.py:189
+#, fuzzy
+#| msgid "Restaurant category"
+msgid "Restaurant's category ID"
+msgstr "Restaurant category"
+
+#: users/swagger.py:193
+#, fuzzy
+#| msgid "Restaurant category"
+msgid "RestaurantCategory"
+msgstr "Restaurant category"
+
+#: users/swagger.py:194
+#, fuzzy
+#| msgid "Restaurant category"
+msgid "Restaurant's category data"
+msgstr "Restaurant category"
+
+#: users/swagger.py:198
+#, fuzzy
+#| msgid "Restaurant category"
+msgid "Restaurant category primary key"
+msgstr "Restaurant category"
+
+#: users/swagger.py:203
+msgid "The name of the restaurant category, in different languages"
+msgstr ""
+
+#: users/swagger.py:208
+msgid "The name of the restaurant category, in English"
+msgstr ""
+
+#: users/swagger.py:212
+#, fuzzy
+#| msgid "Restaurant category"
+msgid "Restaurant category name in English"
+msgstr "Restaurant category"
+
+#: users/swagger.py:222
+msgid "Number of stars, greater means better and more expensive"
+msgstr ""
+
+#: users/swagger.py:226
+#, fuzzy
+#| msgid "Restaurant category"
+msgid "Restaurant location country"
+msgstr "Restaurant category"
+
+#: users/swagger.py:230
+#, fuzzy
+#| msgid "Restaurant category"
+msgid "Restaurant location city"
+msgstr "Restaurant category"
+
+#: users/swagger.py:234
+#, fuzzy
+#| msgid "Restaurant category"
+msgid "Restaurant location street"
+msgstr "Restaurant category"
+
+#: users/swagger.py:238
+#, fuzzy
+#| msgid "Restaurant name"
+msgid "Restaurant's building number"
+msgstr "Restaurant name"
+
+#: users/swagger.py:242
+msgid "Restaurant address extra information (entrance number, floor, etc.)"
+msgstr ""
+
+#: users/swagger.py:246
+#, fuzzy
+#| msgid "Restaurant description"
+msgid "Restaurant's address ZIP code"
+msgstr "Restaurant description"
+
+#: users/swagger.py:250
+#, fuzzy
+#| msgid "restaurant categories"
+msgid "Restaurant's location longitude"
+msgstr "restaurant categories"
+
+#: users/swagger.py:255
+#, fuzzy
+#| msgid "restaurant categories"
+msgid "Restaurant's location latitude"
+msgstr "restaurant categories"
+
+#: users/swagger.py:260
+#, fuzzy
+#| msgid "Restaurant name"
+msgid "Restaurant's phone number"
+msgstr "Restaurant name"
+
+#: users/swagger.py:265
+#, fuzzy
+#| msgid "Restaurant description"
+msgid "Restaurant's website URI"
+msgstr "Restaurant description"
+
+#: users/swagger.py:271
+msgid "Currently published menu"
+msgstr ""
+
+#: users/swagger.py:275
+msgid "Menu primary key"
+msgstr ""
+
+#: users/tests/test_api/test_v1/test_login.py:24 users/views.py:67
 msgid "Username and password must be provided"
 msgstr ""
 
 #: users/tests/test_api/test_v1/test_login.py:34
-#: users/tests/test_api/test_v1/test_login.py:46 users/views.py:77
+#: users/tests/test_api/test_v1/test_login.py:46 users/views.py:84
 msgid "Incorrect username or password"
 msgstr ""
 
 #: users/tests/test_api/test_v1/test_login.py:62
-#: users/tests/test_api/test_v1/test_login.py:80 users/views.py:69
+#: users/tests/test_api/test_v1/test_login.py:80 users/views.py:76
 msgid "Successfully logged in"
 msgstr ""
 
-#: users/tests/test_api/test_v1/test_login.py:89 users/views.py:102
+#: users/tests/test_api/test_v1/test_login.py:89 users/views.py:109
 msgid "Successfully logged out"
 msgstr ""

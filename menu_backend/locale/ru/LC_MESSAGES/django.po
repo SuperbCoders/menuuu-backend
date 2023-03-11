@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-08 17:39+0000\n"
-"PO-Revision-Date: 2023-03-08 17:40+0000\n"
+"POT-Creation-Date: 2023-03-11 13:09+0000\n"
+"PO-Revision-Date: 2023-03-11 13:18+0000\n"
 "Last-Translator:   <admin@localhost>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -27,67 +27,67 @@ msgstr "английский"
 msgid "Russian"
 msgstr "русский"
 
-#: menu_backend/urls.py:52
+#: menu_backend/urls.py:58
 msgid "Menu service for restaurants"
 msgstr "Сервис меню для ресторанов"
 
-#: menus/models.py:31
+#: menus/models.py:32
 msgid "menu"
 msgstr "меню"
 
-#: menus/models.py:32
+#: menus/models.py:33
 msgid "menus"
 msgstr "меню"
 
-#: menus/models.py:37 menus/models.py:104 menus/models.py:152
+#: menus/models.py:38 menus/models.py:117 menus/models.py:169
 msgid "Title"
 msgstr "Название"
 
-#: menus/models.py:44 restaurants/models.py:217
+#: menus/models.py:45 restaurants/models.py:235
 msgid "Restaurant"
 msgstr "Ресторан"
 
-#: menus/models.py:49 menus/models.py:181
+#: menus/models.py:50 menus/models.py:129 menus/models.py:198
 msgid "Published"
 msgstr "опубликовано"
 
-#: menus/models.py:98
+#: menus/models.py:111
 msgid "menu section"
 msgstr "раздел меню"
 
-#: menus/models.py:99
+#: menus/models.py:112
 msgid "menus sections"
 msgstr "разделы меню"
 
-#: menus/models.py:111 menus/models.py:164
+#: menus/models.py:124 menus/models.py:181 users/swagger.py:270
 msgid "Menu"
 msgstr "Меню"
 
-#: menus/models.py:146
+#: menus/models.py:163
 msgid "course"
 msgstr "блюдо"
 
-#: menus/models.py:147
+#: menus/models.py:164
 msgid "courses"
 msgstr "блюда"
 
-#: menus/models.py:157
+#: menus/models.py:174
 msgid "Composition"
 msgstr "Состав"
 
-#: menus/models.py:171
+#: menus/models.py:188
 msgid "Menu section"
 msgstr "Раздел меню"
 
-#: menus/models.py:178
+#: menus/models.py:195
 msgid "Price"
 msgstr "Цена"
 
-#: menus/models.py:185 restaurants/swagger.py:152 restaurants/swagger.py:180
+#: menus/models.py:202 restaurants/swagger.py:152 restaurants/swagger.py:180
 msgid "Cooking time"
 msgstr "Время приготовления"
 
-#: menus/models.py:189
+#: menus/models.py:206
 msgid "Options"
 msgstr "Опции"
 
@@ -99,7 +99,7 @@ msgstr "Категория ресторана"
 msgid "restaurant categories"
 msgstr "Категории ресторанов"
 
-#: restaurants/models.py:40
+#: restaurants/models.py:40 users/swagger.py:202
 msgid "Category name"
 msgstr "Название категории"
 
@@ -169,7 +169,7 @@ msgstr "Долгота"
 
 #: restaurants/models.py:142
 msgid "Latitude"
-msgstr "Ширтоа"
+msgstr "Широта"
 
 #: restaurants/models.py:145
 msgid "Phone number"
@@ -183,27 +183,27 @@ msgstr "Сайт"
 msgid "Generating a QR code for URL: {}"
 msgstr "Генерируется QR код для URL: {}"
 
-#: restaurants/models.py:198
+#: restaurants/models.py:216
 msgid "Restaurant owner"
 msgstr "Владелец ресторана"
 
-#: restaurants/models.py:199
+#: restaurants/models.py:217
 msgid "Restaurant worker"
 msgstr "Работник ресторана"
 
-#: restaurants/models.py:205
+#: restaurants/models.py:223
 msgid "restaurant ownership or employment"
 msgstr "должность пользователя в ресторане"
 
-#: restaurants/models.py:206
+#: restaurants/models.py:224
 msgid "restaurant ownerships or employments"
 msgstr "должности пользователей в ресторанах"
 
-#: restaurants/models.py:210
+#: restaurants/models.py:228
 msgid "User"
 msgstr "Пользователь"
 
-#: restaurants/models.py:224
+#: restaurants/models.py:242
 msgid "Position"
 msgstr "Положение"
 
@@ -308,12 +308,10 @@ msgid "Menu title"
 msgstr "Заголовок меню"
 
 #: restaurants/swagger.py:124
-#| msgid "Menu section"
 msgid "Menu sections"
 msgstr "Разделы меню"
 
 #: restaurants/swagger.py:130
-#| msgid "Menu section"
 msgid "Menu section title"
 msgstr "Название раздела меню"
 
@@ -322,12 +320,10 @@ msgid "Menu courses within this section"
 msgstr "Блюда этого раздела меню"
 
 #: restaurants/swagger.py:140 restaurants/swagger.py:168
-#| msgid "Country name"
 msgid "Course name"
 msgstr "Название блюда"
 
 #: restaurants/swagger.py:144 restaurants/swagger.py:172
-#| msgid "Restaurant description"
 msgid "Course composition description"
 msgstr "Описание состава блюда"
 
@@ -435,21 +431,216 @@ msgstr "Выйти из системы"
 msgid "Message: successfully logged out"
 msgstr "Сообщение: Вы вышли из системы"
 
-#: users/tests/test_api/test_v1/test_login.py:24 users/views.py:60
+#: users/swagger.py:99
+msgid "Get the problem list"
+msgstr "Получить список проблем"
+
+#: users/swagger.py:100
+msgid "Get the list of problems of current user's restaurants"
+msgstr "Получить список проблем с данными о ресторанах текущего пользователя"
+
+#: users/swagger.py:109
+#| msgid "The name of the restaurant"
+msgid "The number of the problems found"
+msgstr "Количество обнаруженных проблем"
+
+#: users/swagger.py:113
+#| msgid "The name of the restaurant"
+msgid "The list of the problems found"
+msgstr "Список обнаруженных проблем"
+
+#: users/swagger.py:116
+#| msgid "The description of the restaurant"
+msgid "Problem description string"
+msgstr "Строка с описанием проблемы"
+
+#: users/swagger.py:128
+#| msgid "restaurants"
+msgid "Get my restaurant list"
+msgstr "Получить список своих ресторанов"
+
+#: users/swagger.py:129
+#| msgid "Get the current menu for the specified restaurant"
+msgid "Get the list of the current user's restaurants."
+msgstr "Получить список ресторанов, принадлежащих текущему пользователю"
+
+#: users/swagger.py:138
+#| msgid "The name of the restaurant"
+msgid "The number of the current user's restaurants"
+msgstr "Количество ресторанов текущего пользователя"
+
+#: users/swagger.py:141
+#| msgid "Restaurant"
+msgid "Restaurant list"
+msgstr "Список ресторанов"
+
+#: users/swagger.py:143
+#| msgid "The name of the restaurant"
+msgid "The list of the current user's restaurants"
+msgstr "Список ресторанов текущего пользователя"
+
+#: users/swagger.py:148
+#| msgid "Restaurant's menu"
+msgid "Restaurant's primary key"
+msgstr "Первичный ключ ресторана"
+
+#: users/swagger.py:152
+#| msgid "Restaurant description"
+msgid "Name and description"
+msgstr "Название и описание"
+
+#: users/swagger.py:153
+#| msgid "The description of the restaurant"
+msgid "The name and the description of the restaurant, in different languages"
+msgstr "Название и описание ресторана на разных языках"
+
+#: users/swagger.py:157 users/swagger.py:207
+#| msgid "English"
+msgid "In English"
+msgstr "По-английски"
+
+#: users/swagger.py:158
+#| msgid "The description of the restaurant"
+msgid "The name and the description of the restaurant, in English"
+msgstr "Название и описание ресторана по английски"
+
+#: users/swagger.py:162
+#| msgid "Restaurant name"
+msgid "Restaurant name in English"
+msgstr "Название ресторана по английски"
+
+#: users/swagger.py:166
+#| msgid "Restaurant description"
+msgid "Restaurant description in English"
+msgstr "Описание ресторана по английски"
+
+#: users/swagger.py:174
+msgid ""
+"The short URL-friendly name of the restaurant (A-Z, 0-9 and - symbols only)"
+msgstr "Короткое название ресторана для URL (только символы A-Z, 0-9 и -)"
+
+#: users/swagger.py:179
+#| msgid "The restaurant's site url"
+msgid "The restaurant's logo image URL"
+msgstr "URL логотипа ресторана"
+
+#: users/swagger.py:184
+#| msgid "The restaurant's site url"
+msgid "The restaurant's picture URL"
+msgstr "URL изображения ресторана"
+
+#: users/swagger.py:189
+#| msgid "Restaurant category"
+msgid "Restaurant's category ID"
+msgstr "Идентификатор категории ресторана"
+
+#: users/swagger.py:193
+#| msgid "Restaurant category"
+msgid "RestaurantCategory"
+msgstr "RestaurantCategory"
+
+#: users/swagger.py:194
+#| msgid "Restaurant category"
+msgid "Restaurant's category data"
+msgstr "Данные о категории ресторана"
+
+#: users/swagger.py:198
+#| msgid "Restaurant category"
+msgid "Restaurant category primary key"
+msgstr "Первичный ключ категории ресторана"
+
+#: users/swagger.py:203
+#| msgid "The name of the restaurant"
+msgid "The name of the restaurant category, in different languages"
+msgstr "Название категории ресторана на разных языках"
+
+#: users/swagger.py:208
+#| msgid "The name of the restaurant"
+msgid "The name of the restaurant category, in English"
+msgstr "Название категории ресторана по английски"
+
+#: users/swagger.py:212
+#| msgid "Restaurant category"
+msgid "Restaurant category name in English"
+msgstr "Название категории по английски"
+
+#: users/swagger.py:222
+msgid "Number of stars, greater means better and more expensive"
+msgstr "Количество звезд, чем больше тем лучше и дороже"
+
+#: users/swagger.py:226
+#| msgid "Restaurant category"
+msgid "Restaurant location country"
+msgstr "Страна, где находится ресторан"
+
+#: users/swagger.py:230
+#| msgid "Restaurant category"
+msgid "Restaurant location city"
+msgstr "Город, где находится ресторан"
+
+#: users/swagger.py:234
+#| msgid "Restaurant category"
+msgid "Restaurant location street"
+msgstr "Улица, где находится ресторан"
+
+#: users/swagger.py:238
+#| msgid "Restaurant's menu"
+msgid "Restaurant's building number"
+msgstr "Номер дома ресторана"
+
+#: users/swagger.py:242
+#| msgid "Address details like entrance number, level number, etc."
+msgid "Restaurant address extra information (entrance number, floor, etc.)"
+msgstr "Подробности адреса - например, подъезд или этаж"
+
+#: users/swagger.py:246
+#| msgid "Restaurant address"
+msgid "Restaurant's address ZIP code"
+msgstr "Почтовый код адреса ресторана"
+
+#: users/swagger.py:250
+#| msgid "Restaurant not found"
+msgid "Restaurant's location longitude"
+msgstr "Долгота местонахождения ресторана"
+
+#: users/swagger.py:255
+#| msgid "Restaurant not found"
+msgid "Restaurant's location latitude"
+msgstr "Широта местонахождения ресторана"
+
+#: users/swagger.py:260
+#| msgid "Restaurant's menu"
+msgid "Restaurant's phone number"
+msgstr "Номер телефона ресторана"
+
+#: users/swagger.py:265
+#| msgid "The restaurant's site url"
+msgid "Restaurant's website URI"
+msgstr "URL сайта ресторана"
+
+#: users/swagger.py:271
+msgid "Currently published menu"
+msgstr "Опубликованное в данный момент меню"
+
+#: users/swagger.py:275
+msgid "Menu primary key"
+msgstr "Первичный ключ меню"
+
+#: users/tests/test_api/test_v1/test_login.py:24 users/views.py:67
 msgid "Username and password must be provided"
 msgstr "Необходимо ввести имя пользователя и пароль"
 
 #: users/tests/test_api/test_v1/test_login.py:34
-#: users/tests/test_api/test_v1/test_login.py:46 users/views.py:77
+#: users/tests/test_api/test_v1/test_login.py:46 users/views.py:84
 msgid "Incorrect username or password"
 msgstr "Неверное имя пользователя и пароль"
 
 #: users/tests/test_api/test_v1/test_login.py:62
-#: users/tests/test_api/test_v1/test_login.py:80 users/views.py:69
+#: users/tests/test_api/test_v1/test_login.py:80 users/views.py:76
 msgid "Successfully logged in"
 msgstr "Вы вошли в систему"
 
-#: users/tests/test_api/test_v1/test_login.py:89 users/views.py:102
+#: users/tests/test_api/test_v1/test_login.py:89 users/views.py:109
 msgid "Successfully logged out"
 msgstr "Вы вышли из системы"
 
