@@ -213,3 +213,15 @@ LOGGING = {
         }
     }
 }
+
+if os.getenv('LOGFILE', None):
+    # Если указана переменная окружения LOGFILE, то записывать отладочную
+    # информацию в соответствующий файл, обновляя его еженедельно
+    logging['handlers']['logfile'] = {
+        'level': 'INFO',
+        'class': 'logging.handlers.TimedRotatingFileHandler',
+        'filename': os.getenv('LOGFILE'),
+        'formatter': 'default',
+        'when': 'W0',
+        'backupCount': 300
+    }
