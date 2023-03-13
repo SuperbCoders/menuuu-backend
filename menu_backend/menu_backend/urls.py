@@ -70,7 +70,7 @@ urlpatterns = [
     # Регистрация нового пользователя
     path('api/v1/users/register/', UserCreationView.as_view(), name="user_register"),
     # Вход в систему
-    path('api/v1/users/login/', LoginView.as_view(), name='user_login'),
+    path('api/v1/users/login', LoginView.as_view(), name='user_login'),
     # Выход из системы
     path('api/v1/users/logout/', LogoutView.as_view(), name='user_logout'),
     # Получение пользователем списка ресторанов, которыми он владеет
