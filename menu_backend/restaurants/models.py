@@ -221,7 +221,7 @@ class RestaurantStaff(models.Model):
         ordering = ['pk']
         db_table = 'restaurants_restaurantstaff'
         verbose_name = _('restaurant ownership or employment')
-        verbose_name = _('restaurant ownerships or employments')
+        verbose_name_plural = _('restaurant ownerships or employments')
 
     user = models.ForeignKey(
         to=User,
