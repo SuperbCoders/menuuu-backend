@@ -33,6 +33,6 @@ class RestaurantAdmin(TranslatableAdmin):
 
 
 @admin.register(RestaurantStaff)
-class RestaurantStaffAdmin(TranslatableAdmin):
+class RestaurantStaffAdmin(admin.ModelAdmin):
     list_display = ('restaurant', 'user')
     search_fields = ('restaurant__name', 'user__username')
