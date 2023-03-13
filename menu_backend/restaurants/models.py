@@ -163,7 +163,7 @@ class Restaurant(TranslatableModel):
         """Генерирует QR код для доступа к меню ресторана через API"""
         logger = logging.getLogger('root')
         if self.slug:
-            data = settings.SITE_URL + "/" + self.slug
+            data = settings.SITE_URL + "/" + self.slug + "/"
         else:
             data = settings.SITE_URL + f"/id{self.pk}"
         logger.info(_("Generating a QR code for URL: {}").format(data))
