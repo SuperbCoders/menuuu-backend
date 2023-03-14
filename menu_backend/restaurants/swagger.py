@@ -8,6 +8,12 @@ from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 
 
+swagger_restaurant_by_slug = swagger_auto_schema(
+    operation_summary=_("Get the restaurant by its nickname"),
+    operation_summary=_("Get the restaurant by its nickname"),
+)
+
+
 swagger_public_menu = swagger_auto_schema(
     operation_name=_("Get the menu"),
     operation_description=_("Get the current menu for the specified restaurant"),

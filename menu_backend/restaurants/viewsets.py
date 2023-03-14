@@ -62,6 +62,27 @@ class RestaurantViewSet(viewsets.ModelViewSet):
     filterset_fields = ['category']
     http_method_names = ['get', 'head', 'options', 'post', 'put', 'patch', 'delete']
 
+    def _check_slug(self, slug, instance=None):
+        """
+        Возвращает True, если указанное сокращенное название для URL может быть
+        присвоено указанному ресторану. Значение True возвращается если значение
+        slug пусто, либо совпадает с имеющимся слагом ресторана instance, либо
+        не совпадает ни с одним слагом другого ресторана. Кроме того, проверяется,
+        что если слаг имеет специальный формат id_XXX то XXX обязано совпадать
+        с первичным ключом ресторана.
+        """
+        if not slug:
+            return True
+        if slug.lower.startswith("id_"):
+            if instance and instance.pk and slug.lower() == f"id_{instance.pk}":
+                return True
+            return False
+        if instance and slug.lower() == instance.slug.lower():
+            return True
+        if Restaurant.objects.filter(slug__iexact=slug).exists():
+            return False
+        return True
+
     def create(self, request):
         """
         При создании нового ресторана сделать пользователя, добавившего
@@ -70,7 +91,7 @@ class RestaurantViewSet(viewsets.ModelViewSet):
         # Проверяем, что если никнейм ресторана задан, то он еще не принадлежит
         # другому ресторану
         slug = request.data.get('slug', None)
-        if slug and Restaurant.objects.filter(slug__iexact=slug).exists():
+        if self.__check_slug(slug):
             return Response(
                 {'detail': _("A restaurant with such slug string already exists")},
                 status=400
@@ -93,8 +114,8 @@ class RestaurantViewSet(viewsets.ModelViewSet):
         restaurant = get_object_or_404(Restaurant, pk=pk)
         # Проверяем, что если никнейм ресторана задан, то он еще не принадлежит
         # другому ресторану
-        slug = request.get('slug', None)
-        if slug and slug != restaurant.slug and Restaurant.objects.filter(slug__iexact=slug).exists():
+        slug = request.data.get('slug', None)
+        if self.__check_slug(slug, instance=restaurant):
             return Response(
                 {'detail': _("A restaurant with such slug string already exists")},
                 status=400
@@ -109,8 +130,8 @@ class RestaurantViewSet(viewsets.ModelViewSet):
         restaurant = get_object_or_404(Restaurant, pk=pk)
         # Проверяем, что если никнейм ресторана задан, то он еще не принадлежит
         # другому ресторану
-        slug = request.get('slug', None)
-        if slug and slug != restaurant.slug and Restaurant.objects.filter(slug__iexact=slug).exists():
+        slug = request.data.get('slug', None)
+        if self.__check_slug(slug, instance=restaurant):
             return Response(
                 {'detail': _("A restaurant with such slug string already exists")},
                 status=400

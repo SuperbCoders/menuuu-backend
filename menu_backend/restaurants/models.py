@@ -73,7 +73,9 @@ class Restaurant(TranslatableModel):
     slug = models.SlugField(
         verbose_name=_("Nickname"),
         max_length=100,
-        blank=True, null=False
+        unique=True,
+        blank=False,
+        null=False
     )
     logo = models.ImageField(
         verbose_name=_("Logo"),
@@ -154,6 +156,15 @@ class Restaurant(TranslatableModel):
     def __str__(self):
         return self.name
 
+    def save(self, *args, **kwargs):
+        """
+        Сохранить данные о ресторане. Если для ресторана не задано сокращенное название
+        для URL то сгенерировать его автоматически на основе его первичного ключа
+        """
+        if not self.slug:
+            self.slug = f"id_{self.pk}"
+        super().save(*args, **kwargs)
+
     @property
     def current_menu(self):
         """Возвращает текущее активное меню ресторана"""
@@ -162,10 +173,7 @@ class Restaurant(TranslatableModel):
     def generate_qrcode(self):
         """Генерирует QR код для доступа к меню ресторана через API"""
         logger = logging.getLogger('root')
-        if self.slug:
-            data = settings.SITE_URL + "/" + self.slug + "/"
-        else:
-            data = settings.SITE_URL + f"/id{self.pk}"
+        data = settings.SITE_URL + "/" + self.slug + "/"
         logger.info(_("Generating a QR code for URL: {}").format(data))
         img = qrcode.make(data)
         return img
