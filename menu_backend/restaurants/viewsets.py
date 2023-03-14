@@ -62,7 +62,7 @@ class RestaurantViewSet(viewsets.ModelViewSet):
     filterset_fields = ['category']
     http_method_names = ['get', 'head', 'options', 'post', 'put', 'patch', 'delete']
 
-    def _check_slug(self, slug, instance=None):
+    def __check_slug(self, slug, instance=None):
         """
         Возвращает True, если указанное сокращенное название для URL может быть
         присвоено указанному ресторану. Значение True возвращается если значение
@@ -73,7 +73,7 @@ class RestaurantViewSet(viewsets.ModelViewSet):
         """
         if not slug:
             return True
-        if slug.lower.startswith("id_"):
+        if slug.lower().startswith("id_"):
             if instance and instance.pk and slug.lower() == f"id_{instance.pk}":
                 return True
             return False
@@ -153,7 +153,7 @@ class RestaurantViewSet(viewsets.ModelViewSet):
     @swagger_restaurant_by_slug
     @action(detail=False,
             methods=['get'],
-            url_path='by_slug/(?P<slug>[A-Za-z0-9_-]+)/',
+            url_path='by_slug/(?P<slug>[A-Za-z0-9_-]+)',
             permission_classes=[AllowAny],
             pagination_class=None)
     def by_slug(self, request, slug: str):

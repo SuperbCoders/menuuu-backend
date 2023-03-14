@@ -12,7 +12,7 @@ from restaurants.serializers import RestaurantSerializer
 
 swagger_restaurant_by_slug = swagger_auto_schema(
     operation_summary=_("Get the restaurant by its nickname"),
-    operation_summary=_("Get the restaurant by its nickname"),
+    operation_description=_("Get the restaurant by its nickname"),
     manual_parameters=[
         openapi.Parameter(
             'slug',

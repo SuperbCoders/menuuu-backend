@@ -161,9 +161,17 @@ class Restaurant(TranslatableModel):
         Сохранить данные о ресторане. Если для ресторана не задано сокращенное название
         для URL то сгенерировать его автоматически на основе его первичного ключа
         """
-        if not self.slug:
+        if self.pk:
+            if not self.slug:
+                self.slug = f"id_{self.pk}"
+                super().save(*args, **kwargs)
+        elif not self.slug:
+            self.slug = "id__"
+            super().save(*args, **kwargs)
             self.slug = f"id_{self.pk}"
-        super().save(*args, **kwargs)
+            super().save()
+        else:
+            super().save(*args, **kwargs)
 
     @property
     def current_menu(self):
