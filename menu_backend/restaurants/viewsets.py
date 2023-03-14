@@ -69,8 +69,8 @@ class RestaurantViewSet(viewsets.ModelViewSet):
         """
         # Проверяем, что если никнейм ресторана задан, то он еще не принадлежит
         # другому ресторану
-        slug = request.data['slug']
-        if slug and Restaurant.objects.filter(slug=slug).exists():
+        slug = request.data.get('slug', None)
+        if slug and Restaurant.objects.filter(slug__iexact=slug).exists():
             return Response(
                 {'detail': _("A restaurant with such slug string already exists")},
                 status=400
@@ -93,8 +93,8 @@ class RestaurantViewSet(viewsets.ModelViewSet):
         restaurant = get_object_or_404(Restaurant, pk=pk)
         # Проверяем, что если никнейм ресторана задан, то он еще не принадлежит
         # другому ресторану
-        slug = request.data['slug']
-        if slug and slug != restaurant.slug and Restaurant.objects.filter(slug=slug).exists():
+        slug = request.get('slug', None)
+        if slug and slug != restaurant.slug and Restaurant.objects.filter(slug__iexact=slug).exists():
             return Response(
                 {'detail': _("A restaurant with such slug string already exists")},
                 status=400
@@ -109,8 +109,8 @@ class RestaurantViewSet(viewsets.ModelViewSet):
         restaurant = get_object_or_404(Restaurant, pk=pk)
         # Проверяем, что если никнейм ресторана задан, то он еще не принадлежит
         # другому ресторану
-        slug = request.data['slug']
-        if slug and slug != restaurant.slug and Restaurant.objects.filter(slug=slug).exists():
+        slug = request.get('slug', None)
+        if slug and slug != restaurant.slug and Restaurant.objects.filter(slug__iexact=slug).exists():
             return Response(
                 {'detail': _("A restaurant with such slug string already exists")},
                 status=400
@@ -138,7 +138,7 @@ class RestaurantViewSet(viewsets.ModelViewSet):
         """
         Получить информацию о ресторане по его никнейму
         """
-        restaurant = get_object_or_404(Restaurant, slug=slug)
+        restaurant = get_object_or_404(Restaurant, slug__iexact=slug)
         return Response(RestaurantSerializer(restaurant).data)
 
 

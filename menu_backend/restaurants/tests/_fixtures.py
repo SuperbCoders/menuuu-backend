@@ -71,6 +71,7 @@ def populate_test_data():
     test_data['cheap_restaurant'].set_current_language('ru')
     test_data['cheap_restaurant'].name = "Придорожное кафе"
     test_data['cheap_restaurant'].description = "Первое попавшееся кафе"
+    test_data['cheap_restaurant'].slug = "cheap-restaurant"
     test_data['cheap_restaurant'].save()
     test_data['cheap_menu'] = test_data['cheap_restaurant'].menus.create(
         # Активное меню ресторана
@@ -169,6 +170,7 @@ def populate_test_data():
     test_data['premium_restaurant'].set_current_language('ru')
     test_data['premium_restaurant'].name = "Премиум ресторан"
     test_data['premium_restaurant'].description = "Ресторан премиум-класса"
+    test_data['premium_restaurant'].slug = "premium-restaurant"
     test_data['premium_restaurant'].save()
     test_data['premium_menu'] = test_data['premium_restaurant'].menus.create(
         # Активное меню премиум ресторана

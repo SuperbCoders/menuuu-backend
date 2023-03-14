@@ -602,3 +602,331 @@ class RestaurantQRCodeTest(BaseTestCase):
         """Неавторизованный пользователь получает QR-код ресторана"""
         ans = self.client.get(self.__get_url())
         self.assertEqual(ans.status_code, 200)
+
+
+class RestaurantBySlugTest(BaseTestCase):
+    """
+    Тесты для API получения информации об одиночном ресторане по его никнейму
+    """
+
+    def __get_url(self):
+        return f"/api/v1/restaurants/by-slug/cheap-restaurant/"
+
+    def test_unauthorized(self):
+        """Неавторизованный пользователь видит информацию о ресторане"""
+        ans = self.client.get(self.__get_url())
+        self.assertEqual(ans.status_code, 200)
+        info = ans.json()
+        self.verify_cheap_restaurant(info)
+
+    def test_some_user(self):
+        """Зарегистрированный пользователь видит информацию о ресторане"""
+        with self.logged_in('some_user'):
+            ans = self.client.get(self.__get_url())
+        self.assertEqual(ans.status_code, 200)
+        info = ans.json()
+        self.verify_cheap_restaurant(info)
+
+    def test_cheap_owner(self):
+        """Владелец ресторана видит информацию о ресторане"""
+        with self.logged_in('cheap_owner'):
+            ans = self.client.get(self.__get_url())
+        self.assertEqual(ans.status_code, 200)
+        info = ans.json()
+        self.verify_cheap_restaurant(info)
+
+    def test_cheap_worker(self):
+        """Работник ресторана видит информацию о ресторане"""
+        with self.logged_in('cheap_worker'):
+            ans = self.client.get(self.__get_url())
+        self.assertEqual(ans.status_code, 200)
+        info = ans.json()
+        self.verify_cheap_restaurant(info)
+
+    def test_premium_owner(self):
+        """Владелец другого ресторана видит информацию о ресторане"""
+        with self.logged_in('premium_owner'):
+            ans = self.client.get(self.__get_url())
+        self.assertEqual(ans.status_code, 200)
+        info = ans.json()
+        self.verify_cheap_restaurant(info)
+
+    def test_premium_worker(self):
+        """Работник другого ресторана видит информацию о ресторане"""
+        with self.logged_in('premium_worker'):
+            ans = self.client.get(self.__get_url())
+        self.assertEqual(ans.status_code, 200)
+        info = ans.json()
+        self.verify_cheap_restaurant(info)
+
+    def test_admin(self):
+        """Администратор видит информацию о ресторане"""
+        with self.logged_in('admin'):
+            ans = self.client.get(self.__get_url())
+        self.assertEqual(ans.status_code, 200)
+        info = ans.json()
+        self.verify_cheap_restaurant(info)
+
+
+class RestaurantByNonExistantSlugTest(BaseTestCase):
+    """
+    Тесты для API получения информации об одиночном ресторане по его никнейму с
+    возвратом ошибки, если такого никнейма не существует
+    """
+
+    def __get_url(self):
+        return f"/api/v1/restaurants/by-slug/non-existent/"
+
+    def test_unauthorized(self):
+        """Неавторизованный пользователь получает ошибку 404"""
+        ans = self.client.get(self.__get_url())
+        self.assertEqual(ans.status_code, 404)
+
+    def test_some_user(self):
+        """Зарегистрированный пользователь получает ошибку 404"""
+        with self.logged_in('some_user'):
+            ans = self.client.get(self.__get_url())
+        self.assertEqual(ans.status_code, 404)
+
+
+class RestaurantCreateTestWithSlug(BaseTestCase):
+    """
+    Тесты для API создания нового ресторана с указанием для него никнейма
+    """
+
+    def __get_url(self):
+        return "/api/v1/restaurants/"
+
+    def __post_new_restaurant_data(self):
+        """
+        Выполнить POST-запрос на добавление нового ресторана и вернуть ответ на
+        него.
+        """
+        return self.client.post(
+            self.__get_url(),
+            {
+                'translations': {
+                    'en': {
+                        'name': "New restaurant",
+                        'description': "A new restaurant just added",
+                    },
+                    'ru': {
+                        'name': "Новый ресторан",
+                        'description': "Только что добавленный ресторан",
+                    },
+                },
+                'slug': 'new-restaurant',
+                'country': 'Россия',
+                'city': 'Москва',
+                'street': 'Тверская',
+                'building': '25',
+                'address_details': 'Вход со двора',
+                'zip_code': '110120',
+                'longitude': '37.5',
+                'latitude': '56.5'
+            },
+            format='json'
+        )
+
+    def test_unauthorized(self):
+        """Неавторизованный пользователь не может добавить ресторан"""
+        self.assertEqual(Restaurant.objects.count(), 2)
+        ans = self.__post_new_restaurant_data()
+        self.assertEqual(ans.status_code, 401)
+        # Проверяем, что ресторан не был добавлен
+        self.assertEqual(Restaurant.objects.count(), 2)
+
+    def test_some_user(self):
+        """Авторизованный пользователь добавляет новый ресторан"""
+        self.assertEqual(Restaurant.objects.count(), 2)
+        with self.logged_in('some_user'):
+            ans = self.__post_new_restaurant_data()
+        self.assertEqual(ans.status_code, 201)
+        new_pk = ans.json()['id']
+        # Проверяем, что ресторан был добавлен
+        self.assertEqual(Restaurant.objects.count(), 3)
+        new_restaurant = Restaurant.objects.get(pk=new_pk)
+        self.assertEqual(new_restaurant.name, "New restaurant")
+        self.assertEqual(new_restaurant.description, "A new restaurant just added")
+        self.assertEqual(new_restaurant.city, "Москва")
+        # Проверяем, что пользователь, добавивший ресторан, стал его владельцем
+        self.assertTrue(
+            new_restaurant.restaurant_staff.filter(
+                position='owner', user=self._data['some_user']
+            ).exists()
+        )
+        # Проверяем, что пользователь, добавивший ресторан, получил права владельца
+        # этого ресторана
+        self.assertTrue(new_restaurant.check_owner(self._data['some_user']))
+        # Проверяем, что и русское название добавилось
+        new_restaurant.set_current_language('ru')
+        self.assertEqual(new_restaurant.name, "Новый ресторан")
+
+    def test_cheap_worker(self):
+        """Сотрудник дешевого ресторана добавляет новый ресторан"""
+        self.assertEqual(Restaurant.objects.count(), 2)
+        with self.logged_in('cheap_worker'):
+            ans = self.__post_new_restaurant_data()
+        self.assertEqual(ans.status_code, 201)
+        new_pk = ans.json()['id']
+        # Проверяем, что ресторан был добавлен
+        self.assertEqual(Restaurant.objects.count(), 3)
+        new_restaurant = Restaurant.objects.get(pk=new_pk)
+        self.assertEqual(new_restaurant.name, "New restaurant")
+        self.assertEqual(new_restaurant.description, "A new restaurant just added")
+        self.assertEqual(new_restaurant.city, "Москва")
+        # Проверяем, что пользователь, добавивший ресторан, стал его владельцем
+        self.assertTrue(
+            new_restaurant.restaurant_staff.filter(
+                position='owner', user=self._data['cheap_worker']
+            ).exists()
+        )
+        # Проверяем, что пользователь, добавивший ресторан, получил права владельца
+        # этого ресторана
+        self.assertTrue(new_restaurant.check_owner(self._data['cheap_worker']))
+        # И остался сотрудником ресторана в котором работал раньше
+        self.assertTrue(self._data['cheap_restaurant'].check_owner_or_worker(self._data['cheap_worker']))
+        # И не получил новых прав по отношению к нему
+        self.assertFalse(self._data['cheap_restaurant'].check_owner(self._data['cheap_worker']))
+        # Проверяем, что и русское название добавилось
+        new_restaurant.set_current_language('ru')
+        self.assertEqual(new_restaurant.name, "Новый ресторан")
+
+    def test_cheap_owner(self):
+        """Владелец дешевого ресторана добавляет новый ресторан"""
+        self.assertEqual(Restaurant.objects.count(), 2)
+        with self.logged_in('cheap_owner'):
+            ans = self.__post_new_restaurant_data()
+        self.assertEqual(ans.status_code, 201)
+        new_pk = ans.json()['id']
+        # Проверяем, что ресторан был добавлен
+        self.assertEqual(Restaurant.objects.count(), 3)
+        new_restaurant = Restaurant.objects.get(pk=new_pk)
+        self.assertEqual(new_restaurant.name, "New restaurant")
+        self.assertEqual(new_restaurant.description, "A new restaurant just added")
+        self.assertEqual(new_restaurant.city, "Москва")
+        # Проверяем, что пользователь, добавивший ресторан, стал его владельцем
+        self.assertTrue(
+            new_restaurant.restaurant_staff.filter(
+                position='owner', user=self._data['cheap_owner']
+            ).exists()
+        )
+        # Проверяем, что пользователь, добавивший ресторан, получил права владельца
+        # этого ресторана
+        self.assertTrue(new_restaurant.check_owner(self._data['cheap_owner']))
+        # И остался владельцем имевшегося у него ранее ресторана
+        self.assertTrue(self._data['cheap_restaurant'].check_owner(self._data['cheap_owner']))
+        # Проверяем, что и русское название добавилось
+        new_restaurant.set_current_language('ru')
+        self.assertEqual(new_restaurant.name, "Новый ресторан")
+
+    def test_admin(self):
+        """Администратор добавляет новый ресторан"""
+        self.assertEqual(Restaurant.objects.count(), 2)
+        with self.logged_in('admin'):
+            ans = self.__post_new_restaurant_data()
+        self.assertEqual(ans.status_code, 201)
+        new_pk = ans.json()['id']
+        # Проверяем, что ресторан был добавлен
+        self.assertEqual(Restaurant.objects.count(), 3)
+        new_restaurant = Restaurant.objects.get(pk=new_pk)
+        self.assertEqual(new_restaurant.name, "New restaurant")
+        self.assertEqual(new_restaurant.description, "A new restaurant just added")
+        self.assertEqual(new_restaurant.city, "Москва")
+        # Проверяем, что пользователь, добавивший ресторан, стал его владельцем
+        self.assertTrue(
+            new_restaurant.restaurant_staff.filter(
+                position='owner', user=self._data['admin']
+            ).exists()
+        )
+        # Проверяем, что пользователь, добавивший ресторан, получил права владельца
+        # этого ресторана
+        self.assertTrue(new_restaurant.check_owner(self._data['admin']))
+        # Проверяем, что и русское название добавилось
+        new_restaurant.set_current_language('ru')
+        self.assertEqual(new_restaurant.name, "Новый ресторан")
+
+
+class RestaurantCreateTestWithExistingSlug(BaseTestCase):
+    """
+    Тесты для API создания нового ресторана с указанием для него никнейма, уже
+    использованного другим рестораном. Ресторан не должен при этом создаваться.
+    """
+
+    def __get_url(self):
+        return "/api/v1/restaurants/"
+
+    def __post_new_restaurant_data(self):
+        """
+        Выполнить POST-запрос на добавление нового ресторана и вернуть ответ на
+        него.
+        """
+        return self.client.post(
+            self.__get_url(),
+            {
+                'translations': {
+                    'en': {
+                        'name': "New restaurant",
+                        'description': "A new restaurant just added",
+                    },
+                    'ru': {
+                        'name': "Новый ресторан",
+                        'description': "Только что добавленный ресторан",
+                    },
+                },
+                'slug': 'Cheap-Restaurant',
+                'country': 'Россия',
+                'city': 'Москва',
+                'street': 'Тверская',
+                'building': '25',
+                'address_details': 'Вход со двора',
+                'zip_code': '110120',
+                'longitude': '37.5',
+                'latitude': '56.5'
+            },
+            format='json'
+        )
+
+    def test_unauthorized(self):
+        """Неавторизованный пользователь не может добавить ресторан"""
+        self.assertEqual(Restaurant.objects.count(), 2)
+        ans = self.__post_new_restaurant_data()
+        self.assertEqual(ans.status_code, 401)
+        # Проверяем, что ресторан не был добавлен
+        self.assertEqual(Restaurant.objects.count(), 2)
+
+    def test_some_user(self):
+        """Авторизованный пользователь добавляет новый ресторан"""
+        self.assertEqual(Restaurant.objects.count(), 2)
+        with self.logged_in('some_user'):
+            ans = self.__post_new_restaurant_data()
+        self.assertEqual(ans.status_code, 400)
+        # Проверяем, что ресторан не был добавлен
+        self.assertEqual(Restaurant.objects.count(), 2)
+
+    def test_cheap_worker(self):
+        """Сотрудник дешевого ресторана добавляет новый ресторан"""
+        self.assertEqual(Restaurant.objects.count(), 2)
+        with self.logged_in('cheap_worker'):
+            ans = self.__post_new_restaurant_data()
+        self.assertEqual(ans.status_code, 400)
+        # Проверяем, что ресторан не был добавлен
+        self.assertEqual(Restaurant.objects.count(), 2)
+
+    def test_cheap_owner(self):
+        """Владелец дешевого ресторана добавляет новый ресторан"""
+        self.assertEqual(Restaurant.objects.count(), 2)
+        with self.logged_in('cheap_owner'):
+            ans = self.__post_new_restaurant_data()
+        self.assertEqual(ans.status_code, 400)
+        # Проверяем, что ресторан не был добавлен
+        self.assertEqual(Restaurant.objects.count(), 2)
+
+    def test_admin(self):
+        """Администратор добавляет новый ресторан"""
+        self.assertEqual(Restaurant.objects.count(), 2)
+        with self.logged_in('admin'):
+            ans = self.__post_new_restaurant_data()
+        self.assertEqual(ans.status_code, 400)
+        # Проверяем, что ресторан не был добавлен
+        self.assertEqual(Restaurant.objects.count(), 2)
