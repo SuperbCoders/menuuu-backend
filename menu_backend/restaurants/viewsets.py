@@ -29,7 +29,7 @@ from restaurants.serializers import (
     RestaurantStaffSerializer,
     RestaurantCategorySerializer
 )
-from restaurants.swagger import swagger_qrcode
+from restaurants.swagger import swagger_qrcode, swagger_restaurant_by_slug
 
 
 class RestaurantCategoryViewSet(viewsets.ModelViewSet):
@@ -150,6 +150,7 @@ class RestaurantViewSet(viewsets.ModelViewSet):
         response['Content-Disposition'] = 'attachment; filename="qrcode.png"'
         return response
 
+    @swagger_restaurant_by_slug
     @action(detail=False,
             methods=['get'],
             url_path='by_slug/(?P<slug>[A-Za-z0-9_-]+)/',

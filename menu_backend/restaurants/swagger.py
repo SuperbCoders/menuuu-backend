@@ -7,10 +7,25 @@ from django.utils.translation import gettext_lazy as _
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 
+from restaurants.serializers import RestaurantSerializer
+
 
 swagger_restaurant_by_slug = swagger_auto_schema(
     operation_summary=_("Get the restaurant by its nickname"),
     operation_summary=_("Get the restaurant by its nickname"),
+    manual_parameters=[
+        openapi.Parameter(
+            'slug',
+            openapi.IN_PATH,
+            description=_("The nickname of the restaurant"),
+            type=openapi.TYPE_STRING,
+            required=True
+        ),
+    ],
+    responses = {
+        200: openapi.Response("OK", schema=RestaurantSerializer()),
+        404: openapi.Response(_("Restaurant not found"))
+    }
 )
 
 
