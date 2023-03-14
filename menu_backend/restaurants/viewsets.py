@@ -5,12 +5,14 @@
 
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
+from django.utils.translation import gettext_lazy as _
 
 from django_filters.rest_framework import DjangoFilterBackend
 
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny
+from rest_framework.response import Response
 
 from restaurants.models import (
     Restaurant,
@@ -65,6 +67,14 @@ class RestaurantViewSet(viewsets.ModelViewSet):
         При создании нового ресторана сделать пользователя, добавившего
         ресторан, в список владельцев этого ресторана
         """
+        # Проверяем, что если никнейм ресторана задан, то он еще не принадлежит
+        # другому ресторану
+        slug = request.data['slug']
+        if slug and Restaurant.objects.filter(slug=slug).exists():
+            return Response(
+                {'detail': _("A restaurant with such slug string already exists")},
+                status=400
+            )
         response = super().create(request)
         if response.status_code == 201:
             # Находим созданный ресторан по возвращаемому значению ключа
@@ -74,6 +84,38 @@ class RestaurantViewSet(viewsets.ModelViewSet):
             if user.is_authenticated and user.is_active:
                 restaurant.restaurant_staff.create(position='owner', user=user)
         return response
+
+    def update(self, request, pk: int):
+        """
+        При изменении данных ресторана проверяем, что если изменен никнейм то он
+        не используется другим рестораном
+        """
+        restaurant = get_object_or_404(Restaurant, pk=pk)
+        # Проверяем, что если никнейм ресторана задан, то он еще не принадлежит
+        # другому ресторану
+        slug = request.data['slug']
+        if slug and slug != restaurant.slug and Restaurant.objects.filter(slug=slug).exists():
+            return Response(
+                {'detail': _("A restaurant with such slug string already exists")},
+                status=400
+            )
+        return super().update(request, pk=pk)
+
+    def partial_update(self, request, pk: int):
+        """
+        При изменении данных ресторана проверяем, что если изменен никнейм то он
+        не используется другим рестораном
+        """
+        restaurant = get_object_or_404(Restaurant, pk=pk)
+        # Проверяем, что если никнейм ресторана задан, то он еще не принадлежит
+        # другому ресторану
+        slug = request.data['slug']
+        if slug and slug != restaurant.slug and Restaurant.objects.filter(slug=slug).exists():
+            return Response(
+                {'detail': _("A restaurant with such slug string already exists")},
+                status=400
+            )
+        return super().partial_update(request, pk=pk)
 
     @swagger_qrcode
     @action(detail=True, methods=['get'], url_path='qrcode', permission_classes=[AllowAny])
@@ -86,6 +128,18 @@ class RestaurantViewSet(viewsets.ModelViewSet):
         restaurant.generate_qrcode().save(response, "PNG")
         response['Content-Disposition'] = 'attachment; filename="qrcode.png"'
         return response
+
+    @action(detail=False,
+            methods=['get'],
+            url_path='by_slug/(?P<slug>[A-Za-z0-9_-]+)/',
+            permission_classes=[AllowAny],
+            pagination_class=None)
+    def by_slug(self, request, slug: str):
+        """
+        Получить информацию о ресторане по его никнейму
+        """
+        restaurant = get_object_or_404(Restaurant, slug=slug)
+        return Response(RestaurantSerializer(restaurant).data)
 
 
 class RestaurantStaffViewSet(viewsets.ModelViewSet):
