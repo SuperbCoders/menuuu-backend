@@ -16,6 +16,7 @@ Including another URLconf
 
 from django.contrib import admin
 from django.conf import settings
+from django.conf.urls.static import static
 from django.urls import path, include
 from django.utils.translation import gettext_lazy as _
 
@@ -92,5 +93,4 @@ urlpatterns = [
     ),
     # API-обработчики для работы с данными по протоколу REST
     path('api/v1/', include(router_v1.urls)),
-    static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
