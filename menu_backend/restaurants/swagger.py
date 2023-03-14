@@ -72,6 +72,22 @@ swagger_public_menu = swagger_auto_schema(
                     type=openapi.TYPE_STRING,
                     description=_("The restaurant's site url")
                 ),
+                'twitter_profile': openapi.Schema(
+                    type=openapi.TYPE_STRING,
+                    description=_("Restaurant's Twitter profile url")
+                ),
+                'facebook_profile': openapi.Schema(
+                    type=openapi.TYPE_STRING,
+                    description=_("Restaurant's Facebook profile url")
+                ),
+                'instagram_profile': openapi.Schema(
+                    type=openapi.TYPE_STRING,
+                    description=_("Restaurant's Instagram profile url")
+                ),
+                'average_receipt': openapi.Schema(
+                    type=openapi.TYPE_NUMBER,
+                    description=_("Average receipt price")
+                ),
                 'logo': openapi.Schema(
                     type=openapi.TYPE_STRING,
                     description=_("The URL of restaurant's logo image, if available")

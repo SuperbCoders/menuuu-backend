@@ -73,7 +73,11 @@ def restaurant_to_json(restaurant, language: str = settings.LANGUAGE_CODE):
         'name': restaurant.name,
         'description': restaurant.description,
         'phone': str(restaurant.phone),
-        'site': restaurant.site
+        'site': restaurant.site,
+        'twitter_profile': restaurant.twitter_profile,
+        'facebook_profile': restaurant.facebook_profile,
+        'instagram_profile': restaurant.instagram_profile,
+        'average_receipt': restaurant.average_receipt,
     }
     if restaurant.logo:
         obj['logo'] = restaurant.logo.url
