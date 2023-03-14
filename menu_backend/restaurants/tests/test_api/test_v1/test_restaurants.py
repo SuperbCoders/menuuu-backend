@@ -610,7 +610,7 @@ class RestaurantBySlugTest(BaseTestCase):
     """
 
     def __get_url(self):
-        return f"/api/v1/restaurants/by-slug/cheap-restaurant/"
+        return "/api/v1/restaurants/by-slug/cheap-restaurant/"
 
     def test_unauthorized(self):
         """Неавторизованный пользователь видит информацию о ресторане"""
@@ -675,7 +675,7 @@ class RestaurantByNonExistantSlugTest(BaseTestCase):
     """
 
     def __get_url(self):
-        return f"/api/v1/restaurants/by-slug/non-existent/"
+        return "/api/v1/restaurants/by-slug/non-existent/"
 
     def test_unauthorized(self):
         """Неавторизованный пользователь получает ошибку 404"""
