@@ -91,7 +91,7 @@ class RestaurantViewSet(viewsets.ModelViewSet):
         # Проверяем, что если никнейм ресторана задан, то он еще не принадлежит
         # другому ресторану
         slug = request.data.get('slug', None)
-        if self.__check_slug(slug):
+        if not self.__check_slug(slug):
             return Response(
                 {'detail': _("A restaurant with such slug string already exists")},
                 status=400
@@ -139,7 +139,10 @@ class RestaurantViewSet(viewsets.ModelViewSet):
         return super().partial_update(request, pk=pk)
 
     @swagger_qrcode
-    @action(detail=True, methods=['get'], url_path='qrcode', permission_classes=[AllowAny])
+    @action(detail=True,
+            methods=['get'],
+            url_path='qrcode',
+            permission_classes=[AllowAny])
     def qrcode(self, request, pk: int):
         """
         Вернуть изображение qr-кода для заданного ресторана
@@ -153,14 +156,15 @@ class RestaurantViewSet(viewsets.ModelViewSet):
     @swagger_restaurant_by_slug
     @action(detail=False,
             methods=['get'],
-            url_path='by_slug/(?P<slug>[A-Za-z0-9_-]+)',
+            url_path='by_slug/(?P<slug>[-A-Za-z0-9_]+)',
             permission_classes=[AllowAny],
             pagination_class=None)
     def by_slug(self, request, slug: str):
         """
-        Получить информацию о ресторане по его никнейму
+        Получить информацию о ресторане по его никнейму, который может быть
+        указан в любом регистре.
         """
-        restaurant = get_object_or_404(Restaurant, slug__iexact=slug)
+        restaurant = get_object_or_404(Restaurant, slug=slug.lower())
         return Response(RestaurantSerializer(restaurant).data)
 
 

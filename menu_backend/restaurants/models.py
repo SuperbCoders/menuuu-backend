@@ -162,9 +162,11 @@ class Restaurant(TranslatableModel):
         для URL то сгенерировать его автоматически на основе его первичного ключа
         """
         if self.pk:
-            if not self.slug:
+            if self.slug:
+                self.slug = self.slug.lower()
+            else:
                 self.slug = f"id_{self.pk}"
-                super().save(*args, **kwargs)
+            super().save(*args, **kwargs)
         elif not self.slug:
             self.slug = "id__"
             super().save(*args, **kwargs)

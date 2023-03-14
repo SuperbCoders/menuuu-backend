@@ -610,7 +610,7 @@ class RestaurantBySlugTest(BaseTestCase):
     """
 
     def __get_url(self):
-        return "/api/v1/restaurants/by-slug/some-cafe/"
+        return "/api/v1/restaurants/by_slug/some-cafe/"
 
     def test_unauthorized(self):
         """Неавторизованный пользователь видит информацию о ресторане"""
