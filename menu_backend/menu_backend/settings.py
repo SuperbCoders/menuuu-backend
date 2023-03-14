@@ -158,6 +158,12 @@ STATIC_URL = 'static/'
 # Каталог для размещения статических файлов
 STATIC_ROOT = BASE_DIR / 'static'
 
+# Префикс URL для загруженных файлов
+MEDIA_URL = 'media/'
+
+# Каталог для загруженных файлов
+MEDIA_ROOT = BASE_DIR / 'media'
+
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 

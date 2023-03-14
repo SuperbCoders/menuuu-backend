@@ -5,7 +5,7 @@
 from parler_rest.serializers import TranslatableModelSerializer
 from parler_rest.fields import TranslatedFieldsField
 
-from rest_framework.serializers import ModelSerializer, SlugField
+from rest_framework.serializers import ModelSerializer, SlugField, ImageField
 
 from restaurants.models import Restaurant, RestaurantCategory, RestaurantStaff
 
@@ -27,6 +27,8 @@ class RestaurantSerializer(TranslatableModelSerializer):
     # Нужно определить явно, чтобы сделать необязательным. Если
     # слаг не задан, то он будет id_{restaurant.pk}.
     slug = SlugField(required=False)
+    logo = ImageField(required=False)
+    picture = ImageField(required=False)
 
     class Meta:
         model = Restaurant
