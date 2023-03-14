@@ -152,6 +152,26 @@ class Restaurant(TranslatableModel):
         verbose_name=_("Site URL"),
         blank=True, null=False
     )
+    twitter_profile = models.URLField(
+        max_length=100,
+        verbose_name=_("Twitter profile URL"),
+        blank=True, null=True
+    )
+    facebook_profile = models.URLField(
+        max_length=100,
+        verbose_name=_("Facebook profile URL"),
+        blank=True, null=True
+    )
+    instagram_profile = models.URLField(
+        max_length=100,
+        verbose_name=_("Instagram profile URL"),
+        blank=True, null=True
+    )
+    average_receipt = models.DecimalField(
+        max_digits=10, decimal_places=2,
+        blank=True, null=True,
+        verbose_name=_('Average receipt price')
+    )
 
     def __str__(self):
         return self.name

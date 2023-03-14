@@ -50,6 +50,10 @@ class RestaurantSerializer(TranslatableModelSerializer):
             'latitude',
             'phone',
             'site',
+            'twitter_profile',
+            'facebook_profile',
+            'instagram_profile',
+            'average_receipt',
             # Только для чтения - подробная информация о категории ресторана и
             # текущем меню
             'category_data',
