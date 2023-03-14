@@ -610,7 +610,7 @@ class RestaurantBySlugTest(BaseTestCase):
     """
 
     def __get_url(self):
-        return "/api/v1/restaurants/by-slug/cheap-restaurant/"
+        return "/api/v1/restaurants/by-slug/some-cafe/"
 
     def test_unauthorized(self):
         """Неавторизованный пользователь видит информацию о ресторане"""
@@ -874,7 +874,7 @@ class RestaurantCreateTestWithExistingSlug(BaseTestCase):
                         'description': "Только что добавленный ресторан",
                     },
                 },
-                'slug': 'Cheap-Restaurant',
+                'slug': 'Some-Cafe',
                 'country': 'Россия',
                 'city': 'Москва',
                 'street': 'Тверская',

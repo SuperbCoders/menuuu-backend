@@ -71,7 +71,6 @@ def populate_test_data():
     test_data['cheap_restaurant'].set_current_language('ru')
     test_data['cheap_restaurant'].name = "Придорожное кафе"
     test_data['cheap_restaurant'].description = "Первое попавшееся кафе"
-    test_data['cheap_restaurant'].slug = "cheap-restaurant"
     test_data['cheap_restaurant'].save()
     test_data['cheap_menu'] = test_data['cheap_restaurant'].menus.create(
         # Активное меню ресторана
@@ -170,7 +169,6 @@ def populate_test_data():
     test_data['premium_restaurant'].set_current_language('ru')
     test_data['premium_restaurant'].name = "Премиум ресторан"
     test_data['premium_restaurant'].description = "Ресторан премиум-класса"
-    test_data['premium_restaurant'].slug = "premium-restaurant"
     test_data['premium_restaurant'].save()
     test_data['premium_menu'] = test_data['premium_restaurant'].menus.create(
         # Активное меню премиум ресторана
@@ -371,7 +369,7 @@ class BaseTestCase(APITestCase):
     def verify_premium_restaurant(self, info):
         """
         Проверить, что словарь info содержит необходимые данные о тестовом
-        дешевом ресторане
+        дорогом ресторане
         """
         self.assertEqual(info['id'], self._data['premium_restaurant'].pk)
         self.assertEqual(info['translations']['en']['name'], "Premium restaurant")
@@ -379,7 +377,7 @@ class BaseTestCase(APITestCase):
         # В продакшне русские переводы возвращаются всегда, при тестировании нет
         # self.assertEqual(info['translations']['ru']['name'], "Премиум ресторан")
         # self.assertEqual(info['translations']['ru']['description'], "Ресторан премиум-класса")
-        self.assertEqual(info['slug'], "")
+        self.assertEqual(info['slug'], f"id_{self._data['premium_restaurant'].pk}")
         self.assertEqual(info['category'], None)
         self.assertEqual(info['category_data'], None)
         self.assertEqual(info['stars'], 5)
@@ -412,6 +410,7 @@ class BaseTestCase(APITestCase):
         restaurant = Restaurant.objects.get(pk=self._data['cheap_restaurant'].pk)
         self.assertEqual(restaurant.name, "A good place to eat")
         self.assertEqual(restaurant.description, "Just some good place to eat")
+        self.assertEqual(restaurant.slug, "some-cafe")
         self.assertEqual(restaurant.country, "Russia")
         self.assertEqual(restaurant.city, "Moscow")
         self.assertEqual(restaurant.street, "Leninskiy avenue")
