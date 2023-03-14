@@ -106,7 +106,7 @@ class RestaurantViewSet(viewsets.ModelViewSet):
                 restaurant.restaurant_staff.create(position='owner', user=user)
         return response
 
-    def update(self, request, pk: int):
+    def update(self, request, pk: int, **kwargs):
         """
         При изменении данных ресторана проверяем, что если изменен никнейм то он
         не используется другим рестораном
@@ -115,14 +115,14 @@ class RestaurantViewSet(viewsets.ModelViewSet):
         # Проверяем, что если никнейм ресторана задан, то он еще не принадлежит
         # другому ресторану
         slug = request.data.get('slug', None)
-        if self.__check_slug(slug, instance=restaurant):
+        if not self.__check_slug(slug, instance=restaurant):
             return Response(
                 {'detail': _("A restaurant with such slug string already exists")},
                 status=400
             )
-        return super().update(request, pk=pk)
+        return super().update(request, pk=pk, **kwargs)
 
-    def partial_update(self, request, pk: int):
+    def partial_update(self, request, pk: int, **kwargs):
         """
         При изменении данных ресторана проверяем, что если изменен никнейм то он
         не используется другим рестораном
@@ -131,12 +131,12 @@ class RestaurantViewSet(viewsets.ModelViewSet):
         # Проверяем, что если никнейм ресторана задан, то он еще не принадлежит
         # другому ресторану
         slug = request.data.get('slug', None)
-        if self.__check_slug(slug, instance=restaurant):
+        if not self.__check_slug(slug, instance=restaurant):
             return Response(
                 {'detail': _("A restaurant with such slug string already exists")},
                 status=400
             )
-        return super().partial_update(request, pk=pk)
+        return super().partial_update(request, pk=pk, **kwargs)
 
     @swagger_qrcode
     @action(detail=True,
